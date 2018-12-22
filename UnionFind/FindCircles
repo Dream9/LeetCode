@@ -1,0 +1,78 @@
+//就是判断有几个连通分量
+//而且是无向图
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& M) {
+        int m=M.size();
+        if(0==m)
+            return 0;
+        /*
+        基于dfs
+        //标记分量
+        vector<int>group(m);
+        int cnt=0;
+        for(int i=0;i<m;++i){
+            if(group[i]==0){
+                group[i]=++cnt;
+                _dfs(M,i,group);
+                
+            }
+        }
+        return cnt;
+        */
+        /*
+        基于union-find
+        */
+        vector<int>sz(m,1);
+        vector<int>root(m);
+        int add=0;
+        count=m;
+        for_each(root.begin(),root.end(),[&add](int&i){i=add++;});
+        for(int i=0;i<m;++i)
+            for(int j=0;j<m;++j){
+                if(M[i][j])
+                _union_find(root,sz,i,j);
+            }
+        return count;
+    }
+private:
+    int count;
+    //基于dfs,,,28ms
+    void _dfs(vector<vector<int>>&Matrix,int iter,vector<int>&group){
+        int m=Matrix.size();
+        for(int i=0;i<m;++i){
+            if(Matrix[iter][i] && group[i]==0){
+                group[i]=group[iter];
+                _dfs(Matrix,i,group);
+            }                
+        }
+    }
+    //路径压缩的加权union-find,,,16ms
+    int _find(vector<int>&root,int index){
+        if(root[index]==index)
+            return index;        
+        return root[index]=_find(root,root[index]);
+    }
+    void _union_find(vector<int>&root,vector<int>sz,
+                     int first,int second){
+        /*
+        if(root[first]==root[second])
+            return;
+        */
+        int f_root=_find(root,first);
+        int s_root=_find(root,second);
+        if(f_root==s_root)
+            return;
+        //加权合并
+        if(sz[first]<sz[second]){
+            root[f_root]=s_root;
+            sz[s_root]+=sz[f_root];
+        }
+        else{
+            root[s_root]=f_root;
+            sz[f_root]+=sz[s_root];
+        }
+        --count;
+    }
+
+};
