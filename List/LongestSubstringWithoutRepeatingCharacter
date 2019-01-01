@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        /*应该记录下上次出现的位置就可以了*/
+        int len=s.size();
+        int ans=0;
+        int last=0;
+        int i=0;
+        char c;
+        map<char,int>dict;
+        //如果只考虑ASCII的话，可以利用直接定址表，不存在冲突，会更快
+        
+        for(;i<len;++i){
+            c=s.at(i);
+            auto iter=dict.insert({c,i});
+            if(!iter.second){
+                ans=max(i-last,ans);
+                last=max(last,iter.first->second+1);
+                dict[c]=i;
+            }
+            /*
+            //auto iter=dict.find(c);
+            //if(iter!=dict.end()&&iter->second>=last){
+            //    ans=max(i-last,ans);
+            //    last=iter->second+1;
+            //}
+            //dict[c]=i;
+            */
+        }
+        return max(ans,len-last);
+        
+    }
+};
