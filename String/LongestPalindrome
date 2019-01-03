@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        int len=s.size();
+        if(len<=1)
+            return s;
+        string dump="!";
+        /*注意不存在to_string(char)的转换，所有的char在添加时都会转化为ascii码*/
+        for(char word:s)
+            dump+=string(1,'$')+string(1,word);
+        dump+="$&";
+        
+        len=dump.size();
+        vector<int>dp(len);
+        int center=0;
+        int max_distance=1;
+        int i=0;
+        while(i<len){
+            int cur_distance=1;
+            if(i<center+max_distance-1)
+                cur_distance=min(dp[(center<<1)-i],center+max_distance-i);
+            while((i-cur_distance>0)&&(i+cur_distance<len)&&
+                  dump[i-cur_distance]==dump[i+cur_distance]){
+                ++cur_distance;
+            }
+            dp[i]=cur_distance;
+            if(max_distance<cur_distance){
+                max_distance=cur_distance;
+                center=i;                
+            }
+            ++i;
+        }
+        //return to_string(center)+"*"+to_string(max_distance)+"*"+dump;
+        return s.substr((center-max_distance)/2,max_distance-1);
+    }
+};
