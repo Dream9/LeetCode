@@ -1,3 +1,4 @@
+/*也可以采用滑动窗口的方式实现，类似卷积的方式*/
 class Solution {
 public:
     string longestPalindrome(string s) {
