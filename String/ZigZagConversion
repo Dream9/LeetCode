@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string convert(string s, int numRows) {
+        if(numRows==1)
+            return s;
+        vector<string>ans(numRows,"");
+        bool flag=false;
+        string ans_string="";
+        int index=0;
+        
+        for(char c:s){
+            ans[index]+=c;
+            flag=(index==0||index==numRows-1)?!flag:flag;
+            index+=flag?1:-1;
+        }
+        for_each(ans.begin(),ans.end(),[&ans_string](string s){ans_string+=s;});
+        return ans_string;
+    }
+};
