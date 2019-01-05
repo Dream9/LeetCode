@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int myAtoi(string str) {
+        size_t word_pos=str.find_first_not_of(' ');
+        size_t num_pos=str.find_first_of("+-0123456789");
+        if (num_pos==string::npos ||num_pos!=word_pos)
+            return 0;
+        size_t num_second_pos=str.find_first_of("0123456789",num_pos+1);
+        /*主要针对"+","+a"等非法输入*/
+        if((str[num_pos]=='+'||str[num_pos]=='-')  &&  num_second_pos!=num_pos+1)
+            return 0;
+        bool flag=str[num_pos]=='-'?true:false;
+        size_t last=str.find_first_not_of("0123456789",num_pos+1);
+        int ans;
+        try{
+            ans=stoi(str.substr(num_pos,last-num_pos));
+        }
+        catch(...){
+            return flag?INT_MIN:INT_MAX;//溢出时，返回两个极值之一
+        }
+        
+        return ans;
+    }
+};
