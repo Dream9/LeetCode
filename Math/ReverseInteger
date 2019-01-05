@@ -1,0 +1,19 @@
+/*long不一定比int长，long long 才保险，int_64_t*/
+class Solution {
+public:
+    int reverse(int x) {
+        long long ans=0;
+        int sum=0;
+        int cur;
+        
+        while(x!=0){
+            cur=(x%10)+sum;
+            x/=10;
+            sum=cur/10;
+            ans=ans*10+cur%10; 
+        }
+        if(ans>INT_MAX||ans<INT_MIN)
+            return 0;
+        return ans;
+    }
+};
