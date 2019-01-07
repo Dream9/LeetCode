@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        //基于dp的实现
+        //int m=s.size();
+        //int n=p.size();
+        //vector<vector<bool>>dp(m+1,vector<bool>(n+1,false));
+        //dp[0][0]=true;
+        ///*存在""匹配"a*",*/
+        //for(int i=0;i<=m;++i){
+        //    for(int j=1;j<=n;++j){
+        //        if(p[j-1]!='*'){
+        //            /*还是考虑nullptr与*的匹配*/
+        //            dp[i][j]=i>0&&(s[i-1]==p[j-1]||p[j-1]=='.')&&
+        //                dp[i-1][j-1];
+        //        }
+        //        else{
+        //            /* "?*"有两种匹配方式 */
+        //            dp[i][j]=(j>1&&dp[i][j-2])||   //"b*",*代表0，相当于跳过这两个字符
+        //                //*代表多于0个时，为第二种情况，
+        //                (i>0&&j>1&&(s[i-1]==p[j-2]||p[j-2]=='.')&&dp[i-1][j] );   
+        //                          
+        //        }
+        //    }
+        //}
+        //return dp[m][n];
+        
+        /*基于递归的实现*/
+        int m=s.size();
+        int n=p.size();
+        if(n==0)
+            return m==0;
+        if(n==1)
+            return m==1&&(p[0]==s[0]||p[0]=='.');
+        //依然是针对*字符分类
+        if(p[1]=='*'){
+            return isMatch(s,p.substr(2))||         //依然对应于*表示0个字符的情况
+                //*代表多个0的情况
+                !s.empty()&&((p[0]==s[0]||p[0]=='.')&&isMatch(s.substr(1),p));
+        }
+        else{
+            return !s.empty()&&(p[0]==s[0]||p[0]=='.')&&isMatch(s.substr(1),p.substr(1));
+        }
+        
+    }
+};
