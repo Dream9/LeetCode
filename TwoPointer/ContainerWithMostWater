@@ -1,0 +1,21 @@
+/*
+**假设左侧更短，则当右侧向内缩进时，面积都小于等于当下，因为此时左侧的长度制约了面积，与右侧无关
+*/
+class Solution {
+public:
+    int maxArea(vector<int>& height) {
+        /*典型的双指针*/
+        /*朝着可能出现最大值的方向移动*/
+        int left=0;
+        int right=height.size()-1;
+        int area=0;
+        while(left<right){
+            area=max(area,min(height[left],height[right])*(right-left));
+            if(height[left]<height[right])
+                ++left;
+            else
+                --right;
+        }
+        return area;
+    }
+};
