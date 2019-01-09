@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string intToRoman(int num) {
+        unordered_map<int,char>dict{{1,'I'},{5,'V'},{10,'X'},{50,'L'},
+                                    {100,'C'},{500,'D'},{1000,'M'}};
+        vector<int>grad{1000,500,100,50,10,5,1};
+        string s=to_string(num);
+        int len=s.size();
+        string out="";
+        for(int i=0;i<len;++i){
+            int cur=s[i]-'0';//得到数字
+            int bit=pow(10.0,len-i-1);//得到权重
+            /*考虑switch实现*/
+            switch(cur){
+                case 4:out+=dict[bit]+string(1,dict[5*bit]);break;
+                case 9:out+=string(1,dict[bit])+dict[10*bit];break;
+                case 5:
+                case 6:
+                case 7:
+                case 8:out+=dict[5*bit];cur-=5;
+                default:out+=string(cur,dict[bit]);break;
+            }
+           // 
+           // //开始讨论
+           // if(cur==4){
+           //     //注意至少有一个是string才可以，
+           //     /*string对象和字符字面值或字符串字面值混合时，应该确保
+           //     **每个+两侧至少有一个string   见p81
+           //     */
+           //     out+=dict[bit]+string(1,dict[5*bit]);
+           //     continue;
+           // }
+           // if(cur==9){
+           //     out+=string(1,dict[bit])+dict[10*bit];
+           //     continue;
+           // }
+           // if(cur>=5){
+           //     out+=dict[5*bit];
+           //     cur-=5;
+           // }
+           // out+=string(cur,dict[bit]);
+        }
+        return out;
+    }
+};
