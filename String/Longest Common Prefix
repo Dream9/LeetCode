@@ -1,0 +1,104 @@
+class Solution {
+public:
+//    string longestCommonPrefix(vector<string>& strs) {
+//        /*二路归并*/
+//        if(strs.empty() )
+//            return "";
+//        return merge(strs,0,strs.size()-1);
+//        
+//    }
+//private:
+//    string merge(vector<string>& strs,int left,int right){
+//        if(left>=right)
+//            return strs[left];
+//
+//        int med=left+((right-left)>>1);
+//        string sl=merge(strs,left,med);
+//        string sr=merge(strs,med+1,right);
+//
+//        return _common(sl,sr);
+//    }
+//    /*寻找公共前缀*/
+//    string _common(const string &s1,const string &s2){
+//
+//        int msize=min(s1.size(),s2.size());
+//        if(msize<=0)
+//            return "";
+//        
+//        int i=0;
+//        while(i<msize&&s1[i]==s2[i])
+//            ++i;
+//
+//        return s1.substr(0,i);
+//    }
+//  /* 基于trie */
+    struct Node {
+    //
+        int count;
+        Node *child[26];
+        
+        Node() {
+            count = 0;
+            for(int i=0; i<26; i++)
+                child[i] = NULL;
+        }
+        
+        ~Node(){
+            for(auto tmp:child){
+                if(tmp!=NULL)
+                    delete tmp;
+            }
+        }
+        
+    };
+    
+    void insert(Node* root, string str)
+    {
+        for(char c: str)
+        {
+            if(root->child[c - 'a'] == NULL)
+                root->child[c - 'a'] = new Node();
+            root->child[c - 'a']->count++;
+            root = root->child[c - 'a'];
+        }
+    }
+    
+    string get_prefix(Node* root, string first_str, int total_words)
+    {
+        string pre = "";
+        for(char c: first_str)
+        {
+            if(root->child[c - 'a'] != NULL)
+            {
+                root = root->child[c - 'a'];
+                if(root->count == total_words)
+                {
+                    pre += c;
+                }
+                else
+                    return pre;
+            }
+            else
+                return pre;
+        }
+        return pre;
+    }
+    
+    string longestCommonPrefix(vector<string>& strs) {
+        if(strs.size() == 0)
+            return "";
+        else
+        {
+            // Node *root = new Node();
+            Node root;
+            for(string s: strs)
+                insert(&root, s);
+            
+            string pre = get_prefix(&root, strs[0], strs.size());
+            return pre;
+        }
+    }
+    
+    
+    
+};
