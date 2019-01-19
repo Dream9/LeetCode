@@ -1,0 +1,46 @@
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        /*通用做法是向下递归，最终化成两个数之和为target*/
+        /*两数之和为指定值时，可以双指针（前提是有序）*/
+        int len=nums.size();
+        if(len==0)
+            return {};
+        vector<vector<int>>ans;
+        sort(nums.begin(),nums.end());
+        for(int i=0;i<len-2&&nums[i]<=0;++i){
+            if(i>0&&nums[i-1]==nums[i])
+                continue;
+            _helper(nums,ans,i);
+        }
+        return ans;
+    }
+private:
+    void _helper(vector<int>&nums,vector<vector<int>>&ans,int i){
+        /*hash是不可以的，因为允许-1,-1,2的情况,*/
+        //unordered_set<int>dict(nums.begin()+i,nums.end());
+        //int target=nums[i];
+        //for(int iter:dict){
+        //    if(dict.find(-target-iter)!=dict.end()){
+        //        ans.push_back({target,iter,-target-iter});
+        //    }
+        //}
+        int target=nums[i];
+        int left=i+1;
+        int right=nums.size()-1;
+        while(left<right){
+            int sum=target+nums[left]+nums[right];
+            if(sum==0){
+                ans.push_back({target,nums[left],nums[right]});
+                ++left;
+                while(left<right&&nums[left-1]==nums[left])
+                    ++left;
+            }
+            else if(sum<0)
+                ++left;
+            else
+                --right;
+        }        
+    }
+        
+};
