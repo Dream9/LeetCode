@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string>res;
+        if(digits.empty())
+            return res;
+        // res.push_back("");
+        /*采用直接定址表的方式，替代hash*/
+        string partern[]={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        string cur="";
+        dfs(digits,cur,partern,res);
+        return res;
+        
+    }
+    void dfs(string digits,string &cur,string partern[],vector<string> &res){
+        /*如果不引用传递，会很慢*/
+        if(digits.size()==0){
+            res.push_back(cur);
+            return;
+        }
+        string cur_iter=partern[digits[0]-'0'];
+        for (auto iter : cur_iter){
+            cur+=iter;
+            dfs(digits.substr(1,digits.size()-1),cur,partern,res);
+            cur.pop_back();
+        }
+    }
+};
