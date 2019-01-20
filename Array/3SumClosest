@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
+        /*关键一点在于根据与目标的绝对值差异进行记录结果*/
+        int len=nums.size();
+        // if(len<3)
+        //     return INT_MIN;
+        sort(nums.begin(),nums.end());
+        // int dif=INT_MAX;
+        int out=nums[0]+nums[1]+nums[2];
+        int dif=abs(out-target);
+        for(int iter=0;iter<len-2;++iter){
+            // int tar=target-nums[iter];
+            int left=iter+1;
+            int right=len-1;
+            while(left<right){
+                // int tmp=tar-nums[left]+nums[right];
+                int tmp=nums[iter]+nums[left]+nums[right];
+                int newdif=abs(tmp-target);
+                if(newdif<dif){
+                    dif=newdif;
+                    out=tmp;
+                }
+                if(tmp>target)
+                    --right;
+                else if(tmp<target)
+                    ++left;
+                else
+                    break;
+            }
+        }
+        return out;
+    }
+};
