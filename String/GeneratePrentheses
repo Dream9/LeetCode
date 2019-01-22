@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<string> generateParenthesis(int n) {
+        /*backtrace适合于遍历解空间*/
+        vector<string>ans;
+        string s="";
+        _backTrace(ans,s,0,0,n);
+        return ans;
+    }
+private:
+    void _backTrace(vector<string>&ans,string&s,int leftP,
+                    int rightP,int n){
+        if(leftP==n && rightP==n){
+            /*出口*/
+            ans.push_back(s);
+            return ;
+        }
+        //剪枝操作
+        if(leftP<rightP || leftP>n || rightP>n)
+            return;
+        s+='(';
+        _backTrace(ans,s,leftP+1,rightP,n);
+        s.back()=')';
+        _backTrace(ans,s,leftP,rightP+1,n);
+        s.pop_back();//////////遍历解空间时一定要记得回到上层前记得还原
+    }
+};
