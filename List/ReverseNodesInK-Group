@@ -1,0 +1,46 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        //确保k个Node均非空时，翻转这些一次，直至结束或最后不足k个即可
+        //递归实现
+        if(k==1)
+            return head;
+        
+        ListNode*ans;
+        ListNode*first=head;
+        int iter=1;
+        while(head && iter<k){
+            head=head->next;
+            ++iter;
+        }
+        if(iter==k && head){
+            //如果上面的判别为head->next,这里的head条件就不用了
+            _reverse(first,k);
+            first->next=reverseKGroup(first->next,k);
+            return head;
+        }
+        else
+            return first;
+    }
+private:
+    void _reverse(ListNode* first,int k){
+        /*辅助函数，全部反转*/
+        /*这次改用递推实现*/
+        ListNode* head=first;
+        ListNode* cur;
+        while(--k>0){
+            cur=first->next;
+            first->next=cur->next;
+            cur->next=head;
+            head=cur;
+        }
+    }
+};
