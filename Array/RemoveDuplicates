@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        //类似于copy_forward,copy_backward,,stl中经常用的一种原地copy方式
+        //也可以看作时双指针
+        int first=1;
+        int second=1;
+        int len=nums.size();
+        
+        //剪一下枝
+        if(len<2)
+            return len;
+        
+        int last=nums[0];
+        while(second<len){
+            if(last!=nums[second]){
+                nums[first++]=nums[second];
+                last=nums[second++];
+            }
+            else{
+                ++second;
+            }
+        }
+        return first;        
+    }
+};
