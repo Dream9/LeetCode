@@ -1,0 +1,43 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Compare{
+public:
+    bool operator()(ListNode*first,ListNode*second){
+        return first->val > second->val;
+    }
+};
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        /*1分治，是对merge two list的延伸,
+        **2同列优先队列
+        */
+        //此处采用了后者
+        //if(lists.empty())
+        //    return nullptr;
+        priority_queue<ListNode*,vector<ListNode*>,Compare>pq;
+        ListNode Pivot(0);
+        ListNode* pre=&Pivot;
+        for(ListNode*head:lists){
+            if(head)
+                pq.push(head);
+        }
+        while(!pq.empty()){
+            ListNode*cur=pq.top();
+            pq.pop();
+            if(cur->next)
+                pq.push(cur->next);
+            pre->next=cur;
+            pre=cur;
+        }
+        pre->next=nullptr;
+        return Pivot.next;
+    }
+};
