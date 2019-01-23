@@ -1,0 +1,23 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+ //有关顺序反转的，关键在于画图，别自己绕晕了即可
+ //递归是常用通解
+ //也可以递推循环
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+       if(head==nullptr || head->next==nullptr)
+           return head;
+        /*此时至少有两个，才值得交换*/
+        ListNode* second=head->next;
+        head->next=swapPairs(second->next);
+        second->next=head;
+        return second;
+    }
+};
