@@ -6,6 +6,8 @@
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
+ //这里利用一个仿函数，实现优先队列的计算，，，
+ //其实相当于对象复合中通过委托机制增加新的操作
 class Compare{
 public:
     bool operator()(ListNode*first,ListNode*second){
