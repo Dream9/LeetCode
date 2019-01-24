@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        /*子字符串查找*/
+        /*brute force、KMP、BM、Sunday、指纹探查等*/
+        /*此处使用了Sunday*/
+        
+        int len=needle.size();
+        int txt_len=haystack.size();
+        if(len==0)
+            return 0;
+            
+        //预处理pattern串，记录最后出现的位置
+        //一旦不符合时，txt串跳转对应位置
+        vector<int>jump(256,-1);
+        for(int i=0;i<len;++i)
+            jump[needle[i]]=i;
+        
+        
+        int i=0;
+        int j=0;
+        while(j<=txt_len-len){
+            //注意等于是可能的结果之一
+            
+            int pos=len-1;
+            while(pos>=0 && haystack[j+pos]==needle[pos])
+                --pos;
+            if(pos==-1){
+                return j;
+            }
+            else{
+                if(j+len>=txt_len)
+                    return -1;
+                j+=(jump[haystack[j+len]]==-1?len:len-jump[haystack[j+len]]);  
+            }
+        }
+        return -1;
+    }
+};
