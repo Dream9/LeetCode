@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> searchRange(vector<int>& nums, int target) {
+        /*二分的变式*/
+        if(nums.empty())
+            return {-1,-1};
+        int right=nums.size()-1;
+        int left=0;
+        int first;
+        
+        /*寻找first*/
+        while(right>left){
+            int med=((right-left)>>1)+left;
+            if(nums[med]>target)
+                right=med-1;
+            else if(nums[med]<target)
+                left=med+1;
+            else
+                right=med;
+        }
+        //return {right,left};
+        if(right>nums.size()-1 || nums[right]!=target )
+            return {-1,-1};
+        first=right;
+        /*寻找last*/
+        right=nums.size()-1;
+        left=first;
+        while(right>left+1){
+            int med=((right-left)>>1)+left;
+            if(nums[med]<target)
+                left=med+1;
+            else if(nums[med]>target)
+                right=med-1;
+            else
+                left=med;
+        }
+        if(left+1<nums.size()&&nums[left+1]==target)
+            return {first,left+1};
+        else
+            return {first,left};
+        
+    }
+};
