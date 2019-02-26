@@ -1,0 +1,31 @@
+class Solution {
+public:
+    /*二分的变形*/
+    /*由于只旋转了一次，因此通过中间值可以判断出其中一部分是有序的*/
+    int search(vector<int>& nums, int target) {
+        int right=nums.size()-1;
+        int left=0;
+        
+        while(left<=right){
+            int med=((right-left)>>1)+left;
+            if(target==nums[med])
+                return med;
+            if(nums[med]<nums[right]){
+                /*右侧是有序的*/
+                if(target<=nums[right]&&target>nums[med])
+                    left=med+1;
+                else
+                    right=med-1;
+            }
+            /*同理*/
+            else{
+                if(target>=nums[left]&&target<nums[med])
+                    right=med-1;
+                else
+                    left=med+1;
+                
+            }
+        }
+        return -1;
+    }
+};
