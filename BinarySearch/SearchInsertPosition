@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int searchInsert(vector<int>& nums, int target) {
+        /*二分，第一个大于或者等于*/
+        /*已知没有重复元素*/
+        if(nums.empty())
+            return 0;
+        int right=nums.size()-1;
+        int left=0;
+        
+        while(left<right){
+            int med=((right-left)>>1)+left;
+            if(nums[med]==target)
+                return med;
+            else if(nums[med]<target)
+                left=med+1;
+            else
+                right=med-1;
+        }
+        if(nums[left]>=target)
+            //注意等号是可以取得的
+            //因为之前的边界条件是left<right
+            return left;
+        else// if(left+1<nums.size()-1 && nums[left+1]>target)
+            return left+1;
+        
+            
+    }
+};
