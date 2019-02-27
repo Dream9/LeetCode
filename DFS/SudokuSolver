@@ -1,0 +1,54 @@
+const int LEN=9;//数独大小固定
+class Solution {
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        /*遍历解空间*/
+        /*剪枝*/
+        /*if(!_solve(board,0,0))
+            cout<<"failed";
+        */
+        _solve(board,0,0);
+    }
+private:
+    bool _solve(vector<vector<char>>& board,int row,int column){
+        if(row==LEN)
+            return true;
+        if(column==LEN)
+            return _solve(board,row+1,0);
+        
+        if(board[row][column]!='.')
+            return _solve(board,row,column+1);
+        
+        for(int num=1;num<=LEN;++num){
+            board[row][column]=char(num+'0');
+            if(_is_valid(board,row,column)){
+                if(_solve(board,row,column+1))
+                    return true;
+            }
+            board[row][column]='.';                   
+        }
+        return false;
+    }
+    
+private:
+    bool _is_valid(vector<vector<char>> &board, int i, int j) {
+        //添加i，j之前是合法的，因此唯一的不合法可能性就是最新的元素导致了重复
+        //所在行、列
+        for (int cur=0;cur<LEN;++cur) {
+            if(cur!=j && board[i][j]== board[i][cur]) return false;
+            if(cur!=i && board[i][j]==board[cur][j]) return false;
+        }
+        //所在九宫格
+        int pos_row=i/3*3;
+        int pos_column=j/3*3;
+        for (int row=pos_row;row<pos_row+3;++row) {
+            for (int col=pos_column;col<pos_column+3;++col) {
+                if ((row!=i || col!=j) && 
+                    board[i][j]==board[row][col]) 
+                    return false;
+            }
+        }
+        return true;
+    }
+    
+};
