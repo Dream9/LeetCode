@@ -1,0 +1,36 @@
+class Solution {
+public:
+    string countAndSay(int n) {
+        /*通过尾递归的形式实现*/
+        string out="1";
+        return _count(out,n);
+    }
+private:
+    string _count(string& out,int n){
+        if(n==1 || out.empty())
+            return out;
+        
+        int len=out.size();
+        int cur=1;
+        char num=out[0];
+        int count=1;
+        string tmp="";
+        
+        while(cur<len){
+            if(out[cur]==num){
+                ++count;
+                ++cur;
+                continue;
+            }
+            tmp+=to_string(count)+out[cur-1];
+            count=1;
+            num=out[cur];
+            ++cur;
+        }
+        tmp+=to_string(count)+out[cur-1];
+        out.swap(tmp);
+        //下一个递归
+        return _count(out,n-1);
+        
+    }
+};
