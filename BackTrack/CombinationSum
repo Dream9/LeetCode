@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        /*backtrace思想*/
+        /*注意防止重复*/
+        //关键在于不走回头路
+        if(candidates.empty())
+            return {};
+        //为了防止重复，应该对候选者排序
+        sort(candidates.begin(),candidates.end());
+        vector<vector<int>>out;
+        vector<int>path;
+        
+        _backTrace(out,path,candidates,target,0);
+        return out;
+    }
+private:
+    void _backTrace(vector<vector<int>>& out,vector<int>& path,
+                   vector<int>& candidates, int target, int cur){
+        //
+        if(target==0){
+            out.emplace_back(path);
+            return;
+        }
+        if(candidates.front()>target)
+            return;
+        /*下面是一个错误的剪枝操作
+        //因为允许重复使用
+        if(candidates.back()<target)
+            return;
+        */
+        
+        int len=candidates.size();
+        
+        for(;cur<len;++cur){
+            if(candidates[cur]>target)
+                //剪枝
+                return;
+            path.push_back(candidates[cur]);
+            _backTrace(out,path,candidates,target-candidates[cur],cur);
+            path.pop_back();            
+        }
+        
+    }
+};
