@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        /*要求每一个候选者只能使用一次，但候选者中存在重复*/
+        //多判断一次即可
+        if(candidates.empty())
+            return {};
+        sort(candidates.begin(),candidates.end());
+        //剪枝
+        if(candidates.front()>target)
+            return {};
+        
+        vector<int>path;
+        vector<vector<int>>out;
+        _combination(out,path,candidates,target,0);
+        return out;
+    }
+private:
+    void _combination(vector<vector<int>>& out,vector<int>& path,
+                     vector<int>& candidates, int target, int index){
+        //backTrace
+        if(target==0){
+            out.emplace_back(path);
+            //即使含有0元素也是正确的，因为sorted了，可以反证
+            return;
+        }
+        if(candidates.front()>target)
+            return;
+        
+        int len=candidates.size();
+        int start=index;
+        for(;index<len;++index){
+            if(candidates[index]>target)
+                break ;
+            if(index!=start && candidates[index]==candidates[index-1])
+                continue;
+            
+            path.emplace_back(candidates[index]);
+            _combination(out,path,candidates,target-candidates[index],index+1);
+            path.pop_back();
+        }
+    }
+};
