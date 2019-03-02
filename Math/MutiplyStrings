@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string multiply(string num1, string num2) {
+        /*模拟大数乘法*/
+        //参照乘法手算过程即可
+        int len1=num1.size();
+        int len2=num2.size();
+        vector<int>ans(len1+len2,0);
+        string out="";
+        int index1=1;
+        int index2;
+        
+        for(;index1<=len1;++index1){
+            int tmp=num1[len1-index1]-'0';
+            //测试
+            //if(index1==2)
+            //   return to_string(tmp);
+            //又是这种错误！！！！！！
+            //双重循环忘记第二层循环的初始化条件
+            index2=1;
+            for(;index2<=len2;++index2){
+                int pos=index1+index2-2;
+                ans[pos]+=tmp*(num2[len2-index2]-'0');
+                if(ans[pos]>9){
+                    ans[pos+1]+=ans[pos]/10;
+                    ans[pos]%=10;
+                }
+            }
+        }
+        //整理输出结果
+        index1=len1+len2-1;
+        while(index1>=0 && ans[index1]==0){
+            --index1;
+        }
+        
+        if(index1==-1)
+            return "0";
+ 
+        index1=std::distance(ans.begin()+index1,ans.end())-1;
+        for_each(ans.rbegin()+index1,ans.rend(),[&out](int x){out+='0'+x;});
+        return out;
+    }
+};
