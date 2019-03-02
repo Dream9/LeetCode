@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        /*整个问题可以做一下抽象：
+        **某点min(max左侧,max右侧)*高度差=改点的蓄水量
+        */
+        /*考虑到(max某测)是一个增函数，可以剪枝
+        */
+        int len=height.size();
+        if(len<3)
+            return 0;
+        
+        vector<int> biside_max;
+        biside_max.reserve(len);
+        biside_max.emplace_back(0);
+        int out=0;
+        int index=1;
+        
+        //左侧
+        for(;index<len;++index){
+            biside_max[index]=max(biside_max[index-1],height[index-1]);
+        }
+        //右侧
+        biside_max[len-1]=0;
+        for(index=len-2;index>0;--index){
+            int right_max=max(height[index+1],biside_max[index+1]);
+            
+            //剪枝操作
+            if(right_max>=biside_max[index])
+                break;
+            
+            biside_max[index]=right_max;
+        }
+        
+        //计算蓄水量
+        --len;
+        int tmp=0;
+        for(index=1;index<len;++index){
+            tmp=biside_max[index]-height[index];
+            if(tmp<=0)
+                continue;
+            out+=tmp;
+        }
+        return out;
+    }
+};
