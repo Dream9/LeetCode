@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        /*求最少需要跳几次，很明显对应于BFS搜索，第一次调到终点时的层数*/
+        int len=nums.size();
+        if(len<=1)
+            return 0;
+        //采用set，因为还要保证不重复
+        set<int>layer;
+        int index;
+        int step=0;
+        
+        layer.insert(0);
+        while(!layer.empty()){
+            ++step;
+            set<int>tmp;
+            for(auto i=layer.begin();i!=layer.end();++i){
+                for(index=nums[*i];index>0;--index){
+                    int pos=*i+index;
+                    if(pos>=len-1)
+                        return step;
+                    //只把之前没有访问的结点加入，否则相当于倒退了
+                    if(layer.find(pos)!=layer.end())
+                        continue;
+                    tmp.insert(pos);
+                }
+            }
+            layer.swap(tmp);            
+        }
+        //尽管保证必有解
+        return -1;
+    }
+};
