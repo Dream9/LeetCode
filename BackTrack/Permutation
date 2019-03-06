@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        /*全组合问题*/
+        if(nums.empty())
+            return {};
+        
+        int len=nums.size();
+        vector<vector<int>>out;
+        out.push_back(nums);
+        
+        for(int layer=0;layer<len-1;++layer){
+            //第一层是交换循环
+            int cur=out.size();
+            for(int index=0;index<cur;++index){
+                //第二层是out数组循环
+                for(int j=layer+1;j<len;++j){
+                    //第三层是产生新的结果
+                    swap(out[index][layer],out[index][j]);
+                    out.push_back(out[index]);
+                    swap(out[index][layer],out[index][j]);
+                }
+            }
+        }
+        return out;
+    }
+};
