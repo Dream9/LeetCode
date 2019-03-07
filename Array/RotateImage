@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+        /*矩阵旋转的问题，无非就是上下翻转、左右反转、对称*/
+        int len=matrix.size();
+        int i=len/2-1;
+        //上下+对称==顺时针
+        //左右+对称==逆时针
+        while(i>=0){
+            swap(matrix[i],matrix[len-i-1]);
+            --i;
+        }
+        
+        for(i=0;i<len;++i){
+            for(int j=i+1;j<len;++j){
+                swap(matrix[i][j],matrix[j][i]);
+            }
+        }
+    }
+
+};
