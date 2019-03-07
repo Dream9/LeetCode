@@ -1,0 +1,44 @@
+typedef vector<vector<int>> VV;
+class Solution {
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        /*标准的dfs遍历解空间的方式*/
+        /*visited记录访问过程*/
+        /**/
+        /*由于可能存在重复，需要剪枝*/
+        //先排序
+        if(nums.empty())
+            return {} ;
+        sort(nums.begin(),nums.end());
+        
+        VV out;
+        vector<int> path;
+        vector<bool> visited(nums.size(),false);
+        _dfs(out,path,visited,nums);
+        return out;
+    }
+private:
+    void _dfs(VV& out, vector<int>& path,vector<bool>& visited, 
+             vector<int>& nums){
+        int len=nums.size();
+        if(path.size()==len){
+            out.push_back(path);
+            return ;
+        }
+        
+        for(int i=0;i<len;++i){
+            if(visited[i])
+                continue;
+            //当前一个与自己相同的元素没有访问过时，不应该访问该元素，防止重复的剪枝
+            if(i>0 && visited[i-1]==false && nums[i-1]==nums[i])
+                continue;
+            visited[i]=true;
+            path.push_back(nums[i]);
+            //到下一层去
+            _dfs(out,path,visited,nums);
+            //还原
+            path.pop_back();
+            visited[i]=false;
+        }
+    }
+};
