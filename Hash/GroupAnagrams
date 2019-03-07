@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        /*把组成成分相同的归为一组，类似于布隆过滤、相似哈希*/
+        if(strs.empty())
+            return {} ;
+        vector<vector<string>> out;
+        unordered_map<string,vector<string>> mp;
+        int len=strs.size()-1;
+        
+        for(;len>=0;--len){
+            string hash=_hash(strs[len]);
+            //可能由于字符串都比较短，采用计数排序反而更慢了
+            //string hash=strs[len];
+            //sort(hash.begin(),hash.end());
+            
+            auto it=mp.find(hash);
+            if(it==mp.end()){
+                vector<string> tmp(1,strs[len]);
+                mp[hash]=tmp;
+            }
+            else
+                mp[hash].emplace_back(strs[len]);
+                //it->second->push_back(strs[len]);
+        }
+        for(auto every:mp)
+            out.emplace_back(every.second);
+        return out;
+    }
+private:
+    string _hash(string& str){
+        //计数排序，，结果作为str的信息指纹
+        string out="";
+        vector<int> alpha(26,0);
+        for(char c:str)
+            alpha[c-'a']++;
+        for(int i=0;i<26;++i){
+            while(alpha[i]>0){
+                out+=('a'+i);
+                --alpha[i];
+            }
+        }
+        return out;
+    }
+};
