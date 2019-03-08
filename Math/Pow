@@ -1,0 +1,28 @@
+class Solution {
+public:
+    double myPow(double x, int n) {
+        //小心边界条件，INT_MIN的加法逆元为其本身。。。
+        if(n==INT_MIN)
+            return 1.0/(myPow(x,INT_MAX))*1.0/;
+        if(n==0)
+            return 1;
+        else if(n<0)
+            return 1.0/myPow(x,-n);
+        
+        //此时n为正数
+        //n为形如 ...000000100101000...形式
+        //这里采用了STL中方法
+        while((n&0x1) == 0){
+            x*=x;
+            n>>=1;
+        }
+        double ans=1;
+        while(n!=0){
+            if((n&0x1) == 1)
+                ans*=x;
+            n>>=1; 
+            x*=x;
+        }
+        return ans;
+    }
+};
