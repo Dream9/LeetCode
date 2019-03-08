@@ -1,0 +1,56 @@
+/////////
+/////////
+//使其不能互相攻击，即任意两个皇后都不能处于同一行、同一列或同一斜线上
+//不会国际象棋。。。。。
+/////////
+/////////
+class Solution {
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        /*遍历解空间，剪枝操作，backtrack*/
+        vector<int>position(n,-1);
+        vector<vector<string>> out;
+        
+        _solver(out,position,n);
+        return out;
+    }
+private:
+    void _solver(vector<vector<string>>& out, vector<int>& position, int num){
+        //
+        int len=position.size();
+        if(num==0 ){
+            //产生一个解
+            string tmp(len,'.');
+            vector<string> queen;
+            for(int i=0;i<len;++i){
+                tmp[position[i]]='Q';
+                queen.emplace_back(tmp);
+                tmp[position[i]]='.';
+            }
+            out.emplace_back(queen);
+            return;
+        }
+        for(int i=0;i<len;++i){
+            //遍历解
+            position[len-num]=i;
+            if(_isValid(position,len-num,i)){
+                _solver(out,position,num-1);
+            }
+            //还原
+            position[len-num]=-1;
+        }
+    }
+    
+private:
+    bool _isValid(vector<int>& position, int row, int column){
+        //判断当前是否为皇后问题的一个合法解
+        //判断是否为同一斜线
+        //既斜率为+-1
+        for(int i=0;i<row;++i){
+            if(position[i]==column ||
+              abs(i-row)==abs(position[i]-column))
+                return false;
+        }
+        return true;
+    }
+};
