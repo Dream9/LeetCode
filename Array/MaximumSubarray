@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        /*记录中间值即可*/
+        if(nums.empty())
+            return 0;
+        int len=nums.size();
+        int cur_max=nums[0];
+        int cur_sum=nums[0];
+        
+        for(int i=1;i<len;++i){
+            cur_sum+=nums[i];
+            cur_sum=max(cur_sum,nums[i]);
+            cur_max=max(cur_sum,cur_max);
+        }
+        return cur_max;
+    }
+};
