@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool canJump(vector<int>& nums) {
+        /*贪心*/
+        int len=nums.size()-1;
+        if(len<=0)
+            return true;
+        
+        int last_pos=0;
+        int jump_pos=nums[0];
+        while(true){
+            if(jump_pos>=len)
+                return true;
+            int max_now=0;
+            for(int i=last_pos+1;i<=jump_pos;++i){
+                max_now=max(max_now,nums[i]+i);
+            }
+
+            if(max_now<=jump_pos)
+                return false;
+            last_pos=jump_pos;
+            jump_pos=max_now;
+        }
+        //return false;
+    }
+};
