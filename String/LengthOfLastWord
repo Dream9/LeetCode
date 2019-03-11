@@ -1,0 +1,20 @@
+class Solution {
+public:
+    int lengthOfLastWord(string s) {
+        /*逆向找到第一个非空，然后统计到结束或遇到空格位置*/
+        if(s.empty())
+            return 0;
+        int len=s.size()-1;
+        int ans=0;
+        
+        while(s[len]==' ')
+            --len;
+        
+        while(len>=0 && s[len]!=' '){
+            ++ans;
+            --len;
+        }
+        return ans;
+        
+    }
+};
