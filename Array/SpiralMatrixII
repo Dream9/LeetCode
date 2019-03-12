@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<vector<int>> generateMatrix(int n) {
+        if(n==0)
+            return {};
+        int up=0;
+        int down=n-1;
+        
+        int left=0;
+        int right=n-1;
+        
+        int index=1;
+        int last=n*n;
+        
+        vector<vector<int>>out(n,vector<int>(n,0));
+        while(index<=last){
+            /*循环一圈*/
+            //上
+            for(int cur=left;cur<=right;++cur)
+                out[up][cur]=index++;
+            //右
+            for(int cur=up+1;cur<=down;++cur)
+                out[cur][right]=index++;
+            //
+            if(up<down && left<right){
+                //下
+                for(int cur=right-1;cur>=left;--cur)
+                    out[down][cur]=index++;
+                //左
+                for(int cur=down-1;cur>up;--cur)
+                    out[cur][left]=index++;
+            }
+            ++up;
+            --down;
+            ++left;
+            --right;            
+        }
+        return out;
+    }
+};
