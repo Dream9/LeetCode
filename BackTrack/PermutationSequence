@@ -1,0 +1,70 @@
+int jiecheng[]={1,2,6,24,120,720,5040,40320};//1到8阶乘
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        /*这其实是在有序序列中查找*/
+        /*根据排名确定是哪一个数字*/
+        vector<bool>visited(n,false);
+        string out="";
+        _rank(out,visited,n,k);        
+        return out;       
+    }
+private:
+    void _rank(string& out,vector<bool>& visited,int n,int k){
+        int len=visited.size();
+        if(n==1){
+            int i=0;
+            while(visited[i]) i++;
+            out+=to_string(i+1);
+            return;
+        }
+        int rank=jiecheng[n-2];
+        int sum=0;
+        int count=0;
+        while(sum<k){
+            sum+=rank;
+            count++;
+        }
+        int i=0;
+        while(count!=0){
+            if(!visited[i])
+                count--;
+            i++;
+        }
+        sum-=rank;
+        out+=to_string(i);
+        visited[i-1]=true;
+        _rank(out,visited,n-1,k-sum);
+    }
+};
+/*
+这个版本不使用迭代
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        string out;
+        if(n==1)
+            return string(1,'1');
+        vector<int>jie(n-1);
+        jie[0]=1;
+        for(int i=1;i<n-1;++i)
+            jie[i]=jie[i-1]*(i+1);
+        //其实就是{1, 2, 6, 24, 120, 720, 5040, 40320, 362880};
+        //这样还省了阶乘循环的时间
+        int i=n-2;
+        vector<int>num{1,2,3,4,5,6,7,8,9};
+        while(i>=0){
+            //k=(k<1)?1:k;
+            int tmp=(k-1)/jie[i];
+            out+=to_string(num[tmp]);
+            k-=(tmp)*jie[i--];
+            //out+=to_string(k);
+            // return out;
+            num.erase(num.begin()+tmp);
+        }
+        out+=to_string(num[0]);
+        return out;
+    }
+};
+
+*/
