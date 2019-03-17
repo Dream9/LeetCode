@@ -1,0 +1,57 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        /**/
+        int m=a.size();
+        int n=b.size();
+        string ans(m+n,'0');
+        int tmp=0;
+        int index=m+n-1;
+        --m;
+        --n;
+        
+        while(m>=0 && n>=0){
+            int cur=a[m]-'0'+b[n]-'0'+tmp;
+            tmp=cur>1?cur>>1:0;
+            ans[index]='0'+(cur-(tmp<<1));
+            --index;
+            --m;
+            --n;
+        }
+        /*一些特殊情况的剪枝*/
+        if(m<0 && n<0 && tmp==0)
+            return ans.substr(index+1);
+        /*直接调用copy操作*/
+        if(tmp==0){
+            copy_backward(a.begin(),a.begin()+m+1,copy_backward(
+            b.begin(),b.begin()+n+1,ans.begin()+index+1));
+            index-=(m>=0?m:n);
+            //return to_string(tmp);
+            //return to_string(m)+"d"+to_string(n)+"s"+to_string(index);
+            return ans.substr(index);
+        }
+        /*此时仍需加*/
+        while(m>=0){
+            int cur=a[m]-'0'+tmp;
+            tmp=cur>1?cur>>1:0;
+            ans[index]='0'+(cur-(tmp<<1));
+            --index;
+            --m;
+            //return to_string(tmp);
+        }
+        while(n>=0){
+            int cur=b[n]-'0'+tmp;
+            tmp=cur>1?cur>>1:0;
+            ans[index]='0'+(cur-(tmp<<1));
+            --index;
+            --n;
+        }
+        
+        if(tmp!=0)
+           ans[index]='1';
+        else
+            index++;
+       
+        return ans.substr(index);
+    }
+};
