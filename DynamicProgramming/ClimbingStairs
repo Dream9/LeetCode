@@ -12,5 +12,17 @@ public:
             dp[i]=dp[i-1]+dp[i-2];
         }
         return dp[n-1];
+        
+        /*
+        int a=1;
+        int b=2;
+        int dump=b;
+        for(int i=3;i<=n;++i){
+            b+=a;
+            a=dump;
+            dump=b;
+        }
+        return b;
+        */
     }
 };
