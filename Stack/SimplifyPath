@@ -1,0 +1,35 @@
+class Solution {
+public:
+    string simplifyPath(string path) {
+        /*用类似stack的方式记录*/
+        stringstream ss(path);
+        string str;
+        vector<string>st;
+        while(getline(ss,str,'/')){
+            if(str=="." || str=="")
+                continue;
+            if(str==".."){
+                if(!st.empty())
+                    st.pop_back();
+                continue;
+            }
+            st.emplace_back(str);
+        }
+        str="";
+        for(string cell:st){
+            str+="/"+cell;
+        }
+        return str.empty()?"/":str;
+        /*
+        if(st.empty())
+            return "/";
+        int i=0;
+        int len=st.size();
+        while(i<len){
+            str+=(st[i]+"/");
+            ++i;
+        }
+        return "/"+str.substr(0,str.size()-1);
+        */
+    }
+};
