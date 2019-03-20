@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        /*可以把二维的访问当成一维的访问*/
+        int m=matrix.size();
+        if(m==0)
+            //ennmmmmmmm
+            return false;
+        int n=matrix[0].size();
+        int left=0;
+        int right=m*n;
+        if(right==0)
+            return false;
+        while(left<right){
+            /////z注意>>的优先级相当的低
+            int med=left+((right-left)>>1);
+            int row=med/n;
+            int column=med%n;
+            if(matrix[row][column]==target)
+                return true;
+            else if(matrix[row][column]>target){
+                right=med;
+            }
+            else
+                left=med+1;
+        }
+        return false;
+    }
+};
