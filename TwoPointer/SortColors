@@ -1,0 +1,28 @@
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        /*三向切分，3个指针操作*/
+        /*类似于partition操作*/
+        /*正好是三部分*/
+        if(nums.empty())
+            return ;
+        auto cur=nums.begin();
+        auto equal=nums.begin();
+        auto great=nums.end();
+        while(cur<great){
+            if(*cur==0){
+                swap(*cur,*equal);
+                ++equal;
+                ++cur;
+            }
+            else if(*cur==1){
+                ++cur;
+            }
+            else{
+                //*cur==2
+                --great;
+                swap(*cur,*great);
+            }
+        }
+    }
+};
