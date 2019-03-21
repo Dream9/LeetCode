@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        /*乱序匹配与滑动窗口*/
+        int m=s.size();
+        int n=t.size();
+        if(m<n || m==0 || n==0)
+            return "";
+        //unordered_map<char,int>rec;
+        vector<int>rec(128,0);
+        
+        for(char c:t)
+            rec[c]+=1;
+        int l=0;
+        int r=0;
+        int count=0;
+        int minlen=INT_MAX;
+        int index=-1;
+        
+        while(r<m){
+            rec[s[r]]-=1;
+            if(rec[s[r]]>=0){
+                ++count;
+                while(count==n){
+                    //////////////////////////////
+                    int len=r-l+1;
+                    rec[s[l]]+=1;
+                    if(rec[s[l]]>0)
+                        --count;
+                    if(len<minlen){
+                        index=l;
+                        minlen=len;
+                    }
+                    ++l;
+                    /////////////////////////////
+                }
+            }
+            ++r;
+        }
+        //return to_string(index);
+        return index!=-1?s.substr(index,minlen):"";
+    }
+};
