@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> combine(int n, int k) {
+        /*典型的dfs遍历*/
+        if(n<k)
+            return {};
+        vector<vector<int>>ans;
+        vector<int>path;
+        path.reserve(k);
+        _helper(n,path,ans,k,0);
+        return ans;
+    }
+private:
+    void _helper(int n,vector<int>&path,
+                 vector<vector<int>>&ans,int len,int pos){
+        if(len==path.size()){
+            ans.push_back(path);
+            return;
+        }
+        for(int i=pos;i<n;++i){
+            path.push_back(i+1);
+            _helper(n,path,ans,len,i+1);
+            path.pop_back();
+        }
+    }
+};
