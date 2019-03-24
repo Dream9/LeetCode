@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        /*bt遍历，visited记录过程*/
+        /*或者通过通过异或改变之*/
+        if(word.empty())
+            return true;
+        if(board.empty() || board[0].empty())
+            return false;
+        int m=board.size();
+        int n=board[0].size();
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(board[i][j]!=word[0])
+                    continue;
+                if(_bt(board,word,i,j,0))
+                    return true;
+            }
+        }
+        return false; 
+    }
+private:
+    bool _bt(vector<vector<char>>& board,string& word,int row,int column,int index){
+        int m=board.size();
+        int n=board[0].size();
+        if(index>=word.size())
+            return true;
+        if(row<0 || row>=m || column<0 || column>=n ||
+           board[row][column]!=word[index])
+            return false;
+        char tmp=board[row][column];
+        board[row][column]='0';
+        bool successor=_bt(board,word,row+1,column,index+1)||
+            _bt(board,word,row-1,column,index+1)||
+            _bt(board,word,row,column+1,index+1)||
+            _bt(board,word,row,column-1,index+1);
+        if(successor)
+            return true;
+        board[row][column]=tmp;
+        return false;
+    }
+};
