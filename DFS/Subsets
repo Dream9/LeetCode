@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        /*记录访问的过程即可*/
+        if(nums.empty())
+            return {};
+        int len=nums.size();
+        vector<int>path;
+        path.reserve(len);
+        vector<vector<int>>ans;
+        _helper(nums,path,0,ans);
+        return ans;
+    }
+private:
+    void _helper(vector<int>&nums,vector<int>&path,int index,vector<vector<int>>&ans){
+        ans.emplace_back(path);
+        int len=nums.size();
+        if(path.size()==len)
+            return;
+        for(int i=index;i<len;++i){
+            path.emplace_back(nums[i]);
+            _helper(nums,path,i+1,ans);
+            path.pop_back();
+        }
+    }
+};
