@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        /*要求：允许重复两次*/
+        /*类似于双指针，一个标记当前，一个标记最后一个合法位置*/
+        int len=nums.size();
+        if(len<=2)
+            return len;
+        int time=1;
+        int last=nums[0];
+        int last_pos=1;
+        for(int i=1;i<len;++i){
+            //标记
+            if(nums[i]==last){
+                ++time;
+            }
+            else{
+                time=1;
+                last=nums[i];
+            }
+            //移动
+            if(time<=2){
+                nums[last_pos]=nums[i];
+                ++last_pos;
+            }
+        }
+        return last_pos;
+    }
+};
