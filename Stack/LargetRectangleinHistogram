@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        /*与蓄水的关键区别在于，面积除了受制于两端之外，还被中间限制了*/
+        /*因此关键在于中间的最小值*/
+        /*更准确的说，应该是[i,j]内的最小值*/
+        int len=heights.size();
+        if(len==0)
+            return 0;
+        int maxarea=0;
+        int i=0;
+        while(i<len){
+            int j=i;
+            while(j+1<len && heights[j+1]>=heights[j])
+                ++j;
+            int curheight=heights[j];
+            i=j;
+            for(;j>=0;--j){
+                curheight=min(curheight,heights[j]);
+                maxarea=max(maxarea,(i-j+1)*curheight);
+            }
+            i+=1;
+        }
+        return maxarea;  
+    }
+};
