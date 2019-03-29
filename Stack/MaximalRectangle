@@ -1,0 +1,38 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        /*本质是一个二维的直方图*/
+        int m=matrix.size();
+        if(m==0)
+            return 0;
+        int n=matrix[0].size();
+        int Area=0;
+        vector<int>hist(n,0);
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j)
+                hist[j]=(matrix[i][j]=='1')?hist[j]+1:0;
+            //Area=max(Area,largest(hist));
+            Area=max(Area,_helper(hist));
+        }
+        return Area;
+    }
+private:
+    int _helper(vector<int>&hist){
+        //计算这个直方图符合要求的最大面积
+        stack<int>st;
+        hist.push_back(0);
+        int Area=0;
+        int len=hist.size();
+        for(int i=0;i<len;++i){
+            while(!st.empty() && hist[st.top()]>=hist[i]){
+                int cur=st.top();
+                st.pop();
+                Area=max(Area,hist[cur]*(st.empty()?i:(i-st.top()-1)));
+            }
+            st.push(i);
+        }
+        hist.pop_back();
+        return Area;
+    }
+   
+};
