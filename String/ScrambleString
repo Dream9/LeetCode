@@ -1,0 +1,28 @@
+class Solution {
+public:
+    bool isScramble(string s1, string s2) {
+        /*关键理解题意*/
+        if(s1==s2)
+            return true;
+        string s11=s1;
+        string s22=s2;
+        sort(s11.begin(),s11.end());
+        sort(s22.begin(),s22.end());
+        if(s11!=s22)
+            return false;
+        int m=s1.size();
+        for(int i=1;i<m;++i){
+            string a11=s1.substr(0,i);
+            string a12=s1.substr(i);
+            string a21=s2.substr(0,i);
+            string a22=s2.substr(i);
+            if(isScramble(a11,a21) && isScramble(a12,a22))
+                return true;
+            a21=s2.substr(m-i);
+            a22=s2.substr(0,m-i);
+            if(isScramble(a11,a21) && isScramble(a12,a22))
+                return true;
+        }
+        return false;
+    }
+};
