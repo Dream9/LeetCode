@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> grayCode(int n) {
+        //每次变动一位，不能重复，backtrack
+        unordered_set<int>s;
+        vector<int> out;
+        s.insert(0);
+        out.push_back(0);
+        _helper(0,n,s,out);
+        return out;
+        
+    }
+private:
+    void _helper(int num,int n,unordered_set<int>&s,
+                 vector<int>& out){
+        for(int i=0;i<n;++i){
+            int k=num;
+            k^=(1<<i);
+            if(s.insert(k).second){
+                out.push_back(k);
+                _helper(k,n,s,out);
+            }
+        }
+    }
+};
