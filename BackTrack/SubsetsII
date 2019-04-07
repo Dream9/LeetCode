@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        if(nums.empty())
+            return {};
+        vector<vector<int>>out;
+        vector<int>path;
+        out.emplace_back(path);
+        sort(nums.begin(),nums.end());
+        _helper(nums,path,out,0);
+        return out;
+    }
+private:
+    void _helper(vector<int>& nums,vector<int>& path,
+                 vector<vector<int>>& out,int iter){
+        if(iter==nums.size()){
+            return;
+        }
+        int len=nums.size();
+        for(int i=iter;i<len;++i){
+            if(i!=iter && nums[i]==nums[i-1])
+                continue;
+            path.emplace_back(nums[i]);
+            out.emplace_back(path);
+            _helper(nums,path,out,i+1);
+            path.pop_back();
+        }
+    }
+};
