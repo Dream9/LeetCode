@@ -1,0 +1,92 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+        vector<TreeNode*> out;
+        if(n<1)
+            return out;
+        generate(1,n,out);
+        return out;
+        
+        
+    }
+private:
+    void generate(int left,int right,vector<TreeNode*>& rec){
+        if(left>right){
+            rec.emplace_back(nullptr);
+            return;
+        }
+        for(int i=left;i<=right;++i){
+            vector<TreeNode*> _l;
+            vector<TreeNode*> _r;
+            generate(left,i-1,_l);
+            generate(i+1,right,_r);
+            //保证每次记录的node*都不一样
+            //TreeNode* med=new TreeNode(i);
+            //
+            for(TreeNode* ln:_l){
+                for(TreeNode* rn:_r){
+                    TreeNode* med=new TreeNode(i);
+                    med->left=ln;
+                    med->right=rn;
+                    rec.emplace_back(med);
+                }
+            }
+        }
+    }
+};
+/*
+class Solution {
+public:
+    vector<TreeNode*> generateTrees(int n) {
+        if(n<=0)
+            return{};
+        vector<TreeNode*>out;
+        for(int i=1;i<=n;++i){
+        //对于返回不定个数的函数，显然要通过某些容器返回
+        ////////////////////////////////////////////
+            vector<TreeNode*>lv;
+            vector<TreeNode*>rv;
+            _helper(lv,1,i-1);
+            _helper(rv,i+1,n);
+            TreeNode* med=new TreeNode(i);
+            for(TreeNode* i:lv){
+                for(TreeNode* j:rv){
+                    med->left=i;
+                    med->right=j;
+                    out.emplace_back(med);
+                }
+            }
+        }
+        return out;
+    }
+protected:
+    void _helper(vector<TreeNode*>&rec,int left,int right){
+        if(left>right){
+            rec.emplace_back(nullptr);
+            return ;
+        }
+        if(left==right){
+            TreeNode* tmp=new TreeNode(left);
+            rec.emplace_back(tmp);
+            return ;
+        }
+        for(int i=left;i<=right;++i){
+            TreeNode* _l=_helper(rec,left,i-1);
+            TreeNode* tmp=new TreeNode(i);
+            TreeNode* _r=_helper(rec,i+1,right);
+            tmp->left=_l;
+            tmp->right=_r; 
+            rec.emplace_back(tmp);
+        }
+    }
+};
+*/
