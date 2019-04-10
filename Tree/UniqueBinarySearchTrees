@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int numTrees(int n) {
+        if(n<=1)
+            return 1;
+        return C(n);
+        
+        /*基于dp*/
+        vector<int>dp(n+1,0);
+        dp[0]=1;
+        dp[1]=1;
+        for(int i=2;i<=n;++i){
+            for(int j=1;j<=i;++j){
+                dp[i]+=dp[j-1]*dp[i-j];
+            }
+        }
+        return dp[n];
+    }
+private:
+    //TLE
+    int _helper(int left,int right){
+        if(left>right)
+            return 1;
+        int cnt=0;
+        for(int i=left;i<=right;++i){
+            int _l=_helper(left,i-1);
+            int _r=_helper(i+1,right);
+            cnt+=_r*_l;
+        }
+        return cnt;
+    }
+    
+    int C(int n){
+        //卡特兰数
+        long long out=1;
+        int index=0;
+        for(;index<n;++index){
+            out=out*2*(2*index+1)/(index+2);
+        }
+        return out;
+    }
+};
