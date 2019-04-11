@@ -1,0 +1,56 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void recoverTree(TreeNode* root) {
+        /*关键在于遍历找到不符合顺序的2个节点*/
+        /*特殊情况是紧邻的两个节点发生了交换，此时第二个指针会为nullptr*/
+        if(root==nullptr)
+            return;
+        
+        TreeNode* prevb=nullptr;
+        TreeNode* prevl=nullptr;
+        TreeNode* prev=nullptr;
+        TreeNode* special;
+        TreeNode* cur=root;
+        stack<TreeNode*>st;
+        bool flag=true;
+        
+        while(cur!=nullptr || !st.empty()){
+            while(cur){
+                st.push(cur);
+                cur=cur->left;
+            }
+            cur=st.top();
+            st.pop();
+            if(prev!=nullptr && prev->val>=cur->val){
+                if(flag){
+                    //错序中较大的那个
+                    prevb=prev;
+                    flag=false;
+                    special=cur;//特殊情况。。。
+                }
+                else{
+                    //找到错序中较小的那个
+                    prevl=cur;
+                    break;
+                }
+            }
+            prev=cur;
+            cur=cur->right;
+        }
+        //判断特殊情况
+        if(prevl==nullptr)
+            prevl=special;
+        int tmp=prevb->val;
+        prevb->val=prevl->val;
+        prevl->val=tmp;
+    }
+};
