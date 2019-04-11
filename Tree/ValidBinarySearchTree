@@ -21,6 +21,7 @@ public:
     }
 private:
     bool _isValid(TreeNode* root,long Max,long Min){
+        //设置一个上下限
         if(root==nullptr)
             return true;
         if(root->left && (root->left->val>=root->val || 
@@ -32,4 +33,31 @@ private:
         return _isValid(root->left,root->val,Min) && _isValid(root->right,Max,root->val);
     }
     
+    
+    bool _isV(TreeNode* root) {
+        //利用了BST的中序遍历特征
+        if(root==nullptr)
+            return true;
+        stack<TreeNode*>st;
+        TreeNode* cur=root;
+        int last;
+        int flag=false;
+        while(cur!=nullptr || !st.empty()){
+            while(cur){
+                st.push(cur);
+                cur=cur->left;
+            }
+            cur=st.top();
+            st.pop();
+            if(flag && last>=cur->val)
+                return false;
+            else{
+                flag=true;
+                last=cur->val;
+            }
+            cur=cur->right;
+        }
+        return true;
+        
+    }
 };
