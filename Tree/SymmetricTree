@@ -1,0 +1,73 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if(root==nullptr)
+            return true;
+        
+        /*layer遍历，中心对称*/
+        //也可以采用递归
+        return _helper(root->left,root->right);
+        
+        
+        /*
+        vector<TreeNode*>layer;
+        layer.push_back(root);
+        
+        while(!layer.empty()){
+            vector<TreeNode*>tmp;
+            int len=layer.size();
+            tmp.reserve(len<<1);
+            int med=(len>>1)-1;
+            
+            for(int i=0;i<=med;++i){
+                if(layer[i]==nullptr && layer[len-i-1]==nullptr){
+                    tmp.push_back(nullptr);
+                    tmp.push_back(nullptr);
+                    continue;
+                }
+                if(layer[i] && layer[len-i-1] &&
+                  layer[i]->val==layer[len-i-1]->val){
+                    tmp.push_back(layer[i]->left);
+                    tmp.push_back(layer[i]->right);
+                    continue;
+                }
+                return false;
+            }
+            
+            for(int i=med+1;i<len;++i){
+                if(layer[i]){
+                    tmp.push_back(layer[i]->left);
+                    tmp.push_back(layer[i]->right);
+                }
+                else{
+                    tmp.push_back(nullptr);
+                    tmp.push_back(nullptr);
+                }
+            }
+            
+            layer.swap(tmp);
+        }
+        return true;    
+        */
+        
+        
+    }
+private:
+    bool _helper(TreeNode* left,TreeNode* right){
+        if(left==nullptr && right==nullptr)
+            return true;
+        if(left && right && left->val==right->val)
+            return _helper(left->left,right->right) &&
+                   _helper(left->right,right->left);
+        return false;
+    }
+};
