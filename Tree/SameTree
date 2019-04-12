@@ -1,0 +1,24 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        /*按照统一方式遍历*/
+        return _helper(p,q);
+    }
+private:
+    bool _helper(TreeNode* p,TreeNode* q){
+        if(p==nullptr && q==nullptr)
+            return true;
+        if(p && q && p->val==q->val)
+            return _helper(p->left,q->left) && _helper(p->right,q->right);
+        return false;
+    }
+};
