@@ -1,0 +1,63 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    typedef vector<int>::iterator It;
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        /*先序可以确定root,中序可以确定root->left部分，剩下的为其right部分*/
+        if(preorder.empty() || preorder.size()!=inorder.size())
+            return nullptr;
+        
+        /*
+        return _bulid(preorder.begin(),preorder.end()-1,
+                     inorder.begin(),inorder.end()-1);
+        */
+        
+
+        /*传递位置参数时更快一点*/
+        return tree(preorder,inorder,0,0,inorder.size()-1);
+        
+    }
+private:
+    //下面的版本传递的是迭代器
+    TreeNode* _bulid(It preBeg,It preEnd,It inBeg,It inEnd){
+        int len=std::distance(preBeg,preEnd);
+        //int len=preEnd-preBeg;
+        TreeNode* root=new TreeNode(*preBeg);
+        int j=0;
+        
+        while(j<len && *(inBeg+j)!=*preBeg)
+            ++j;
+        if(j!=0)
+            root->left=_bulid(preBeg+1,preBeg+j,inBeg,inBeg+j-1);
+        if(j!=len)
+            root->right=_bulid(preBeg+j+1,preEnd,inBeg+j+1,inEnd);
+        return root;
+    }
+    
+    //下面的版本传递是位置
+    TreeNode* tree(vector<int>&preorder,vector<int>&inorder,int pl,int il,int ir){
+        if(il>ir)//pl>pr||
+            return nullptr;
+        
+        auto root=new TreeNode(preorder[pl]);
+        int index=il;
+        
+        while(inorder[index]!=preorder[pl]) ++index;
+        // if (index>ir)
+        //     return nullptr;
+        //c//
+        int count=index-il;
+        root->left=std::move(tree(preorder,inorder,pl+1,il,index-1));
+        root->right=std::move(tree(preorder,inorder,pl+count+1,index+1,ir));
+        
+        return root;
+    }
+};
