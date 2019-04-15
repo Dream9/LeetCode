@@ -1,0 +1,61 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        /*分治？*/
+        if(head==nullptr)
+            return nullptr;
+        if(head->next==nullptr)
+            return new TreeNode(head->val);
+        //快慢指针找到root
+        ListNode* fast=head;
+        ListNode* slow=head;
+        int cnt=0;
+        
+        while(fast->next && fast->next->next){
+            fast=fast->next->next;
+            slow=slow->next;
+            ++cnt;
+        }
+        TreeNode* root=new TreeNode(slow->val);
+        root->left=cnt==0?nullptr:_helper(head,cnt);
+        cnt+=(fast->next?1:0);
+        root->right=_helper(slow->next,cnt);
+        return root;
+    }
+private:
+    TreeNode* _helper(ListNode* node,int count){
+        if(count==0)
+            return nullptr;
+        if(count==1)
+            return new TreeNode(node->val);
+        //第count>>1个为root
+        int num=count>>1;
+        ListNode* med=node;
+        while(num>0){
+            med=med->next;
+            --num;
+        }
+        TreeNode* root=new TreeNode(med->val);
+        num=count>>1;
+        root->left=_helper(node,num);
+        root->right=(count-num-1>0)?_helper(med->next,count-num-1):nullptr;
+        return root;
+    }
+};
