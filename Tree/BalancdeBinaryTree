@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        /*两个条件：左右是平衡的；左右深度差小于等于1*/
+        if(root==nullptr)
+            return true;
+        int l=_depth(root->left,1);
+        int r=_depth(root->right,1);
+        return (l==-1 || r==-1 || abs(l-r)>1)?false:true;
+    }
+private:
+    /*@brief:返回-1标识处不平衡*/
+    int _depth(TreeNode* root,int D){
+        
+        if(root==nullptr)
+            return D;
+        int Dl=_depth(root->left,D+1);
+        if(Dl==-1)
+            return -1;
+        int Dr=_depth(root->right,D+1);
+        if(Dr==-1)
+            return -1;
+        if(abs(Dl-Dr)>1)
+            return -1;
+        return max(Dl,Dr);
+    }
+};
