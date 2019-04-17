@@ -1,0 +1,30 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        /*注意是要到叶子节点*/
+        //并且规定{},0 是false
+        if(root==nullptr)
+            return false;
+        sum-=root->val;
+        /*注意如果是负数，是可以小于0的
+        if(sum<0)
+            return false;
+        */
+        //leaf
+        if(!root->left && !root->right){
+            return sum==0?true:false;
+        }
+        
+        return hasPathSum(root->left,sum) || hasPathSum(root->right,sum);
+        
+    }
+};
