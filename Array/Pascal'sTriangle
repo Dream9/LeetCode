@@ -1,0 +1,29 @@
+class Solution {
+public:
+    vector<vector<int>> generate(int numRows) {
+        /*遍历过程中记录路径即可*/
+        /*也可以循环完成，类似于全排列问题*/
+        vector<vector<int>>out;
+        vector<int>path(1,1);
+        _Generate(numRows,path,out);
+        return out;
+    }
+private:
+    void _Generate(int num,vector<int>&path,vector<vector<int>>&out){
+        if(num<=0) return;
+        
+        int len=path.size();
+        vector<int>tmp;
+        tmp.reserve(len+1);
+        
+        tmp.emplace_back(1);
+        for(int i=1;i<len;++i){
+            tmp.emplace_back(path[i-1]+path[i]);
+        }
+        tmp.emplace_back(1);
+        out.emplace_back(path);
+        path.swap(tmp);
+        _Generate(num-1,path,out);
+        
+    }
+};
