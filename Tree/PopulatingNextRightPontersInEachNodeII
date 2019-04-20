@@ -1,0 +1,59 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+    Node* next;
+
+    Node() {}
+
+    Node(int _val, Node* _left, Node* _right, Node* _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+};
+*/
+class Solution {
+public:
+    Node* connect(Node* root) {
+        /*一定要先_Connect右侧，然后左侧，，，为什么*/
+        //存在这种情况
+        //   3   5   6
+        //  1 2     7 8
+        //先左后右时候，遍历到3，5还没有指向6，那么2会指向nullptr
+        
+        _Connect(root);
+        return root;
+    }
+    
+private:
+    Node* _NextNode(Node *node){
+        while(node->next){
+            node=node->next;
+            if(node->left)
+                return node->left;
+            if(node->right)
+                return node->right;
+        }
+        return nullptr;
+    }
+    
+    void _Connect(Node* node){
+        if(!node) return;
+        
+        if(node->right){
+            node->right->next=_NextNode(node);
+        }
+        if(node->left){
+            node->left->next=(node->right?node->right:_NextNode(node));
+        }
+        
+        _Connect(node->right);
+        _Connect(node->left);
+        //_Connect(node->right);
+    }
+};
