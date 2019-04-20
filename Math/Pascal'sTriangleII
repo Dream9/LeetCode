@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<int> getRow(int rowIndex) {
+        /*不记录中间过程即可*/
+        /*循环完成*/
+        if(rowIndex<0) return {};
+        
+        vector<int>out;
+        out.reserve(rowIndex+1);
+        out.emplace_back(1);
+        
+        while(rowIndex>0){
+            vector<int> vecTmp(out.begin(),out.end());
+            int iLen=vecTmp.size();
+            for(int i=0;i<iLen;++i){
+                out[i+1]+=vecTmp[i];
+            }
+            out.emplace_back(1);
+            --rowIndex;
+        }
+        return out;
+    }
+private:
+    //根据数学规律
+    vector<int> _GetRow(int rowIndex){
+        vector<int>res(rowIndex+1);
+        res[0]=1;
+        if(rowIndex<1)
+            return res;
+        res[1]=1;
+        res[rowIndex]=1;
+        for(int i=1;i<rowIndex;++i){
+            for(int j=1;j<=i;++j){
+                int tmp=res[j];
+                res[j]+=res[rowIndex];
+                res[rowIndex]=tmp;
+            }
+            res[i+1]=1;
+        }
+        return res;
+    }
+};
