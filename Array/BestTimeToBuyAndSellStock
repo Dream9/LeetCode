@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        /*维持两个变量*/
+        /*最大利润与最小价格*/
+        if(prices.empty())
+            return 0;
+        int min_price=prices[0];
+        int max_profit=0;
+        for(int cur_price:prices){
+            max_profit=max(max_profit,cur_price-min_price);
+            min_price=min(min_price,cur_price);
+        }
+        return max_profit;
+    }
+};
