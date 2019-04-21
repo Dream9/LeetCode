@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        /*dp的更新方式*/
+        if(triangle.empty())
+            return 0;
+        
+        int len=triangle.size();
+        vector<int>weight(len,0);
+        weight[0]=triangle[0][0];
+        
+        int i=1;
+        while(i<len){
+            int layer_len=triangle[i].size()-1;
+            int last=weight[0];
+            
+            weight[0]+=triangle[i][0];
+            for(int j=1;j<layer_len;++j){
+                int new_data=triangle[i][j]+min(last,weight[j]);
+                last=weight[j];
+                weight[j]=new_data;
+            }
+            weight[layer_len]=triangle[i][layer_len]+last;
+            /*
+            if(i==2)
+                return weight[0];
+            */
+            ++i;
+        }
+        
+        i=weight[0];
+        for_each(weight.begin(),weight.end(),[&](int cur){i=min(i,cur);});
+        return i;
+    }
+};
