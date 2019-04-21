@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        /*变相统计所有的正利润*/
+        /*只要是正的就是盈利的*/
+        if(prices.empty())
+            return 0;
+        int prev_price=prices[0];
+        int total_profit=0;
+        int cur_profit=0;
+        for(int cur_price:prices){
+            cur_profit=cur_price-prev_price;
+            total_profit+=(cur_profit>0?cur_profit:0);
+            prev_price=cur_price;
+        }
+        return total_profit;
+    }
+};
