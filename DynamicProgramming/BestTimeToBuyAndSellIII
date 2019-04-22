@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        if (prices.empty()) return 0;
+        int n = prices.size(), g[n][3] = {0}, l[n][3] = {0};
+        for (int i = 1; i < prices.size(); ++i) {
+            int diff = prices[i] - prices[i - 1];
+            for (int j = 1; j <= 2; ++j) {
+                l[i][j] = max(g[i - 1][j - 1] + max(diff, 0), l[i - 1][j] + diff);
+                g[i][j] = max(l[i][j], g[i - 1][j]);
+            }
+        }
+        return g[n - 1][2];
+        
+        
+        
+        /*
+        if(prices.empty())
+            return 0;
+        vector<int>profits;
+        int profit=0;
+        int prev_price=prices[0];
+        int last_in=prices[0];
+        int len=prices.size();
+        int mmax=0;
+        int first=0;
+        int second=0;
+
+        for(int i=1;i<len;++i){
+            int cur_profit=prices[i]-prices[i-1];
+            if(cur_profit<=0){
+                profits.emplace_back(profit);
+                if(profit>max){
+                    first=i-1;
+                }
+                int id=
+                profit=0;
+                prev_price=prices[i];
+            }
+            else{
+                profit+=cur_profit;
+            }
+        }
+        if(profit>0)
+            profits.emplace_back(profit);
+        //return profits[0]*1000+profits[1]*100+profits[2]*10+profits[3];
+
+        if(profits.size()>=2){
+            partial_sort(profits.begin(),profits.begin()+2,profits.end(),std::greater<int>());
+            return max(0,max(profits[0],profits[0]+profits[1]));
+        }
+        if(profits.empty())
+            return 0;
+        return max(0,profits[0]);
+        */
+    }
+};
