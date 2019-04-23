@@ -1,0 +1,27 @@
+class Solution {
+public:
+    //isdigit配合isalpha 双向比较即可
+    bool isPalindrome(string s) {
+        if(s.empty())
+            return true;
+        int left=0;
+        int len=s.size();
+        int right=len-1;
+        
+        while(left<right){
+            while(left<len && !isdigit(s[left]) && !isalpha(s[left]))
+                ++left;
+            while(right>=0 && !isdigit(s[right]) && !isalpha(s[right]))
+                --right;
+            if(left==len || right==-1)
+                return true;
+            if(isalpha(s[left]) && tolower(s[left])!=tolower(s[right]))
+                return false;
+            if(isdigit(s[left]) && s[left]!=s[right])
+                return false;
+            ++left;
+            --right;
+        }
+        return true;
+    }
+};
