@@ -1,0 +1,104 @@
+class Solution {
+public:
+    //转换为图的形式，相差1为相连，判断可达性
+    vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
+        int len=wordList.size();
+        vector<vector<bool>>link(len,vector<bool>(len,true));
+        //图构造
+        for(int i=0;i<len;++i){
+            for(int j=i+1;j<len;++j){
+                link[i][j]=link[j][i]=_IsLinked(wordList[i],wordList[j]);
+            }
+        }
+        
+        //计算最短长度
+        unordered_set<string> layer;
+        unordered_set<string> pool(wordList.begin(),wordList.end());
+        layer.insert(beginWord);
+        int count=0;
+        while(!pool.empty()){
+            unordered_set<string>next;
+            for(string layer_word:layer){
+                unordered_set<string>pool_dump(pool.begin(),pool.end());
+                for(string cur:pool_dump){
+                    if(_IsLinked(layer_word,cur)){
+                        next.insert(cur);
+                        pool.erase(cur);
+                    }
+                }
+            }
+            if(next.empty())
+                return {};
+            count++;
+            //vector<vector<string>> tmp;
+            //for(string cur:next){
+            //    for(vector<string> path:ans){
+            //        path.emplace_back(cur);
+            //        tmp.emplace_back(path);
+            //    }
+            //}
+            //ans.swap(tmp);
+            if(next.find(endWord)!=next.end())
+                break;
+            layer=std::move(next);
+        }
+        
+        
+        //下面的是找寻所有路径
+        vector<bool>is_visited(len,false);
+        vector<vector<string>>ans;
+        for(int i=0;i<len;++i){
+            //寻找遍历的起点
+            if(_IsLinked(beginWord,wordList[i])){
+                vector<bool>is_visited(len,false);
+                vector<string>path;
+                path.emplace_back(beginWord);
+                path.emplace_back(wordList[i]);
+                is_visited[i]=true;
+                _dfs(wordList,link,i,is_visited,endWord,path,ans,count);
+            }
+        }
+        return ans;
+        
+    }
+    
+private:
+    bool _IsLinked(string &first,string &second){
+        int cnt=0;
+        int len_first=first.size();
+        int len_second=second.size();
+        if(abs(len_first-len_second)>1)
+            return false;
+        
+        int len=min(len_first,len_second);
+        for(int i=0;i<len && cnt<2;++i){
+            if(first[i]!=second[i])
+                cnt++;
+        }
+        return (cnt<2 && len_first==len_second)?true:
+                         (cnt==0)?true:false;
+    }
+    
+    //最短路径应该用bfs,因为这里的权重是一样的
+    void _dfs(vector<string>& wordList,vector<vector<bool>>&G,
+             int pos,vector<bool>&visited,
+             string& end,vector<string>&path,
+             vector<vector<string>>&ans,int shortest_len){
+        if(shortest_len<1)
+            return;
+        if(wordList[pos]==end){
+            ans.emplace_back(path);
+            return;
+        }
+        int len=visited.size();
+        for(int i=0;i<len;++i){
+            if(!visited[i] && G[pos][i]){
+                path.emplace_back(wordList[i]);
+                visited[i]=true;
+                _dfs(wordList,G,i,visited,end,path,ans,shortest_len-1);
+                visited[i]=false;
+                path.pop_back();
+            }
+        }
+    }
+};
