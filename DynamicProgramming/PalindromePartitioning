@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<vector<string>> partition(string s) {
+        if(s.empty())
+            return {};
+        int len=s.size();
+        vector<vector<bool>>dp(len,vector<bool>(len,false));
+        for(int i=0;i<len;++i){
+            for(int j=0;j<=i;++j){
+                //注意这个地方！！！！！
+                //if(s[i]==s[j] &&  (i==j || i+1==j || i+2==j || j>=i+2 && dp[i+1][j-1]) )
+                if(s[i]==s[j] &&  (j>=i-2 || dp[j+1][i-1]) )
+                    dp[j][i]=true;
+            }
+        }
+        vector<string> path;
+        vector<vector<string>> out;
+        _Partition(s,0,path,out,dp);
+        return out;
+    }
+private:
+    void _Partition(string &s,int idx,vector<string> &path,vector<vector<string>> &out,
+                   vector<vector<bool>> &dp){
+        if(idx==s.size()){
+            out.emplace_back(path);
+            return;
+        }
+        int len=s.size();
+        for(int i=idx;i<len;++i){
+            if(dp[idx][i]){
+                path.emplace_back(s.substr(idx,i-idx+1));
+                _Partition(s,i+1,path,out,dp);
+                path.pop_back();
+            }
+        }
+    }
+};
