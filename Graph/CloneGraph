@@ -1,0 +1,54 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+
+    Node() {}
+
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+class Solution {
+public:
+    Node* cloneGraph(Node* node) {
+        /*在遍历图过程中，建立一个map,映射oldNode与newNode*/
+        /*map中未映射的Node对，说明需要deepcopy一个*/
+        /*思路与之前拷贝带有随机指向指针的list相似*/
+        if(!node)
+            return nullptr;
+        unordered_map<Node*,Node*>mapNode;
+        unordered_set<Node*>visited;
+        Node *out=new Node();
+        out->val=node->val;
+        mapNode.insert(make_pair(node,out));
+        _Copy(node,out,mapNode,visited);
+        return out;
+    }
+private:
+    void _Copy(Node *node,Node *out,unordered_map<Node*,Node*> &mapNode,
+               unordered_set<Node*> &visited){
+        if(visited.find(node)!=visited.end()){
+            return;
+        }
+        vector<Node *> &tmp=out->neighbors;
+        for(Node *i:node->neighbors){
+            if(mapNode.find(i)==mapNode.end()){
+                Node *newnode=new Node(i->val);
+                mapNode.insert(make_pair(i,newnode));
+                tmp.emplace_back(newnode);
+            }
+            else{
+                tmp.emplace_back(mapNode[i]);
+            }
+        }
+        visited.insert(node);
+        for(Node *i:node->neighbors){
+            _Copy(i,mapNode[i],mapNode,visited);
+        }
+    }
+};
