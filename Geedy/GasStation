@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int canCompleteCircuit(vector<int>& gas, vector<int>& cost) {
+        /*delta=gas-cost,如果delta>=0,那么这个点是从后某点起可达的*/
+        /*如果<0,并且存在能够循环的路线，那么delta累和必须尽量取最大值*/
+        /*在贪心的情况下，就是把起点设置为下一个点*/
+        if(accumulate(gas.begin(),gas.end(),0)<accumulate(cost.begin(),cost.end(),0))
+            return -1;
+        int len=gas.size();
+        int i=0;
+
+        while(i<len){
+            int tmp=i;
+            int step=0;
+            int costs=0;
+            int gass=0;
+            while(gass>=costs && step<len){
+                gass+=gas[i];
+                costs+=cost[i];
+                i=(i+1)%len;
+                ++step;
+            }
+            if(step==len && gass>=costs){
+                return tmp;
+            }
+            //始终保持前向移动
+            i=i>tmp?i:tmp+1;
+        }
+        return -1;
+    }
+};
