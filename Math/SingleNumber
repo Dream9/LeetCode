@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int ans=0;
+        for(int i:nums){
+            ans ^= i;
+        }
+        return ans;
+        /*如果不借助异或，那就用set,第二次insert是false的*/
+    }
+};
