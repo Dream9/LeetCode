@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        
+        unordered_map<int,int>dict;
+        int ans=0;
+        for(int i:nums){
+            dict[i]+=1;
+            ans ^= dict[i]<3?i:0;
+        }
+        
+        return ans;
+        
+        //或者
+        //unordered_map<int,int>dict;
+        //for(int i:nums){
+        //    dict[i]=dict[i]+1;
+        //}
+        //
+        //for(auto i:dict){
+        //    if(i.second==1)
+        //        return i.first;
+        //}
+        //
+        //return -1;
+    }
+};
