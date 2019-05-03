@@ -1,0 +1,49 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+
+    Node() {}
+
+    Node(int _val, Node* _next, Node* _random) {
+        val = _val;
+        next = _next;
+        random = _random;
+    }
+};
+*/
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        /*与Clone Graph类似，关键在于维护new出来的Node和旧Node的关系*/
+        //第一遍主干建立联系
+        if(!head){
+            return nullptr;
+        }
+        unordered_map<Node*,Node*>dict;
+        Node *iter=head->next;
+        Node *ans=new Node(head->val,nullptr,nullptr);
+        Node *iter2=ans;
+        dict[head]=ans;
+        while(iter){
+            Node *tmp=new Node(iter->val,nullptr,nullptr);
+            dict[iter]=tmp;
+            iter2->next=tmp;
+            iter2=tmp;
+            iter=iter->next;
+        }
+        
+        //第二遍copy分支
+        while(head){
+            if(head->random){
+                dict[head]->random=dict[head->random];
+            }
+            head=head->next;
+        }
+        
+        return ans;
+    }
+};
