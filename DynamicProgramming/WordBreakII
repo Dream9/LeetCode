@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        /*先判断可切分，然后遍历集合*/
+        if(s.empty())
+            return {};
+        int len=s.size();
+        vector<bool>dp(len+1,false);
+        unordered_set<string>dict(wordDict.begin(),wordDict.end());
+        dp[len]=true;
+        for(int i=len-1;i>=0;--i){
+            int j=i+1;
+            while(j<=len){
+                if(dp[j] && dict.find(s.substr(i,j-i))!=dict.end()){
+                    dp[i]=true;
+                    break;
+                }
+                ++j;
+            }
+        }
+        if(dp[0]==false)
+            return {};
+        
+        //遍历解空间
+        vector<string>out;
+        string path; 
+        _Dfs(s,dict,dp,path,out,0);
+        
+        return out;
+    }
+private:
+    void _Dfs(string &s,unordered_set<string> &dict,vector<bool> &dp,
+             string &path,vector<string> &out,int index){
+        int len=s.size();
+        if(len==index){
+            path.pop_back();
+            out.emplace_back(path);
+            return;
+        }
+        for(int i=index;i<len;++i){
+            string tmp=s.substr(index,i-index+1);
+            if(dp[i+1] && dict.find(tmp)!=dict.end()){
+                string ttm=path;
+                path+=tmp+" ";
+                _Dfs(s,dict,dp,path,out,i+1);
+                path=ttm;
+            }
+        }
+        //return;
+    }
+};
