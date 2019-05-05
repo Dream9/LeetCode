@@ -1,0 +1,45 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        /*flyd判圈的变式*/
+        if(!head){
+            return head;
+        }
+        ListNode *fast=head;
+        ListNode *slow=head;
+        bool flag=false;
+        
+        //判圈
+        while(fast && fast->next){
+            fast=fast->next->next;
+            slow=slow->next;
+            if(fast && fast==slow){
+                flag=true;
+                break;
+            }
+        }
+        
+        //注意，存在没有进入循环直接到这里的情况,故这个判别是错误的
+        //if(!fast || fast!=slow)
+        if(false==flag){
+            return nullptr;
+        }
+        
+        //寻找起点
+        slow=head;
+        while(slow!=fast){
+            slow=slow->next;
+            fast=fast->next;
+        }
+        return slow;
+        
+    }
+};
