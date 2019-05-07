@@ -1,0 +1,61 @@
+class LRUCache {
+private:
+    using _Ty=pair<int,int>;
+    using _Ky=list<_Ty>::iterator;
+    using _iterator=unordered_map<int,_Ky>::iterator;
+    unordered_map<int,_Ky> _C;
+    list<_Ty> _L;
+    int _cap;
+public:
+    //hash+list组合
+    LRUCache(int capacity) {
+        _cap=capacity;
+    }
+    
+    int get(int key) {
+        _iterator ans;
+        int out;
+        
+        if((ans=_C.find(key))==_C.end()){
+            return -1;
+        }
+        
+        out=ans->second->second;
+        //更新缓存
+        _Ty cur=*(ans->second);
+        _L.erase(ans->second);
+        _L.push_front(cur);
+        
+        ans->second=_L.begin();
+
+        return out;
+    }
+    
+    void put(int key, int value) {
+        int len=_C.size();
+        _iterator ans=_C.find(key);
+        
+        if(ans==_C.end()){
+            if(len==_cap){
+                int key_to_pop=_L.back().first;
+                _L.pop_back();
+                _C.erase(key_to_pop);
+            }
+            _L.push_front(_Ty(key,value));
+            _C[key]=_L.begin();
+        }
+        else{
+            _L.erase(ans->second);
+            _Ty cur=_Ty(key,value);
+            _L.push_front(cur);
+            ans->second=_L.begin();
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
