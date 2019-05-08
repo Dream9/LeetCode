@@ -1,0 +1,59 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        /*归并排序*/
+        if(!head || !head->next){
+            return head;
+        }
+        
+        ListNode *prev=head;
+        ListNode *fast=head;
+        ListNode *slow=head;
+        
+        while(fast && fast->next){
+            prev=slow;
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        
+        //注意，下面的这种分割是有问题的，对于只有两个元素，相当于没有分割
+        //fast=slow->next;
+        //slow->next=nullptr;
+        //return merge(sortList(head),sortList(fast));
+
+        prev->next=nullptr;
+        return merge(sortList(head),sortList(slow));
+    }
+    
+private:
+    ListNode* merge(ListNode *left,ListNode *right){
+        if(!left || !right){
+            return left?left:right;
+        }
+        
+        //注意返回out是不可取的
+        //ListNode *out;
+        if(left->val<right->val){
+            //out=left;
+            //out->next=merge(left->next,right);
+            left->next=merge(left->next,right);
+            return left;
+        }
+        else{
+            //out=right;
+            //out->next=merge(left,right->next);
+            right->next=merge(left,right->next);
+            return right;
+        }
+        
+        //return out;
+    }
+};
