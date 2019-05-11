@@ -1,0 +1,59 @@
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        /*需要维护两个量*/
+        /*之前的局部极大,之前局部极小,以及当前值都有可能成为最大*/
+        if(nums.empty())
+            return 0;
+        
+        int len=nums.size();
+        int ans=nums[0];
+        vector<int>min_X(len,0);
+        vector<int>max_X(len,0);
+        min_X[0]=nums[0];
+        max_X[0]=nums[0];
+        
+        for(int i=1;i<len;++i){
+            min_X[i]=min(nums[i],min(min_X[i-1]*nums[i],
+                                     max_X[i-1]*nums[i]));
+            max_X[i]=max(nums[i],max(min_X[i-1]*nums[i],
+                                     max_X[i-1]*nums[i]));
+            ans=max(ans,max_X[i]);
+        }
+        return ans;
+    }
+   //TLE... 
+   // int maxProduct(vector<int>& nums) {
+   //     /*子串最大乘积值*/
+   //     /*明显动态规划*/
+   //     if(nums.empty()){
+   //         return 0;//??
+   //     }
+   //     
+   //     int len=nums.size();
+   //     if(len==1){
+   //         return nums[0];
+   //     }
+   //     
+   //     int ans=INT_MIN;
+   //     vector<vector<int>>dp(len,vector<int>(len,0));
+   //     
+   //     //边界条件
+   //     dp[0][0]=nums[0];
+   //     for(int i=1;i<len;++i){
+   //         dp[0][i]=dp[0][i-1]*nums[i];
+   //         dp[i][i]=nums[i];
+   //         ans=max(ans,dp[0][i]);
+   //     }
+   //     
+   //     for(int i=1;i<len;++i){
+   //         ans=max(ans,nums[i]);
+   //         for(int j=i+1;j<len;++j){
+   //             dp[i][j]=dp[i][j-1]*nums[j];
+   //             ans=max(ans,dp[i][j]);
+   //         }
+   //     }
+   //     return max(ans,nums[0]);
+   //     
+   // }
+};
