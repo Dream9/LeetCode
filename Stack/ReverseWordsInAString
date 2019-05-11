@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        /*空格分隔，stack输出即可*/
+        if(s.empty())
+            return "";
+        size_t len=s.size();
+        size_t first=0;
+        size_t second=0;
+        stack<string>st;
+        string ans="";
+        
+        //提取
+        while(second!=len){
+            first=s.find_first_not_of(" ",second);
+            if(string::npos==first)
+                break;
+            second=s.find_first_of(" ",first);
+            if(string::npos==second)
+                second=len;
+            st.push(s.substr(first,second-first));
+        }
+        
+        //逆序输出即可
+        while(!st.empty()){
+            string cur=st.top();
+            st.pop();
+            ans+=cur+" ";
+        }
+        
+        return ans.empty()?ans:ans.substr(0,ans.size()-1);
+    }
+};
