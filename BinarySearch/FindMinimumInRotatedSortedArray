@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int findMin(vector<int>& nums) {
+        /*二分的变形*/
+        int right=nums.size();
+        
+        return _Conquer(nums,0,right);
+    }
+private:
+    int _Conquer(vector<int> &nums,int left,int right){
+        
+        if(left+1==right)
+            return nums[left];
+        
+        int mid=((right-left)>>1)+left;
+        
+        if(nums[mid]>nums[left]){
+            //左侧最小值index为left
+            if(nums[left]>nums[right-1]){
+                return _Conquer(nums,mid+1,right);
+            }
+            else
+                return nums[left];
+        }
+        else{
+            if(nums[mid]>nums[mid-1]){
+                return _Conquer(nums,left,mid);
+            }
+            else
+                return nums[mid];
+        }
+    }
+};
