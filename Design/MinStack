@@ -1,0 +1,60 @@
+class MinStack {
+public:
+    /** initialize your data structure here. */
+    /*stack+priority_queue*/
+    /*stack+heap(set)*/
+    /*或者两个list*/
+    MinStack() {
+        
+    }
+    
+    void push(int x) {
+        st.push_front(x);
+        list<int>::iterator it;
+        //利用list的话只能线性插入
+        for(it=pq.begin();it!=pq.end();++it){
+            if(*it>=x){
+                pq.insert(it,x);
+                return;
+            }
+        }
+        pq.push_back(x);
+    }
+    
+    void pop() {
+        if(st.empty())
+            return;
+        int x=st.front();
+        st.pop_front();
+        //利用list的话只能线性删除
+        for(auto it=pq.begin();it!=pq.end();++it){
+            if(*it==x){
+                pq.erase(it);
+                return;
+            }
+        }
+        
+    }
+    
+    int top() {
+        return st.front();
+    }
+    
+    int getMin() {
+        return pq.front();
+    }
+    
+private:
+    list<int>st;
+    list<int>pq;
+    //multiset<int>pq;
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(x);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
