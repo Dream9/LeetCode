@@ -1,0 +1,46 @@
+class Solution {
+public:
+    int maximumGap(vector<int>& nums) {
+        /*桶排序*/
+        int len=nums.size();
+        if(len<2){
+            return 0;
+        }
+        int nmax=nums[0];
+        int nmin=nums[0];
+        int buget_cap;
+        int buget_size;
+        int out=0;
+        int prev=0;
+        
+        for(int i:nums){
+            nmax=max(nmax,i);
+            nmin=min(nmin,i);
+        }
+        if(nmax==nmin)
+            return 0;
+        
+        buget_cap=(nmax-nmin)/len+1;
+        buget_size=(nmax-nmin)/buget_cap+1;
+        
+        vector<int>vmax(buget_size,nmin);
+        vector<int>vmin(buget_size,nmax);
+        //注意有可能这个桶并没有元素
+        vector<bool>vset(buget_size,false);
+        
+        for(int i:nums){
+            int index=(i-nmin)/buget_cap;
+            vmax[index]=max(vmax[index],i);
+            vmin[index]=min(vmin[index],i);
+            vset[index]=true;
+        }
+        
+        //上一个桶的最大值与这个桶的最小值为最大差
+        for(int i=1;i<buget_size;++i){
+            out=vset[i]?max(out,vmin[i]-vmax[prev]):out;
+            prev=vset[i]?i:prev;
+        }
+        
+        return out;
+    }
+};
