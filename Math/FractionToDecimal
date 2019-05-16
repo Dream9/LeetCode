@@ -1,0 +1,49 @@
+class Solution {
+public:
+    string fractionToDecimal(int numerator, int denominator) {
+        /*余数一旦重复，表示进入循环*/
+        /*但是余数可能会溢出。。。*/
+        /*取绝对值时也要小心溢出。。。*/
+        if(denominator==0)
+            return "";
+        if(numerator==0)
+            return "0";
+        
+        unordered_map<int,int> dict;
+        string out;
+        string rem="";
+        //int remainder;/////溢出
+        long long remainder;
+        long long num;
+        long long den;
+        int pos=0;
+        bool flag=(numerator>0&&denominator>0 || numerator<0&&denominator<0)
+                  ?true:false;
+        
+        //num=abs(numerator);////溢出
+        //denominator=abs(denominator);////溢出
+        num=numerator;
+        num=abs(num);
+        den=denominator;
+        den=abs(den);
+        out=flag?to_string(num/den):"-"+to_string(num/den);
+        remainder=num%den;
+        if(remainder==0)
+            return out;
+        
+        while(remainder!=0){
+            dict.insert(make_pair(remainder,pos));
+            num=remainder*10;
+            rem+=to_string(num/den);
+            remainder=num%den;
+            
+            if(dict.find(remainder)!=dict.end()){
+                pos=dict[remainder];
+                rem=rem.substr(0,pos)+"("+rem.substr(pos)+")";
+                break;
+            }
+            pos++;
+        }
+        return out+"."+rem;
+    }
+};
