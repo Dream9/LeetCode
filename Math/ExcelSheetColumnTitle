@@ -1,0 +1,17 @@
+class Solution {
+public:
+    string convertToTitle(int n) {
+        /*类似26进制换算*/
+        /*但存在区别，没有0*/
+        int rem=n%26;
+        string out;
+        while(n){
+            rem=rem==0?26:rem;
+            out+='A'+rem-1;
+            n-=rem;
+            n/=26;
+            rem=n%26;
+        }
+        return string(out.rbegin(),out.rend());
+    }
+};
