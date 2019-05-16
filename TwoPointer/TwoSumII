@@ -1,0 +1,61 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        /*已知numbers是sorted的，故可以缩小范围*/
+        //保证有解,故保证有两个以上的值
+        int big=target-numbers[0];
+        int left=0;
+        int right=numbers.size();
+        
+        //剪枝
+        //找到第一个大于big的值
+        while(left+1<right){
+            int mid=((right-left)>>1)+left;
+            //存在重复，这样就不能直接返回结果了
+            //if(numbers[mid]==big){
+            //    return {1,mid+1};
+            //}
+            if(numbers[mid]<=big){
+                left=mid+1;
+            }
+            else{
+                right=mid;
+            }
+        }
+        //寻找解空间
+        if(left==numbers.size())
+            left=numbers.size()-1;
+        vector<int>::iterator b=numbers.begin(),
+                              e=b+left;
+        while(b!=e){
+            int tmp=*b+*e;
+            if(tmp>target){
+                --e;
+            }
+            else if(tmp<target){
+                ++b;
+            }
+            else{
+                return vector<int>{b-numbers.begin()+1,e-numbers.begin()+1};
+            }
+        }
+        
+        //下面的空间消耗大
+        //但实际性能没有想象中的大
+        //map<int,int>dict;
+        //for(int i=0;i<=left;++i){
+        //    int rem=target-numbers[i];
+        //    //if(rem==2)
+        //    //    return {dict[rem]};
+        //    if(dict.find(rem)!=dict.end()){
+        //        return rem>numbers[i]?vector<int>{i+1,dict[rem]}:vector<int>{dict[rem],i+1};
+        //    }
+        //    
+        //    //要求取最早的index
+        //    if(dict.find(numbers[i])==dict.end())
+        //        dict[numbers[i]]=i+1;
+        //}
+        
+        return {};
+    }
+};
