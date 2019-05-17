@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        /*每增加一对2，5就增加一个0*/
+        /*按照/5进行递减*/
+        int out=0;
+        while(n!=0){
+            int tmp=n/5;
+            out+=tmp;
+            n=tmp;
+        }
+        return out;
+    }
+};
