@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<string> findRepeatedDnaSequences(string s) {
+        /*ACGT,4bit,每10个可以用一个int表示*/
+        int len=s.size();
+        if(len<=10)
+            return {};
+        
+        unordered_set<int> rec;
+        unordered_set<int> repeat;
+        vector<string> out;
+        unordered_map<char,uint8_t> dict;
+        dict['A']=0;
+        dict['C']=1;
+        dict['G']=2;
+        dict['T']=3;
+        
+        int bitmap=0;
+        for(int i=0;i<10;++i){
+            bitmap=(bitmap<<2)+dict[s[i]];
+        }
+        rec.insert(bitmap);
+        
+ 
+        for(int i=10;i<len;++i){
+            bitmap=((bitmap<<2)+dict[s[i]]) & 0xfffff;
+            if(rec.insert(bitmap).second==false){
+                //防止重复
+                if(repeat.insert(bitmap).second){
+                    out.emplace_back(s.substr(i-9,10));
+                    //out.emplace_back(to_string(bitmap));
+                }
+            }
+        }
+        return out;
+    }
+};
