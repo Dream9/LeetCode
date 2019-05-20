@@ -1,0 +1,52 @@
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        /*基于特殊规则的排序即可*/
+        sort(nums.begin(),nums.end(),Comp());
+        string a;
+        for(int cur:nums){
+            a+=to_string(cur);
+        }
+        int len=a.size();
+        int i=0;
+        for(;i<len;++i){
+            if(a[i]!='0')
+                break;
+        }
+        return i==len?"0":a.substr(i);
+    }
+    
+private:
+    struct Comp{
+        bool operator()(int a,int b){
+            //循环comp
+            string stra=to_string(a);
+            string strb=to_string(b);
+            int lena=stra.size();
+            int lenb=strb.size();
+            int len=min(lena,lenb);
+            while(len){
+                for(int i=0;i<len;++i){
+                    if(stra[i]>strb[i]){
+                        return true;
+                    }
+                    else if(stra[i]<strb[i]){
+                        return false;
+                    }
+                }
+                if(lena==lenb)
+                    return false;
+                if(lena>lenb){
+                    stra=stra.substr(len);
+                    lena-=len;
+                }
+                else{
+                    strb=strb.substr(len);
+                    lenb-=len;
+                }
+                len=min(lena,lenb);
+            }
+            return false;
+        }
+    };
+};
