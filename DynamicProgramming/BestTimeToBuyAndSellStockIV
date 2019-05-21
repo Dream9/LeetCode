@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int maxProfit(int k, vector<int>& prices) {
+        /*全局最值和局部极值*/
+        
+        int len=prices.size();
+        if(len==0){
+            return 0;
+        }
+        k=min(k,len>>1);
+        
+        k++;
+        //直接用数组记录会MLE
+        //逐层计算然后替换即可
+        vector<int>local(k,0);
+        vector<int>global(k,0);
+        for(int i=1;i<len;i++){
+            int diff=prices[i]-prices[i-1];
+            //又是只能倒着计算
+            //for(int j=1;j<k;j++){
+            for(int j=k-1;j>=1;j--){
+                local[j]=max(local[j]+diff,global[j-1]+max(0,diff));
+                global[j]=max(global[j],local[j]);
+            }
+        }
+        return global[k-1];
+               
+       // MLE
+       // vector<vector<int>>local(len,vector<int>(k,0));
+       // vector<vector<int>>global(len,vector<int>(k,0));
+       // for(int i=1;i<len;i++){
+       //     for(int j=1;j<k;j++){
+       //         int diff=prices[i]-prices[i-1];
+       //         local[i][j]=max(local[i-1][j]+diff,
+       //                         global[i-1][j-1]+max(0,diff));
+       //         global[i][j]=max(global[i-1][j],
+       //                         local[i][j]);
+       //     }
+       // }
+       // return global[len-1][k-1];
+    }
+};
