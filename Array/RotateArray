@@ -1,0 +1,24 @@
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        /*STL中使用过这种算法*/
+        int len=nums.size();
+        if(len<=1)
+            return;
+        
+        //注意转换，找到旋转中心，即变换后成为leader的前一个元素
+        int med=len-k%len;
+        if(med==0)
+            return;
+        _R(nums,0,med-1);
+        _R(nums,med,len-1);
+        _R(nums,0,len-1);
+    }
+    
+private:
+    void _R(vector<int> &nums,int left,int right){
+        while(left<right){
+            swap(nums[left++],nums[right--]);
+        }
+    }
+};
