@@ -1,0 +1,14 @@
+class Solution {
+public:
+    uint32_t reverseBits(uint32_t n) {
+        /*先获得每一位的二进制数，然后逐次移位*/
+        uint32_t out=0;
+        int i=0;
+        while(n){
+            out=(out<<1)+(n & 0x1);
+            n>>=1;
+            ++i;
+        }
+        return i==0?0:out<<(32-i);
+    }
+};
