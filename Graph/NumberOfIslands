@@ -1,0 +1,59 @@
+class Solution {
+private:
+    int _R;
+    int _C;
+    
+public:
+    int numIslands(vector<vector<char>>& grid) {
+        //可以dfs或者union-find实现
+        int m=grid.size();
+        if(0==m)
+            return 0;
+        int n=grid[0].size();
+        if(0==n)
+            return 0;
+        
+        /*union-find*/
+        vector<int>root(m*n,-1);
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                if(grid[i][j]=='0')
+                    continue;
+                int tmp=i*n+j;
+                if(j<n-1&&grid[i][j+1]=='1')
+                    _union(root,tmp,tmp+1);
+                if(i<m-1&&grid[i+1][j]=='1')
+                    _union(root,tmp,tmp+n);
+                if(j>0&&grid[i][j-1]=='1')
+                    _union(root,tmp,tmp-1);
+                if(i>0&&grid[i-1][j]=='1')
+                    _union(root,tmp,tmp-n);
+            }
+            
+        //统计个数
+        set<int>single;
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                if (grid[i][j]=='1'){
+                    //return _find(root,1*n+j);
+                    single.insert(_find(root,i*n+j));
+                }
+        
+        return single.size();
+               
+    }
+private:    
+    int _find(vector<int>&root,int index){
+        if(root[index]==-1)
+            return index;
+        return root[index]=_find(root,root[index]);
+    }
+    void _union(vector<int>&root,int first,int second){
+        //连接分量
+        int r_fir=_find(root,first);
+        int r_sec=_find(root,second);
+        if(r_fir==r_sec)
+            return;
+        root[r_sec]=r_fir;
+    }
+};
