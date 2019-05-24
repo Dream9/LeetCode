@@ -1,0 +1,35 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        /*按layer遍历，只取最后一个数据即可*/
+        if(!root){
+            return {};
+        }
+        vector<int>out;
+        vector<TreeNode*>layer;
+        layer.emplace_back(root);
+        while(!layer.empty()){
+            vector<TreeNode*>tmp;
+            for(TreeNode* cur:layer){
+                if(cur->left){
+                    tmp.emplace_back(cur->left);
+                }
+                if(cur->right){
+                    tmp.emplace_back(cur->right);
+                }
+            }
+            out.emplace_back(layer.back()->val);
+            layer.swap(tmp);
+        }
+        return out;
+    }
+};
