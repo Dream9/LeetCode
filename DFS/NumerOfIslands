@@ -1,0 +1,41 @@
+class Solution {
+public:
+    using Ty=pair<int,int>;
+    int numIslands(vector<vector<char>>& grid) {
+        /*即求连通分量数目*/
+        m=grid.size();
+        if(m==0){
+            return 0;
+        }
+        n=grid[0].size();
+        if(n==0){
+            return 0;
+        }
+        
+        int count=0;
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(grid[i][j]=='1'){
+                    count++;
+                    _Dfs(grid,i,j,'X');
+                }
+            }
+        }
+        return count;
+        
+    }
+private:
+    int m;
+    int n;
+    void _Dfs(vector<vector<char>>&grid,int row,int column,char color){
+        if(row<0 || row>=m || column<0 || column>=n || grid[row][column]!='1'){
+            return ;
+        }
+        grid[row][column]=color;
+        
+        _Dfs(grid,row,column+1,color);
+        _Dfs(grid,row,column-1,color);
+        _Dfs(grid,row+1,column,color);
+        _Dfs(grid,row-1,column,color);
+    }
+};
