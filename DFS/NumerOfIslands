@@ -2,7 +2,9 @@ class Solution {
 public:
     using Ty=pair<int,int>;
     int numIslands(vector<vector<char>>& grid) {
-        /*即求连通分量数目*/
+         /*即求连通图数目*/
+        /*可以利用dfs将单个分量一次性遍历完*/
+        /*也可以用路径压缩quick-find算法计算连通性*/
         m=grid.size();
         if(m==0){
             return 0;
