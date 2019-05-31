@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        /*通过map建立映射关系即可*/
+        /*注意是一一映射关系*/
+        vector<int>dict(128,-1);
+        vector<int>set(128,-1);
+        int len=s.size();
+        if(len!=t.size()){
+            return false;
+        }
+        
+        for(int i=0;i<len;++i){
+            char cur=s[i];
+            char target=t[i];
+            //正向映射
+            if(dict[cur]!=-1){
+                if(dict[cur]!=target)
+                    return false;
+                continue;
+            }
+            //反向映射
+            if(set[target]!=-1){
+                return false;
+            }
+            //更新
+            dict[cur]=target;
+            set[target]=0;
+        }
+        return true;
+    }
+};
