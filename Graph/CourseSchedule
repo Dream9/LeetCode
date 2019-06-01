@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        /*有向图的判环*/
+        /*通过拓扑排序，或者dfs*/
+        if(prerequisites.empty()){
+            return true;
+        }
+        vector<int>visited(numCourses,0);
+        vector<vector<int>>graph(numCourses,vector<int>());
+        int len=prerequisites.size();
+        vector<vector<int>>&pre=prerequisites;
+        //建立graph
+        for(int i=0;i<len;++i){
+            graph[pre[i][1]].emplace_back(pre[i][0]);
+        }
+        
+        //dfs遍历
+        for(int i=0;i<numCourses;++i){
+            if(visited[i]==0){
+                if(false==_dfs(graph,visited,i)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+private:
+    //在遍历过程中如果处于同一个路径上的定点二次出现则有换
+    bool _dfs(vector<vector<int>> &graph, vector<int> &visited, int node){
+        visited[node]=1;
+        for(int i:graph[node]){
+            if(i==node || visited[i]==1){
+                return false;
+            }
+            else if(visited[i]==2){
+                continue;
+            }
+            if(false==_dfs(graph,visited,i)){
+                return false;
+            }
+        }
+        visited[node]=2;
+        return true;
+    }
+};
