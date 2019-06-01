@@ -1,0 +1,96 @@
+class Trie {
+    /*前缀树实现*/
+private:
+    class node{
+    public:
+        node *next;//下一层
+        node *peer;//同一层
+        char key;//键值
+        bool is_word;//是否为词
+        
+        node():next(nullptr),peer(nullptr),key('\0'),is_word(false){}
+        node(char c):next(nullptr),peer(nullptr),key(c),is_word(false){}
+    };
+    
+    node *root;
+public:
+    /** Initialize your data structure here. */
+    Trie() {
+        root=new node();//注意资源释放
+    }
+    ~Trie(){
+        _dealloc(root);
+    }
+    
+    /** Inserts a word into the trie. */
+    void insert(string word) {
+        node *up=root;
+        for(char c:word){
+            node *cur=up->next;
+            node *iter=_find(cur,c);
+            if(iter==nullptr){
+                iter=new node(c);
+                iter->peer=cur;
+                up->next=iter;
+            }
+            up=iter;
+        }
+        up->is_word=true;
+    }
+    
+    /** Returns if the word is in the trie. */
+    bool search(string word) {
+        //注意，需要记录上一次的信息
+        node *up=root;
+        for(char c:word){
+            node *cur=up->next;
+            node *iter=_find(cur,c);
+            if(iter==nullptr){
+                return false;
+            }
+            up=iter;
+        }
+        //退出循环时上一层信息记录了结果
+        return up?up->is_word:false;
+    }
+    
+    /** Returns if there is any word in the trie that starts with the given prefix. */
+    bool startsWith(string prefix) {
+        node *cur=root->next;
+        for(char c:prefix){
+            node *iter=_find(cur,c);
+            if(iter==nullptr){
+                return false;
+            }
+            cur=iter->next;
+        }
+        return true;
+    }
+private:
+    //brief:辅助函数，在同层中寻找
+    node* _find(node *root, char c){
+        while(root){
+            if(root->key==c){
+                return root;
+            }
+            root=root->peer;
+        }
+        return nullptr;
+    }
+    
+    void _dealloc(node *root){
+        if(!root)
+            return;
+        //递归释放资源
+        node *cur=root->peer;
+        while(cur){
+            _dealloc(cur);
+        }
+        cur=root->next;
+        while(cur){
+            _dealloc(cur);
+        }
+        //最后释放自己
+        delete root;
+    }
+};
