@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        /*求拓扑顺序*/
+        /*1.dfs的逆后序*/
+        /*2.入度为0的顶点顺序*/
+        vector<vector<int>>graph(numCourses,vector<int>());
+        vector<int>degree(numCourses,0);
+        stack<int>st;
+        vector<int>out;
+        vector<vector<int>>&pre=prerequisites;
+        int len=pre.size();
+        //生成graph,并统计入度
+        for(int i=0;i<len;++i){
+            graph[pre[i][1]].emplace_back(pre[i][0]);
+            ++degree[pre[i][0]];
+        }
+        for(int i=0;i<numCourses;++i){
+            if(degree[i]==0)
+                st.push(i);
+        }
+        //循环
+        while(!st.empty()){
+            int cur=st.top();
+            out.emplace_back(cur);
+            st.pop();
+            //减少入度
+            for(int i:graph[cur]){
+                --degree[i];
+                if(degree[i]==0){
+                    st.push(i);
+                }
+            }
+        }
+        //判环
+        for(int i:degree){
+            if(i){
+                return {};
+            }
+        }
+        return out;
+        
+            
+    }
+};
