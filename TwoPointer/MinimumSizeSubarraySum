@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minSubArrayLen(int s, vector<int>& nums) {
+        /*都是正数*/
+        /*双指针*/
+        int len=nums.size();
+        int left=0;
+        int right=0;
+        int out=len+1;
+        int sum=0;
+        while(right<len){
+            while(right<len && sum<s){
+                sum+=nums[right];
+                ++right;
+            }
+            while(sum>=s){
+                out=min(out,right-left);
+                sum-=nums[left];
+                ++left;
+            }
+        }
+        
+        return out==len+1?0:out;
+    }
+};
