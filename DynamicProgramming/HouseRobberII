@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        /*就是增加了一个限制条件，之前选择第一个和最后一个的答案要排除*/
+        /*依然是dp*/
+        /*max(去除第一个，去除最后一个)*/
+        int len=nums.size();
+        switch(len){
+            case 0:return 0;
+            case 1:return nums[0];
+            case 2:return max(nums[0],nums[1]);
+            default:break;
+        }
+        return max(_R(nums,0,len-1),_R(nums,1,len));
+    }
+private:
+    int _R(vector<int> &nums,int start,int last){
+        vector<int>dp(last-start+1,0);
+        dp[start]=nums[start];
+        dp[start+1]=max(dp[start],nums[start+1]);
+        for(int i=start+2;i<last;++i){
+            dp[i]=max(dp[i-1],dp[i-2]+nums[i]);
+        }
+        return dp[last-1];
+    }
+};
