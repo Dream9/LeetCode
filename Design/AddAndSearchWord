@@ -1,0 +1,90 @@
+const int kCOUNT=26;
+class WordDictionary {
+private:
+    //设计一个前缀树的结构
+    //可以采用链表，节省空间
+    //此处使用了固定大小的array
+    struct Node{
+        Node *next[kCOUNT];
+        int isword[kCOUNT];
+        
+        Node(){
+            memset(next,0,sizeof next);
+            memset(isword,0,sizeof isword);
+        }
+    };
+private:
+    Node *root;
+    
+public:
+    /** Initialize your data structure here. */
+    WordDictionary() {
+        root=new Node();
+    }
+    
+    /** Adds a word into the data structure. */
+    void addWord(string word) {
+        Node *cur=root;
+        Node *up;
+        for(char c:word){
+            up=cur;
+            if(!cur->next[c-'a']){
+                cur->next[c-'a']=new Node();
+            }
+            cur=cur->next[c-'a'];
+        }
+        up->isword[word.back()-'a']=1;
+    }
+    
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+    bool search(string word) {
+        if(word.empty()){
+            return true;
+        }
+        return _find(root,word,0);
+        
+    }
+private:
+    bool _find(Node *root, const string word, int pos){
+        int len=word.size();
+        //递归出口
+        if(pos==len-1){
+            if(word[pos]!='.'){
+                return root->isword[word[pos]-'a'];
+            }
+            else{
+                //针对'.'
+                for(bool i:root->isword){
+                    if(i){
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+        
+        char c=word[pos];
+        if(c=='.'){
+            //针对'.''
+            for(int i=0;i<kCOUNT;++i){
+                if(root->next[i] && _find(root->next[i],word,pos+1)){
+                    return true;
+                }
+            }
+        }
+        else{
+            if(root->next[c-'a'] && _find(root->next[c-'a'],word,pos+1)){
+                return true;
+            }
+        }
+        //全都没有
+        return false;
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
