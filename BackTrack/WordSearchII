@@ -1,0 +1,57 @@
+class Solution {
+private:
+    int _M;
+    int _N;
+public:
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        if(words.empty())
+            return {};
+        vector<string>out;
+        _M=board.size();
+        if(_M==0)
+            return out;
+        _N=board[0].size();
+        //遍历
+        for(string str:words){
+            //先找到第一个字符位置
+            for(int i=0;i<_M;++i){
+                bool jump=false;
+                for(int j=0;j<_N;++j){
+                    if(board[i][j]==str[0]){
+                        vector<vector<int>>visited(_M,vector<int>(_N,0));
+                        if(_dfs(board,visited,str,0,i,j)){
+                            out.emplace_back(str);
+                            jump=true;
+                            break;
+                        }
+                    }
+                }
+                if(jump)
+                    break;
+            }
+        }
+        return out;
+    }
+private:
+    //dfs遍历图
+    bool _dfs(vector<vector<char>> &board,vector<vector<int>> &visited,
+              const string &str,int pos,int m,int n){
+        if(str.empty() || pos>=str.size()){
+            return true;
+        }
+        if(m<0 || n<0 || m>=_M || n>=_N || visited[m][n] 
+           || board[m][n]!=str[pos]){
+            return false;
+        }
+        
+        visited[m][n]=1;
+        bool ret=_dfs(board,visited,str,pos+1,m+1,n)
+            || _dfs(board,visited,str,pos+1,m-1,n)
+            || _dfs(board,visited,str,pos+1,m,n+1)
+            || _dfs(board,visited,str,pos+1,m,n-1);
+        //记得要复原
+        visited[m][n]=0;
+        return ret;
+        
+    }
+};
