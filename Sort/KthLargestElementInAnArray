@@ -1,0 +1,56 @@
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        /*medium of medium*/
+        /*快排*/
+        int left=0;
+        int right=nums.size();
+        k=right-k;
+        while(1){
+            //小数据直接排序
+            if(right-left<=8){
+                sort(nums.begin()+left,nums.begin()+right);
+                return nums[k];
+            }
+            
+            int p=_partition(nums,left,right,nums[left]);
+            if(p==k){
+                return nums[p];
+            }
+            else if(p>k){
+                right=p;
+            }
+            else{
+                left=p+1;
+            }
+        }
+        return -1;
+        
+    }
+private:
+    //切分
+    int _partition(vector<int> &nums,int left,int right,int pivot){
+        if(left+1>=right)
+            return left;
+        int _l=left;
+        int _r=right;
+        
+        while(true){
+            while(nums[++_l]<pivot){
+                if(_l==right-1)
+                    break;
+            }
+            while(pivot<nums[--_r]){
+                if(_r==left)
+                    break;
+            }
+            if(_l>=_r){
+                break;
+            }
+            swap(nums[_l],nums[_r]);
+        }
+        
+        swap(nums[_r],nums[left]);
+        return _r;
+    }
+};
