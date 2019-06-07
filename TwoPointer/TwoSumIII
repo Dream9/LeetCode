@@ -1,0 +1,48 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum3(int k, int n) {
+        if(k<=0){
+            return {};
+        }
+        if(k==1){
+            return {{n}};
+        }
+        vector<vector<int>>out;
+        vector<int>path;
+        _Nsum(out,path,k,1,9,n);
+        return out;
+    }
+private:
+    ////////题目要求数字范围是1---9
+    void _Nsum(vector<vector<int>>&out,vector<int>&path,int k,int start,int n,int target){
+        if(k==2){
+            _Twosum(out,path,start,n,target);
+            return;
+        }
+        for(int i=start;i<=n;++i){
+            path.emplace_back(i);
+            _Nsum(out,path,k-1,i+1,n,target-i);
+            path.pop_back();
+        }
+    }
+    //最终是twosum 双指针问题
+    void _Twosum(vector<vector<int>>&out,vector<int>&path,int first,int second,int target){
+        while(first<second){
+            if(first+second==target){
+                path.emplace_back(first);
+                path.emplace_back(second);
+                out.emplace_back(path);
+                path.pop_back();
+                path.pop_back();
+                ++first;
+                --second;
+            }
+            else if(first+second>target){
+                --second;
+            }
+            else{
+                ++first;
+            }
+        }
+    }
+};
