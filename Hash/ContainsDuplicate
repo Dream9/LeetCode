@@ -1,0 +1,10 @@
+class Solution {
+public:
+    bool containsDuplicate(vector<int>& nums) {
+        /*利用set*/
+        if(nums.empty())
+            return false;
+        unordered_set<int>dict(nums.begin(),nums.end());
+        return dict.size()!=nums.size();
+    }
+};
