@@ -1,0 +1,51 @@
+class Solution {
+public:
+    bool containsNearbyAlmostDuplicate(vector<int>& nums, int k, int t) {
+        /*主要的耗时点在于k个数内寻找是否有小于指定值的值*/
+        /*转换为二分判断*/
+        /*利用map结构*/
+        map<long long,int>dict;
+        int i=0;
+        int j=0;
+        int len=nums.size();
+        if(len==0){
+            return false;
+        }
+        while(i<len){
+            if(i-j>k){
+                dict.erase(nums[j++]);
+            }
+            auto iter=dict.lower_bound((long long)nums[i]-t);
+            if(iter!=dict.end() && abs(iter->first-nums[i])<=t){
+                return true;
+            }
+            dict[nums[i]]=i;
+            ++i;
+        }
+        return false;
+        
+        
+        //force brute TLE
+        //if(nums.empty())
+        //    return false;
+        //int len=nums.size();
+        //int index=len-k<0?0:len-k;
+        //for(int i=0;i<index;++i){
+        //    long long cur=nums[i];
+        //    for(int j=1;j<=k;++j)
+        //        if(abs(nums[j+i]-cur)<=t)
+        //            return true;
+        //}
+        //
+        //for(int i=index;i<len;++i){
+        //    long long cur=nums[i];
+        //    for(int j=i+1;j<len;++j){
+        //        if(abs(nums[j]-cur)<=t)
+        //            return true;
+        //    }
+        //}
+        //
+        //return false;
+        
+    }
+};
