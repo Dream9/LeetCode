@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        /*分别计算，然后去除重叠区域即可*/
+        long long a1=(C-A)*(D-B);
+        long long a2=(G-E)*(H-F);
+        long long xx,yy;
+        //y方向重叠
+        if(B>=H || D<=F)
+            return a1+a2;
+        if(B<F){
+            yy=min(D,H)-F;
+        }
+        else{
+            yy=min(D,H)-B;
+        }
+        //x方向重叠
+        if(A>=G || C<=E)
+            return a1+a2;
+        if(A<E){
+            xx=min(C,G)-E;
+        }
+        else{
+            xx=min(C,G)-A;
+        }
+        return a1+a2-xx*yy;
+        
+    }
+};
