@@ -1,0 +1,82 @@
+class Solution {
+    //typedef 的好处啊
+    typedef int64_t tt;
+public:
+    int calculate(string s) {
+        /*逆波兰式*/
+        /*这真是恶趣味，int的计算统一按照int64_t 要求*/
+        stack<tt>num;
+        stack<char>op;
+        tt n=0;
+        for(char c:s){
+            switch(c){
+                case '+':
+                case '-':{
+                    if(op.empty()){
+                        op.push(c);
+                    }
+                    else{
+                        char last=op.top();
+                        if(last=='+'){
+                            tt last_num=num.top();
+                            num.pop();
+                            n=last_num+n;
+                            op.pop();
+                        }
+                        else if(last=='-'){
+                            tt last_num=num.top();
+                            num.pop();
+                            n=last_num-n;
+                            op.pop();
+                        }
+                    }
+                    num.push(n);
+                    n=0;
+                    op.push(c);
+                    break;
+                }
+                case '(':{
+                    op.push(c);
+                    break;
+                }
+                case ')':{
+                    char last=op.top();
+                    op.pop();
+                    while(last!='('){
+                        if(last=='+'){
+                            tt last_num=num.top();
+                            num.pop();
+                            n=last_num+n;
+                        }
+                        else if(last=='-'){
+                            tt last_num=num.top();
+                            num.pop();
+                            n=last_num-n;
+                        }
+                        last=op.top();
+                        op.pop();
+                    }
+                    break;
+                }
+                case ' ':{
+                    break;
+                }
+                default:{
+                    n=n*10+c-'0';
+                    break;
+                }
+            }
+        }
+        if(!op.empty()){
+            char last=op.top();
+            if(last=='+'){
+                n=n+num.top();
+            }
+            else{
+                n=num.top()-n;
+            }
+        }
+        return n;
+        
+    }
+};
