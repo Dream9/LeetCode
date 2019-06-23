@@ -1,0 +1,68 @@
+class MyStack {
+private:
+    typedef queue<int> Ty;
+    Ty first;
+    //Ty second;
+    /*利用两个queue颠倒顺序即可*/
+public:
+    /** Initialize your data structure here. */
+    MyStack() {
+        
+    }
+    
+    /** Push element x onto stack. */
+    void push(int x) {
+        
+        /*
+        Ty second;
+        while(!first.empty()){
+            int tmp=first.front();
+            second.push(tmp);
+            first.pop();
+        }
+        first.push(x);
+        while(!second.empty()){
+            int tmp=second.front();
+            first.push(tmp);
+            second.pop();
+        }
+        */
+        
+        //可以以自身为参照直接转换
+        //即pop然后push到尾端，循环一边即可
+        int len=first.size();
+        first.push(x);
+        while(len>0){
+            int tmp=first.front();
+            first.pop();
+            first.push(tmp);
+            --len;
+        }
+    }
+    
+    /** Removes the element on top of the stack and returns that element. */
+    int pop() {
+        int tmp=first.front();
+        first.pop();
+        return tmp;
+    }
+    
+    /** Get the top element. */
+    int top() {
+        return first.front();
+    }
+    
+    /** Returns whether the stack is empty. */
+    bool empty() {
+        return first.empty();
+    }
+};
+
+/**
+ * Your MyStack object will be instantiated and called as such:
+ * MyStack* obj = new MyStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ * int param_3 = obj->top();
+ * bool param_4 = obj->empty();
+ */
