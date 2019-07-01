@@ -1,0 +1,29 @@
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        /*按位运算即可*/
+        
+
+
+        return n>0 && ((n&(n-1))==0);
+        
+        
+        ///////////////////////////////////
+        if(n==1)
+            return true;
+        uint64_t i=1;
+        int bit=1;
+        int len=sizeof(int)*8;
+        while(bit<len){
+            i<<=1;
+            if(i==n){
+                return true;
+            }
+            if(i>n){
+                return false;
+            }
+            ++bit;
+        }
+        return false;
+    }
+};
