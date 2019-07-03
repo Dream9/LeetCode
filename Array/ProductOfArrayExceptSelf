@@ -1,0 +1,17 @@
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        /*ennm，确实好巧妙啊*/
+        int len=nums.size();
+        vector<int>out(len,1);
+        for(int i=1;i<len;++i){
+            out[i]=out[i-1]*nums[i-1];
+        }
+        int pivot=1;
+        for(int i=len-2;i>=0;--i){
+            pivot*=nums[i+1];
+            out[i]*=pivot;
+        }
+        return out;
+    }
+};
