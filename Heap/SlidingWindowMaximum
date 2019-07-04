@@ -1,8 +1,28 @@
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        /*利用deque记录*/
+        /*也是采用了延迟删除的策略*/
+        deque<int>dq;
+        vector<int>out;
+        int len=nums.size();
+        for(int i=0;i<len;++i){
+            if(!dq.empty() && dq.front()==i-k)
+                dq.pop_front();
+            while(!dq.empty() && nums[dq.back()]<nums[i])
+                dq.pop_back();
+            dq.push_back(i);
+            
+            if(i>=k-1){
+                out.emplace_back(nums[dq.front()]);
+            }
+        }
+        return out;
+        
+        
         /*利用大根堆这种结构，求取最大值，同时标记位置，窗口之外的最大值需要pop*/
         /*延迟pop*/
+        /*
         if(k==0)
             return {};
         priority_queue<pair<int,int>>heap;
@@ -16,6 +36,7 @@ public:
                 out.emplace_back(heap.top().first);
         }
         return out;
+        */
         
     }
 };
