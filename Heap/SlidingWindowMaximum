@@ -1,0 +1,21 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        /*利用大根堆这种结构，求取最大值，同时标记位置，窗口之外的最大值需要pop*/
+        /*延迟pop*/
+        if(k==0)
+            return {};
+        priority_queue<pair<int,int>>heap;
+        vector<int>out;
+        int len=nums.size();
+        for(int i=0;i<len;++i){
+            while(!heap.empty() && heap.top().second<=i-k)
+                heap.pop();
+            heap.push({nums[i],i});
+            if(i>=k-1)
+                out.emplace_back(heap.top().first);
+        }
+        return out;
+        
+    }
+};
