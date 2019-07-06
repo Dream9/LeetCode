@@ -1,0 +1,77 @@
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        /*这道题，，，不需要做合法性判断*/
+        vector<int> res;
+        for (int i = 0; i < input.size(); ++i) {
+            if (input[i] == '+' || input[i] == '-' || input[i] == '*') {
+                vector<int> left = diffWaysToCompute(input.substr(0, i));
+                vector<int> right = diffWaysToCompute(input.substr(i + 1));
+                for (int j = 0; j < left.size(); ++j) {
+                    for (int k = 0; k < right.size(); ++k) {
+                        if (input[i] == '+') res.push_back(left[j] + right[k]);
+                        else if (input[i] == '-') res.push_back(left[j] - right[k]);
+                        else res.push_back(left[j] * right[k]);
+                    }
+                }
+            }
+        }
+        if (res.empty()) res.push_back(stoi(input));
+        return res;
+    }
+    /*
+        vector<int>out;
+        int len=input.size();
+        int i=0;
+        _Conquer(input,0,len,out);
+        return out;
+    }
+    */
+private:
+    void _Conquer(string &input,int left,int right,vector<int>&out){
+        /*if(left>=right){
+            out.emplace_back(0);
+            return;
+        }
+        */
+        int old=out.size();
+        for(int i=left;i<right;++i){
+            if(input[i]=='+'||input[i]=='-'
+              ||input[i]=='*')
+            {
+                vector<int>vecleft;
+                vector<int>vecright;
+                _Conquer(input,0,i,vecleft);
+                _Conquer(input,i+1,right,vecright);
+                //融合结果
+                switch(input[i]){
+                    case '+':
+                        for(int _l:vecleft){
+                            for(int _r:vecright){
+                                out.emplace_back(_l+_r);
+                            }
+                        }
+                        break;
+                    case '-':
+                        for(int _l:vecleft){
+                            for(int _r:vecright){
+                                out.emplace_back(_l-_r);
+                            }
+                        }
+                        break;
+                    case '*':
+                        for(int _l:vecleft){
+                            for(int _r:vecright){
+                                out.emplace_back(_l*_r);
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        if(old==out.size()){
+            out.emplace_back(stoi(input.substr(left,right-left)));
+        }
+        
+    }
+};
