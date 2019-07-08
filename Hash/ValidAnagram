@@ -1,0 +1,11 @@
+class Solution {
+public:
+    bool isAnagram(string s, string t) {
+        /*dict记录每个字母个数即可*/
+        vector<int> dict(26,0);
+        for_each(s.begin(),s.end(),[&](char c){++dict[c-'a'];return;});
+        for_each(t.begin(),t.end(),[&](char c){--dict[c-'a'];return;});
+        auto iter=find_if(dict.begin(),dict.end(),[](int i){return i!=0;});
+        return iter==dict.end();
+    }
+};
