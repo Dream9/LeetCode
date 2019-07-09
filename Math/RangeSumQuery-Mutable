@@ -1,0 +1,38 @@
+class NumArray {
+private:
+    vector<int> sum;
+    int len;
+public:
+    NumArray(vector<int>& nums) {
+        len=nums.size();
+        if(len==0)
+            return ;
+        sum.resize(len+1);
+        int *ptr=&sum[0];
+        for_each(nums.begin(),nums.end(),
+                  [&](int cur){*(ptr+1)=*ptr+cur;++ptr;});
+    }
+    
+    int sumRange(int i, int j) {
+        if(j>=len || i<0){
+            throw "error";
+        }
+        return sum[j+1]-sum[i];
+    }
+    
+    void update(int i, int val) {
+        //只要修改受影响的区域即可
+        assert(i>=0&&i<len);
+        int change=val-(sum[i+1]-sum[i]);
+        transform(sum.begin()+i+1,sum.end(),sum.begin()+i+1,
+                 [change](int cur){return cur+change;});
+    }
+    
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(i,val);
+ * int param_2 = obj->sumRange(i,j);
+ */
