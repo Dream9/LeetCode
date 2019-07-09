@@ -1,0 +1,32 @@
+/*主要是题意不清。。。*/
+class NumArray {
+private:
+    vector<int> sum;
+    int len;
+public:
+    NumArray(vector<int>& nums) {
+        len=nums.size();
+        if(len==0)
+            return ;
+        sum.resize(len);
+        sum[0]=nums[0];
+        int *ptr=&sum[0];
+        for_each(nums.begin()+1,nums.end(),
+                  [&](int cur){*(ptr+1)=*ptr+cur;++ptr;});
+    }
+    
+    int sumRange(int i, int j) {
+        if(j>=len){
+            throw "error";
+        }
+        if(i==0)
+            return sum[j];
+        return sum[j]-sum[i-1];
+    }
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * int param_1 = obj->sumRange(i,j);
+ */
