@@ -1,0 +1,40 @@
+/*就是简单的重叠图形加减，不要越界即可*/
+class NumMatrix {
+private:
+    using ty=vector<int>;
+    using Ty=vector<ty>;
+    Ty _sum;
+    int _m;
+    int _n;
+public:
+    NumMatrix(vector<vector<int>>& matrix) {
+        _m=matrix.size()+1;
+        if(_m==1)
+            return;
+        _n=matrix[0].size()+1;
+        if(_n==1)
+            return;
+        Ty(_m,ty(_n,0)).swap(_sum);
+        for(int i=1;i<_m;++i){
+            for(int j=1;j<_n;++j){
+                _sum[i][j]=_sum[i-1][j]+_sum[i][j-1]
+                    -_sum[i-1][j-1]+matrix[i-1][j-1];
+            }
+        }
+        
+    }
+    
+    int sumRegion(int row1, int col1, int row2, int col2) {
+        if(row2>=_m || col2>=_n || row1<0 || col1<0)
+            throw "error";
+        return _sum[row2+1][col2+1]-_sum[row2+1][col1]
+            -_sum[row1][col2+1]+_sum[row1][col1];
+        
+    }
+};
+
+/**
+ * Your NumMatrix object will be instantiated and called as such:
+ * NumMatrix* obj = new NumMatrix(matrix);
+ * int param_1 = obj->sumRegion(row1,col1,row2,col2);
+ */
