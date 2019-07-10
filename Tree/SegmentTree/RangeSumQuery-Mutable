@@ -1,0 +1,68 @@
+class NumArray {
+private:
+    vector<int> sum;
+    int len;
+public:
+    NumArray(vector<int>& nums) {
+        len=nums.size();
+        sum.resize(len<<1);
+        transform(nums.begin(),nums.end(),sum.begin()+len,
+                  [](const int &cur){return cur;});
+        for(int i=len-1;i>0;--i){
+            int j=i<<1;
+            sum[i]=sum[j]+sum[j+1];
+        }
+        /*
+        len=nums.size();
+        if(len==0)
+            return ;
+        sum.resize(len+1);
+        int *ptr=&sum[0];
+        for_each(nums.begin(),nums.end(),
+                  [&](int cur){*(ptr+1)=*ptr+cur;++ptr;});
+        */
+    }
+    
+    int sumRange(int i, int j) {
+        i+=len;
+        j+=len;
+        int out=0;
+        for(;i<=j;i>>=1,j>>=1){
+            if(i&1)
+                out+=sum[i++];
+            if(!(j&1))
+                out+=sum[j--];
+        }
+        return out;
+        /*
+        if(j>=len || i<0){
+            throw "error";
+        }
+        return sum[j+1]-sum[i];
+        */
+    }
+    
+    void update(int i, int val) {
+        i+=len;
+        sum[i]=val;
+        while(i>0){
+            int j=i>>1;
+            sum[j]=sum[i]+sum[i^1];
+            i=j;
+        }
+        /*
+        assert(i>=0&&i<len);
+        int change=val-(sum[i+1]-sum[i]);
+        transform(sum.begin()+i+1,sum.end(),sum.begin()+i+1,
+                 [change](int cur){return cur+change;});
+        */
+    }
+    
+};
+
+/**
+ * Your NumArray object will be instantiated and called as such:
+ * NumArray* obj = new NumArray(nums);
+ * obj->update(i,val);
+ * int param_2 = obj->sumRange(i,j);
+ */
