@@ -1,0 +1,43 @@
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        if(n<=1)
+            return {0};
+        vector<int>in(n,0);
+        vector<vector<int>>graph(n);
+        int len=edges.size();
+        for(int i=0;i<len;++i){
+            graph[edges[i][0]].emplace_back(edges[i][1]);
+            graph[edges[i][1]].emplace_back(edges[i][0]);
+            ++in[edges[i][0]];
+            ++in[edges[i][1]];
+        }
+        //统计度为1的点
+        vector<int>Q;
+        for(int i=0;i<n;++i){
+            if(in[i]==1)
+                Q.emplace_back(i);
+        }
+        //搞错了，，要记录索引...
+        //remove_copy_if(in.begin(),in.end(),back_inserter(Q),
+        //         [](const int &i){return i!=1;});
+        while(n>2){
+            n-=Q.size();
+            vector<int>tmp;
+            for(const int &cur:Q){
+                //度为1的定点
+                for(const int &other:graph[cur]){
+                    --in[other];
+                    --in[cur];
+                    if(in[other]==1)
+                        tmp.emplace_back(other);
+                    //按道理应该删除这条边
+                    //但这里没删除，就意味着重复遍历导致度出现负数
+                    //但是不删除，操作效率更高，尽管出现了重复遍历
+                }
+            }
+            tmp.swap(Q);
+        }
+        return Q;
+    }
+};
