@@ -1,0 +1,48 @@
+class Solution {
+private:
+    typedef pair<int,int> Ty;
+    struct cmp{
+        bool operator()(const Ty &first,const Ty &second){
+            return first.first>second.first;
+        }
+    };
+public:
+    vector<int> countSmaller(vector<int>& nums) {
+        int len=nums.size();
+        if(len==0){
+            return {};
+        }
+        vector<int> container;
+        vector<int> out(len,0);
+        container.reserve(len);
+        
+        //主要是处理等值情况下的处理，找到第一个大于等于的值
+        for(int i=len-1;i>=0;--i){
+            auto iter=lower_bound(container.begin(),container.end(),nums[i]);
+            out[i]=distance(container.begin(),iter);
+            container.insert(iter,nums[i]);
+        }
+        
+        return out;
+        
+        //单纯用排序无法处理相等的情况，因此要采用lower_bound
+        //vector<Ty>tmp;
+        //int len=nums.size();
+        //if(len==0)
+        //    return {};
+        //tmp.reserve(len);
+        //int size_right=len-1;
+        //for(int i=0;i<len;++i){
+        //    tmp.emplace_back(nums[i],size_right-i);
+        //}
+        //sort(tmp.begin(),tmp.end(),cmp());
+        //vector<int>out(len,0);
+        //for(int i=0;i<len;++i){
+        //    int index_right=tmp[i].second;
+        //    int index=size_right-index_right;
+        //    out[index]=min(size_right-i,index_right);
+        //    //out[i]=index;
+        //}
+        //return out;
+    }
+};
