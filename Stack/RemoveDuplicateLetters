@@ -1,0 +1,45 @@
+class Solution {
+public:
+    string removeDuplicateLetters(string s) {
+        /*注意题意*/
+        /*要保证顺序不变*/
+        /*也就是最小词典序的不重复的公共子串*/
+        vector<int>counter(26,0);
+        vector<int>dict(26,0);
+        for(const char &cur:s)
+            ++counter[cur-'a'];
+        vector<char>st;
+        unordered_set<char>uset;
+        st.reserve(26);
+        //核心思路在于：只有后面还存在的字符才是能弹出的，否则保持这个顺序
+        for(const char &cur:s){
+            int i=cur-'a';
+            --counter[i];
+            if(uset.find(cur)!=uset.end())
+                continue;
+            while(!st.empty() && st.back()>cur 
+                  && counter[st.back()-'a']>0 ){
+                char last=st.back();
+                st.pop_back();
+                uset.erase(last);
+            }
+            st.push_back(cur);
+            uset.insert(cur);
+        }
+        return string(st.begin(),st.end());
+        
+        /*理解错了*/
+        //vector<int>dict(26,0);
+        //for(const char &cur:s){
+        //    dict[cur-'a']=1;
+        //}
+        //string out;
+        //out.reserve(26);
+        //for(int i=0;i<26;++i){
+        //    if(0==dict[i])
+        //        continue;
+        //    out+='a'+i;
+        //}
+        //return out;
+    }
+};
