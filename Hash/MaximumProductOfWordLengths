@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxProduct(vector<string>& words) {
+        /*暴力解法*/
+        /*通过hash标记不同word*/
+        vector<int>dict(26,0);
+        size_t out=0;
+        int len=words.size();
+        for(int i=0;i<len;++i){
+            for(const char &c:words[i])
+                ++dict[c-'a'];
+            size_t len_f=words[i].size();
+            for(int j=i+1;j<len;++j){
+                bool flag=true;
+                for(const char &c:words[j]){
+                    if(dict[c-'a']){
+                        flag=false;
+                        break;
+                    }
+                }
+                if(flag)
+                    out=max(out,len_f*words[j].size());
+            }
+            for(const char &c:words[i])
+                --dict[c-'a'];
+        }
+        return out;
+    }
+};
