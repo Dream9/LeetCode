@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<int> maxNumber(vector<int>& nums1, vector<int>& nums2, int k) {
+        /*类似于之前的那道求保持相对顺序不变的最大词典序字符串的题*/
+        /*所以关键是字典序最大的组合*/
+        if(k==0)
+            return {};
+        int n1 = nums1.size(), n2 = nums2.size();
+        vector<int> res;
+        res.reserve(k);
+        for (int i = max(0, k - n2); i <= min(k, n1); ++i) {
+            res = max(res, mergeVector(maxVector(nums1, i), maxVector(nums2, k - i)));
+        }
+        return res;
+    }
+private:
+    vector<int> maxVector(vector<int>& nums, int k) {
+        int drop = (int)nums.size() - k;
+        vector<int> res;
+        //关键在于保留最大的k个数
+        for (int num : nums) {
+            while (drop > 0 && !res.empty() && res.back() < num) {
+                res.pop_back();
+                --drop;
+            }
+            res.push_back(num);
+        }
+        res.resize(k);
+        return res;
+    }
+    vector<int> mergeVector(vector<int> nums1, vector<int> nums2) {
+        vector<int> res;
+        while (!nums1.empty() || !nums2.empty()) {
+            vector<int> &tmp = (nums1 > nums2) ? nums1 : nums2;
+            res.push_back(tmp[0]);
+            tmp.erase(tmp.begin());
+        }
+        return res;
+    }
+};
