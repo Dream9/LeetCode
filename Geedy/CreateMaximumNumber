@@ -8,17 +8,20 @@ public:
         int n1 = nums1.size(), n2 = nums2.size();
         vector<int> res;
         res.reserve(k);
-        for (int i = max(0, k - n2); i <= min(k, n1); ++i) {
+        int start=max(0,k-n2);
+        int end=min(k,n1);
+        for (int i = start; i <= end; ++i) {
             res = max(res, mergeVector(maxVector(nums1, i), maxVector(nums2, k - i)));
         }
         return res;
     }
 private:
+    //与316题相似的思路，保证相对顺序不变的情况下求取最大的k个数的组合
     vector<int> maxVector(vector<int>& nums, int k) {
         int drop = (int)nums.size() - k;
         vector<int> res;
-        //关键在于保留最大的k个数
         for (int num : nums) {
+            //drop相当于316题中的是否还有后续相同数字的标记
             while (drop > 0 && !res.empty() && res.back() < num) {
                 res.pop_back();
                 --drop;
@@ -28,13 +31,41 @@ private:
         res.resize(k);
         return res;
     }
+    //merge 
     vector<int> mergeVector(vector<int> nums1, vector<int> nums2) {
         vector<int> res;
+        
+        //这种实现是错的，，这里不是通常上的融合
+        //int len1=nums1.size();
+        //int len2=nums2.size();
+        //res.reserve(len1+len2);
+        //auto i1=nums1.begin();
+        //auto i2=nums2.begin();
+        //while(i1!=nums1.end() && i2!=nums2.end()){
+        //    //不能通过判断第一个元素判断两个vector的词典大小
+        //    //主要是在相等的时候，比如6，0，4是小于6，7的；6，7是大于6，0，4的
+        //    //等于号是不能简单的归于一种情况
+        //    int tmp;
+        //    if(*i1>*i2){
+        //        tmp=*i1;
+        //        ++i1;
+        //    }
+        //    else{
+        //        tmp=*i2;
+        //        ++i2;
+        //    }
+        //    res.emplace_back(tmp);
+        //}
+        //copy(i1,nums1.end(),copy(i2,nums2.end(),back_inserter(res)));
+        //return res;
+        
+        
         while (!nums1.empty() || !nums2.empty()) {
             vector<int> &tmp = (nums1 > nums2) ? nums1 : nums2;
             res.push_back(tmp[0]);
             tmp.erase(tmp.begin());
         }
         return res;
+        
     }
 };
