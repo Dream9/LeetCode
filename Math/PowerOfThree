@@ -1,0 +1,11 @@
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        /*不让用循环或者递归，说明必然是有规律的*/
+        /*循环思路就是循环除3，判读为1*/
+        //数学思路：
+        //return fmod(log10(double(n))/log10(3.0),1.0)==0;//fmod,对double类型取模
+        double tmp=log10(double(n))/log10(3.0);
+        return tmp-int(tmp)==0;
+    }
+};
