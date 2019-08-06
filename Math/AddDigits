@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int addDigits(int num) {
+        /*循环计算即可*/
+        string str=to_string(num);
+        while(str.size()>1){
+            int tmp=0;
+            for(const char &c:str){
+                tmp+=c-'0';
+            }
+            str=to_string(tmp);
+        }
+        return str[0]-'0';
+    }
+};
