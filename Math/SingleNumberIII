@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> singleNumber(vector<int>& nums) {
+        /*先入后出，最后剩下的就是结果*/
+        unordered_set<int>dict;
+        for(const int &n:nums){
+            auto iter=dict.find(n);
+            if(iter==dict.end())
+                dict.insert(n);
+            else
+                dict.erase(iter);
+        }
+        
+        //统计结果
+        vector<int>out;
+        for(const int &n:dict)
+            out.emplace_back(n);
+        return out;
+    }
+};
