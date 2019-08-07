@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool isUgly(int num) {
+        /*逐步分解，直到必须采用其他质数才能整除即可*/
+        if(num<=0)
+            //感到了深深的恶意
+            return false;
+        while((0x1&num)==0){
+            num>>=1;
+        }
+        //return true;
+        
+        while(num!=1){
+            if(num%3==0)
+                num/=3;
+            else if(num%5==0)
+                num/=5;
+            else
+                return false;
+        }
+        return true;
+    }
+};
