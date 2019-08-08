@@ -1,0 +1,78 @@
+class Solution {
+public:
+    bool isAdditiveNumber(string num) {
+        /*思路不是很难，但代码确实很烦*/
+        /*每一个子函数都可以当一个easy题了，拼在一起确实挺麻烦的*/
+        int len=num.size();
+        //剪枝，任意两个加数最多不能占超过一半的位数
+        int len_thresh=(len>>1)+1;
+        for(int i=1;i<=len_thresh;++i){
+            //允许0，但不允许023之类的
+            //if(num[i]=='0')
+            //    break;
+            string first=num.substr(0,i);
+            //剪枝
+            int tmp_len=min(len-i,len_thresh);
+            for(int j=1;j<tmp_len;++j){
+                string second=num.substr(i,j);
+                if(second[0]=='0' && second.size()>1)
+                    break;
+                if(true==_H(first,second,num.substr(i+j)))
+                    return true;
+            }
+        }
+        return false;
+    }
+    
+private:
+    bool _H(string first,string second,string num){
+        string add=_add(first,second);
+        if(add==num)
+            return true;
+        if(add.size()>num.size() || memcmp(add.data(),num.data(),add.size())!=0)
+            return false;
+        return _H(second,add,num.substr(add.size()));
+    }
+    
+    //大数加法
+    string _add(const string &first, const string &second){
+        int _first=first.size()-1;
+        int _second=second.size()-1;
+        string out(max(_first,_second)+2,'\0');
+        int tmp=0;
+        int index=out.size()-1;
+        
+        while(_first>=0 && _second>=0){
+            int value=tmp+first[_first]-'0'+second[_second]-'0';
+            tmp=value>=10?1:0;
+            value=tmp==1?value-10:value;
+            
+            out[index]=value+'0';
+            --_first;
+            --_second;
+            --index;
+        }
+        while(_first>=0){
+            int value=tmp+first[_first]-'0';
+            tmp=value>=10?1:0;
+            value=tmp==1?value-10:value;
+            
+            out[index]=value+'0';
+            --_first;
+            --index;
+        }
+        while(_second>=0){
+            int value=tmp+second[_second]-'0';
+            tmp=value>=10?1:0;
+            value=tmp==1?value-10:value;
+            
+            out[index]=value+'0';
+            --_second;
+            --index;
+        }
+        if(tmp!=0)
+            out[index]=tmp+'0';
+        return out[0]=='\0'?out.substr(1):out;
+    }
+    
+};
