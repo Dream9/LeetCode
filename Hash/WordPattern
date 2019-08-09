@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool wordPattern(string pattern, string str) {
+        map<string,int>dict;
+        map<int,string>dict2;
+        size_t lastidx=0;
+        size_t count=0;
+        string word;
+        while(1){
+            if(lastidx==str.size())
+                break;
+            size_t cur_idx=str.find(' ',lastidx);
+            if(cur_idx==string::npos){
+                word=str.substr(lastidx);
+                lastidx=str.size();
+            }
+            else{
+                word=str.substr(lastidx,cur_idx-lastidx);
+                lastidx=cur_idx+1;
+            }
+            auto iter=dict.find(word);
+            if(iter!=dict.end() && iter->second!=pattern[count])
+                return false;
+            auto iter2=dict2.find(pattern[count]);
+            if(iter2!=dict2.end() && iter2->second!=word)
+                return false;
+            dict.insert({word,pattern[count]});
+            dict2.insert({pattern[count],word});
+            ++count;
+            
+        }
+        return count==pattern.size() && lastidx==str.size();
+    }
+};
