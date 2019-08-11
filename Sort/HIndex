@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        /*h因子：至少有h票文章的引用次数大于等于h次*/
+        sort(citations.begin(),citations.end(),greater<int>());
+        int h=0;
+        if(citations.empty() || citations[0]==0)
+            return 0;
+        for(int i:citations){
+            if(h>=i)//注意等号,h篇大于h次，因此只有次数相等时不算
+                break;
+            ++h;
+        }
+        return h;
+    }
+};
