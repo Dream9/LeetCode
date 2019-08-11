@@ -1,0 +1,20 @@
+// Forward declaration of isBadVersion API.
+bool isBadVersion(int version);
+
+class Solution {
+public:
+    int firstBadVersion(int n) {
+        /*找到第一个==*/
+        int64_t left=1;
+        int64_t right=static_cast<int64_t>(n)+1;
+        while(left<right){
+            int med=left+((right-left)>>1);
+            if(isBadVersion(med))
+                right=med;
+            else
+                left=med+1;
+        }
+        
+        return left;
+    }
+};
