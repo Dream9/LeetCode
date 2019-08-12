@@ -1,0 +1,15 @@
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        /*相当常规的一道要求原地移动的题，就是stl中remove的实现*/
+        int lookup=0;
+        int dest=0;
+        int len=nums.size();
+        for(;lookup<len;++lookup){
+            if(nums[lookup])
+                nums[dest++]=nums[lookup];
+        }
+        /*还要加上相当与erase的步骤，这里是置零*/
+        memset(&nums[dest],0,(len-dest)*sizeof(int));
+    }
+};
