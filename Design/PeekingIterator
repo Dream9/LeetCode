@@ -1,0 +1,68 @@
+
+// Below is the interface for Iterator, which is already defined for you.
+// **DO NOT** modify the interface for Iterator.
+
+class Iterator {
+    struct Data;
+	Data* data;
+public:
+	Iterator(const vector<int>& nums);
+	Iterator(const Iterator& iter);
+	virtual ~Iterator();
+	// Returns the next element in the iteration.
+	int next();
+	// Returns true if the iteration has more elements.
+	bool hasNext() const;
+};
+/*上面的都是已经实现好了的，，，，*/
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////题意不明/////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/*下面是这道题你需要完成的*/
+class PeekingIterator : public Iterator {
+public:
+	PeekingIterator(const vector<int>& nums) : Iterator(nums) {
+	    // Initialize any member here.
+	    // **DO NOT** save a copy of nums and manipulate it directly.
+	    // You should only use the Iterator interface methods.
+	    _is_advanced=false;
+	}
+
+    // Returns the next element in the iteration without advancing the iterator.
+	int peek() {
+        if(!_is_advanced){
+            _v=Iterator::next();
+            _is_advanced=true;
+        }
+        return _v;
+	}
+
+	// hasNext() and next() should behave the same as in the Iterator interface.
+	// Override them if needed.
+    //题意表意不明！！！！！！！！！！！！！！！！！！！！！！！！！
+    //这是这道题最大的题意不明之处//
+    //首先假设基类已经实现了next()操作//
+    //然后你的任务是借助于基类的next(),重写之，使其具有新的功能//
+    //因此你毫无疑问需要调用Iterator::next()//
+	int next() {
+	    if(_is_advanced){
+            _is_advanced=false;
+            return _v;
+        }
+        return Iterator::next();
+	}
+
+	bool hasNext() const {
+	    return Iterator::hasNext() || _is_advanced;
+	}
+private:
+    bool _is_advanced;
+    int _v;
+};
