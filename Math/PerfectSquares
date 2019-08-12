@@ -1,0 +1,29 @@
+class Solution {
+public:
+    //想要不超时需要采用四平方和定理。。。。没听过,gg
+    int numSquares(int n) {
+        while (n % 4 == 0) n /= 4;
+        if (n % 8 == 7) return 4;
+        for (int a = 0; a * a <= n; ++a) {
+            int b = sqrt(n - a * a);
+            if (a * a + b * b == n) {
+                return !!a + !!b;
+            }
+        }
+        return 3;
+    }
+    
+    ////////////////////超时///////////////////
+    int __numSquares(int n) {
+        /*递归遍历解空间会超时*/
+        if(n==0)
+            return 0;
+        int _square=sqrt(n);
+        int out=INT_MAX;
+        while(_square>0){
+            out=min(out,1+numSquares(n-_square*_square));
+            --_square;
+        }
+        return out;
+    }
+};
