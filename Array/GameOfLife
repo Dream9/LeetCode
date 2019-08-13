@@ -1,0 +1,88 @@
+//额外的状态变量
+const int kDead2Live=400;
+const int kDead2Dead=401;
+const int kLive2Live=200;
+const int kLive2Dead=201;
+class Solution {
+public:
+    using VV=vector<vector<int>>;
+    void gameOfLife(vector<vector<int>>& board) {
+        /*如果要求原地完成的话无非是多设置状态值，但需要二次扫描*/
+        __height=board.size();
+        if(__height==0)
+            return;
+        __width=board[0].size();
+        if(__width==0)
+            return;
+        
+        //for test
+        //VV tmp(__height,vector<int>(__width,0));
+        for(int i=0;i<__height;++i){
+            for(int j=0;j<__width;++j){
+                int count=__C(board,i,j);
+                //tmp[i][j]=count;
+                if(board[i][j]==0){
+                    if(count==3){
+                        board[i][j]=kDead2Live;
+                    }
+                    else
+                        board[i][j]=kDead2Dead;
+                }
+                else{
+                    if(count==2 || count==3)
+                        board[i][j]=kLive2Live;
+                    else
+                        board[i][j]=kLive2Dead;
+                }
+            }
+        }
+        //for test
+        //board.swap(tmp);
+        //return;
+        
+        //第二遍扫描确定最终状态
+        for(int i=0;i<__height;++i){
+            for(int j=0;j<__width;++j){
+                switch(board[i][j]){
+                    case kDead2Dead:case kLive2Dead:
+                        board[i][j]=0;
+                        break;
+                    case kDead2Live:case kLive2Live:
+                        board[i][j]=1;
+                }
+            }
+        }
+    }
+private:
+    //统计邻域内的存活者
+    int __C(VV &board,int row,int column){
+        //
+        int _c=0;
+        for(int i=row-1;i<=row+1;++i){
+            for(int j=column-1;j<=column+1;++j){
+                if(__IsLive(board,i,j)==1)
+                    ++_c;
+            }
+        }
+        //不要把自己也算进去了!!!
+        if(board[row][column]==1)
+            --_c;
+        return _c;
+        
+    }
+    //判断某个位置是否存活
+    int __IsLive(VV &board,int row,int column){
+        if(row<0 || column<0 || row>=__height || column>=__width)
+            return 0;
+        switch(board[row][column]){
+            case 0:case kDead2Live:case kDead2Dead:
+                return 0;
+            case 1:case kLive2Live:case kLive2Dead:
+                return 1;
+        }
+        return -1;
+    }
+private: 
+    int __height;
+    int __width;
+};
