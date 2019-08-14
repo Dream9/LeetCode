@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int nthSuperUglyNumber(int n, vector<int>& primes) {
+        /*分别记录各个数字当前使用的index*/
+        /*小心溢出*/
+        int count=1;
+        int len=primes.size();
+        
+        vector<int64_t>data(1,1);
+        vector<int>dict(len,0);
+        while(count<n){
+            int64_t tmp=INT_MAX;
+            for(int i=0;i<len;++i){
+                tmp=min(tmp,data[dict[i]]*primes[i]);
+            }
+            for(int i=0;i<len;++i){
+                if(data[dict[i]]*primes[i]==tmp)
+                    ++dict[i];
+            }
+            data.emplace_back(tmp);
+            ++count;
+        }
+        return data.back();
+    }
+};
