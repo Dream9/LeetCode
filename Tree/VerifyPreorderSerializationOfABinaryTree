@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        /*如何进行数学证明呢*/
+        /*自始至终：非空节点的数目+1>=空节点数目,并且最终取等号*/
+        /*充分性与必要性？？？*/
+        int len=preorder.size()-1;
+        if(len<0)
+            return true;
+        int count=0;
+        //bug:采用,分隔，当中间可能不止一个数字
+        for(int i=0;i<len;++i){
+            char c=preorder[i];
+            if(c==',')
+                continue;
+            //if(c=='#' && --count<0){
+            if(c=='#'){
+                --count;
+                if(count<0)
+                    return false;
+            }
+            else{
+                ++count;
+                char *p=&preorder[i];
+                char *next=strchr(p,',');
+                if(!next)
+                    break;
+                i+=(next-p)-1;
+            }
+        }
+        return count==0 && preorder[len]=='#';
+    }
+};
