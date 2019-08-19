@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        /*欧拉通路问题*/
+        /*注意是对路径的回溯遍历，而不在是对顶点的回溯遍历*/
+        
+        unordered_map<string, priority_queue<string, vector<string>, greater<string>>> G;
+        for (auto &ticket : tickets) {
+            G[ticket[0]].push(ticket[1]);
+        }
+        
+        vector<string> path;
+        function<void(string)> dfs = [&](string v) {
+                auto & edges = G[v];
+                while (edges.size() > 0) {
+                    string to = edges.top(); edges.pop();//这里把边从邻接表里删去就是相当于mark这条边。
+                    dfs(to);
+                }
+                path.push_back(v);
+        };
+        
+        dfs("JFK");
+        reverse(path.begin(), path.end());
+        return path;
+    }
+};
