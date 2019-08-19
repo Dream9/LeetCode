@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool increasingTriplet(vector<int>& nums) {
+        /*伸缩窗口*/
+        int len=nums.size();
+        if(len<=2)
+            return false;
+        int left=0;
+        int right=2;
+        
+        vector<int>dp(len,1);
+        for(int i=1;i<len;++i){
+            int tmp=0;
+            for(int j=0;j<i;++j){
+                if(nums[j]<nums[i])
+                    tmp=max(tmp,dp[j]);
+            }
+            if(tmp==2)
+                return true;
+            dp[i]=tmp+1;
+        }
+        return false;
+        
+/*ennm
+        vector<int> f(n, nums[0]), b(n, nums.back());
+        for (int i = 1; i < n; ++i) {
+            f[i] = min(f[i - 1], nums[i]);
+        }
+        for (int i = n - 2; i >= 0; --i) {
+            b[i] = max(b[i + 1], nums[i]);
+        }
+        for (int i = 0; i < n; ++i) {
+            if (nums[i] > f[i] && nums[i] < b[i]) return true;
+        }
+        return false;
+*/
+        
+    }
+};
