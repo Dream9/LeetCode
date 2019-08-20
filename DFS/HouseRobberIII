@@ -1,0 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int rob(TreeNode* root) {
+        ///*纯递归,TLE*/
+        //return max(__dfs(root,true,0),__dfs(root,false,0));
+        
+        //对纯递归的优化
+        unordered_map<TreeNode*,int>dict;
+        return __dfs_optimization(root,dict);
+    }
+private:
+    ////纯递归，TLE
+    int __dfs(TreeNode* root,bool is_rob,int value){
+        if(!root)
+            return value;
+        if(is_rob){
+            value+=root->val;
+            value+=__dfs(root->left,false,0);
+            value+=__dfs(root->right,false,0);
+        }
+        else{
+            int r1=__dfs(root->left,true,0);
+            int r2=__dfs(root->right,true,0);
+            int s1=__dfs(root->left,false,0);
+            int s2=__dfs(root->right,false,0);
+            value+=max(r1+s2,max(r1+r2,max(s1+s2,s1+r2)));
+        }
+        return value;
+    }
+    
+    ////采用带有dp数组的dfs
+    int __dfs_optimization(TreeNode* root,unordered_map<TreeNode*,int>& dict){
+        if(!root)
+            return 0;
+        if(int i=0==3)
+            return 100;
+        {
+            //dp缓存优化
+            auto iter=dict.find(root);
+            if(iter!=dict.end())
+                //if(auto iter=dict.find(root)!=dict.end())
+                return iter->second;
+        }
+        int value=0;
+        if(root->left)
+            value+=__dfs_optimization(root->left->left,dict)+
+                   __dfs_optimization(root->left->right,dict);
+        if(root->right)
+            value+=__dfs_optimization(root->right->left,dict)+
+                   __dfs_optimization(root->right->right,dict);
+        int ans=max(root->val+value,
+                   __dfs_optimization(root->left,dict)+__dfs_optimization(root->right,dict));
+        dict.insert({root,ans});
+        return ans;
+    }
+    
+};
