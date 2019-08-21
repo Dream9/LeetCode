@@ -1,0 +1,110 @@
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * class NestedInteger {
+ *   public:
+ *     // Return true if this NestedInteger holds a single integer, rather than a nested list.
+ *     bool isInteger() const;
+ *
+ *     // Return the single integer that this NestedInteger holds, if it holds a single integer
+ *     // The result is undefined if this NestedInteger holds a nested list
+ *     int getInteger() const;
+ *
+ *     // Return the nested list that this NestedInteger holds, if it holds a nested list
+ *     // The result is undefined if this NestedInteger holds a single integer
+ *     const vector<NestedInteger> &getList() const;
+ * };
+ */
+class NestedIterator {
+public:
+    NestedIterator(vector<NestedInteger> &nestedList) {
+        for (int i = nestedList.size() - 1; i >= 0; --i) {
+            s.push(nestedList[i]);
+        }
+    }
+
+    int next() {
+        NestedInteger t = s.top(); s.pop();
+        return t.getInteger();
+    }
+
+    bool hasNext() {
+        while (!s.empty()) {
+            NestedInteger t = s.top(); 
+            if (t.isInteger()) return true;
+            s.pop();
+            for (int i = t.getList().size() - 1; i >= 0; --i) {
+                s.push(t.getList()[i]);
+            }
+        }
+        return false;
+    }
+
+private:
+    stack<NestedInteger> s;
+    
+    //NestedIterator(vector<NestedInteger> &nestedList) {
+    //    int len=nestedList.size();
+    //    if(len==0)
+    //        return;
+    //    
+    //    Ptr p=&nestedList;
+    //    Ner* first=&(*p)[0];
+    //    
+    //    while(!first->isInteger()){
+    //        __map.emplace_back(p,0);
+    //        
+    //        p=&first->getList();
+    //        if(p->empty())
+    //            break;
+    //        first=&(*p)[0];
+    //    }
+    //}
+    //
+    //int next() {
+    //    //向上
+    //    Iter cur=__map.back();
+    //    while(cur.second>=cur.first->size()){
+    //        __map.pop_back();
+    //        if(__map.empty())
+    //            return INT_MIN;
+    //        cur=__map.back();
+    //    }
+    //    //向下
+    //    ++__map.back().second;
+    //    ++cur.second;
+    //    
+    //    while(!((*cur.first)[cur.second]).isInteger()){
+    //        cur.first=&((*cur.first)[cur.second].getList());
+    //        cur.second=0;
+    //        __map.emplace_back(cur);
+    //    }
+    //    
+    //    int out=(*cur.first)[cur.second].getInteger();
+    //    __map.emplace_back(cur.first,cur.second+1);
+    //    return out;
+    //}
+    //
+    //bool hasNext() {
+    //    if(__map.empty())
+    //        return false;
+    //    int len=__map.size();
+    //    for(int i=len-1;i>=0;--i){
+    //        if(__map[i].first->size()>__map[i].second)
+    //            return true;
+    //    }
+    //    return false;
+    //}
+    //private:
+    //using Ner=NestedInteger;
+    //using Ptr=vector<Ner>*;
+    ////using Cptr=const vector<Ner>*;
+    //using Iter=pair<Ptr,int>;
+    //vector<Iter> __map;
+};
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i(nestedList);
+ * while (i.hasNext()) cout << i.next();
+ */
