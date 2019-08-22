@@ -1,0 +1,19 @@
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        /*在STL中的实现是在有序的情况下，采用双指针的方式实现的*/
+        unordered_map<int,int>dict;
+        vector<int>ans;
+        
+        for_each(nums1.begin(),nums1.end(),\
+                 [&](int i){dict[i]++;return;});
+        
+        for_each(nums2.begin(),nums2.end(),\
+                [&](int i){if(dict[i]!=0)\
+                            {ans.emplace_back(i);\
+                             dict[i]--;}\
+                           });
+        
+        return ans;
+    }
+};
