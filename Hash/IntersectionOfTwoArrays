@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        unordered_set<int>dict;
+        unordered_set<int>ans;
+        
+        for_each(nums1.begin(),nums1.end(),\
+                 [&](int i){dict.insert(i);return;});
+        
+        for_each(nums2.begin(),nums2.end(),\
+                [&](int i){if(dict.find(i)!=dict.end())\
+                           ans.insert(i);});
+        
+        return vector<int>(ans.begin(),ans.end());
+    }
+};
