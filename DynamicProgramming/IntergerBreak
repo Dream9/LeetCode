@@ -1,0 +1,40 @@
+class Solution {
+public:
+    //using Ty=unordered_map<int,int>;
+    using Ty=vector<int>;
+    int integerBreak(int n) {
+        /*先分解之，dp记录重复计算部分*/
+        /*由于事先已经知道不会超过58，因此可以用直接定址法代替哈希*/
+        //unordered_map<int,int>dp;
+        //dp.insert({1,1});
+        
+        Ty dp(59,-1);
+        dp[1]=1;
+        
+        return __calc(n,dp);
+        //for(int i=1;i<=half;++i){
+        //    max_product=max(max_product,__calc(n-i,dp)*i);
+        //}
+        //return max_product;
+    }
+private:
+    int __calc(int n, Ty &dict){
+        //auto iter=dict.find(n);
+        //if(iter!=dict.end())
+        //    return iter->second;
+        
+        if(dict[n]!=-1)
+            return dict[n];
+        
+        int half=n>>1;
+        int max_product=0;
+        for(int i=1;i<=half;++i){
+            max_product=max(max_product,max(i*(n-i),i*__calc(n-i,dict)));
+        }
+        
+        //dict.insert({n,max_product});
+        dict[n]=max_product;
+        
+        return max_product;
+    }
+};
