@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        /*利用nth_element可以线性时间内确定top k的频率*/
+        /*这样整体就是4N*/
+        unordered_map<int,int> dict;
+        for(int i:nums){
+            dict[i]++;
+        }
+        
+        vector<int> frequence;
+        for(auto i:dict){
+            frequence.emplace_back(i.second);
+        }
+        
+        int pivot=k-1;
+        nth_element(frequence.begin(),frequence.begin()+pivot,frequence.end(),greater<int>());
+        pivot=frequence[pivot];
+        
+        vector<int>out;
+        for(auto i:dict){
+            if(i.second>=pivot)
+                out.emplace_back(i.first);
+        }
+        
+        return out;
+    }
+};
