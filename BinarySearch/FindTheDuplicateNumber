@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        /*采用二分的方式确定*/
+        /*本质是一个数学问题*/
+        /*小于i的元素数目大于等于i个，那么重复位于[1,i]之间*/
+        int left=0;
+        int right=nums.size();
+        while(left<right){
+            int mid=left+((right-left)>>1);
+            int count=0;
+            for(int i:nums)
+                if(i<=mid)
+                    ++count;
+            if(count>mid)
+                right=mid;
+            else
+                left=mid+1;
+        }
+        return left;
+        
+        //sort(nums.begin(),nums.end());
+        //int before=nums[0];
+        //int len=nums.size();
+        //for(int i=1;i<len;++i){
+        //    if(nums[i]==before)
+        //        return before;
+        //    before=nums[i];
+        //}
+        //
+        //return before;
+    }
+};
