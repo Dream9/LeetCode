@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool isPerfectSquare(int num) {
+        /*本质就是把sqrt的过程拆开来，或者是说自己写一个sqrt*/
+        if(num==1)
+            return true;
+        
+        int left=0;
+        int right=num;
+        
+        while(left<right){
+            double mid=left+((right-left)>>1);
+            
+            //
+            //ennm,,,,,我就是知道
+            //就喜欢拿数值溢出说事。。。。。。。
+            //int tmp=mid*mid;
+            //if(tmp==num)
+            //    return true;
+            //else if(tmp>num)
+            //    right=mid;
+            //else
+            //    left=mid+1;
+            //
+            
+            //改成除法
+            double tmp=num/mid;
+            if(tmp==mid)
+                return true;
+            else if(tmp<mid)
+                right=mid;
+            else
+                left=mid+1;
+        }
+        return false;
+        
+    }
+};
