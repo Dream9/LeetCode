@@ -1,0 +1,67 @@
+#define MODULE_ZERO(x,y) x%y!=0 && y%x!=0
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        /*又是题意，，subset是子集，不是子字串，不要求相邻*/
+        return __FindLargest(nums);
+        //以下为求取子串时的方法
+        //算是白写了。。。
+        //if(nums.empty())
+        //    return {};
+        //int len=nums.size();
+        //vector<int>rec(len,1);
+        //int max_count=1;
+        //int max_index=0;
+        //for(int i=1;i<len;++i){
+        //    if(MODULE_ZERO(nums[i],nums[i-1]))
+        //        continue;
+        //    int size=rec[i-1];
+        //    int count=0;
+        //    for(int j=1;j<size;++j){
+        //        if(MODULE_ZERO(nums[i],nums[i-1-j]))
+        //            break;
+        //        else
+        //            ++count;
+        //    }
+        //    rec[i]=2+count;
+        //    if(rec[i]>max_count){
+        //       max_count=rec[i];
+        //        max_index=i;
+        //    }
+        //}
+        //return vector<int>(nums.begin()+max_index+1-max_count,nums.begin()+max_index+1);
+    }
+private:
+    //以下为求取子集合的方法
+    vector<int> __FindLargest(vector<int>& nums){
+        if(nums.empty())
+            return {};
+        sort(nums.begin(),nums.end());
+        int len=nums.size();
+        vector<int> dp(len,0);
+        vector<int> next(len,0);
+        int longest=-1;
+        int l_index=-1;
+        for(int i=len-1;i>=0;--i){
+            for(int j=i;j<len;++j){
+                if(nums[j]%nums[i]==0 && dp[j]+1>dp[i]){
+                    dp[i]=dp[j]+1;
+                    next[i]=j;
+                    if(dp[i]>longest){
+                        longest=dp[i];
+                        l_index=i;
+                    }
+                }
+            }
+        }
+        vector<int>out;
+        out.reserve(longest);
+        while(longest>0){
+            out.emplace_back(nums[l_index]);
+            l_index=next[l_index];
+            --longest;
+        }
+        return out;
+    }
+};
+#undef MODULE_ZERO
