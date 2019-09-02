@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int superPow(int a, vector<int>& b) {
+        /*公式：(a*b)%c=((a%c)*(b%c))%c*/
+        /*分解开来便不会溢出*/
+        /*二分求pow,加快速度*/
+        int out=1;
+        for(int i:b){
+            out=(_PandM(out,10)*_PandM(a,i))%1337;
+        }
+        return out;
+    }
+private:
+    int _PandM(int a,int b){
+        if(b==0)
+            return 1;
+        if(b==1)
+            return a%1337;
+        int tmp=b>>1;
+        return (_PandM(a,tmp)*_PandM(a,b-tmp))%1337;
+    }
+};
