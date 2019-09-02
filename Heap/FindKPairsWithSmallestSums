@@ -1,0 +1,34 @@
+typedef pair<int,int> T;
+struct cmp{
+    bool operator()(T a,T b){
+        return a.first+a.second>b.first+b.second;
+    }
+};
+class Solution {
+public:
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        auto func=[](T a,T b){return (a.first+a.second)<(b.first+b.second);};
+        priority_queue<T,vector<T>,cmp>pq;
+        for(int i:nums1){
+            for(int j:nums2){
+                pq.push(T(i,j));
+            }
+        }
+        /*全在恶心人*/
+        if(pq.empty())
+            return {};
+        k=min(k,static_cast<int>(pq.size()));
+        /*如果k大于了size(),这种不可能满足的要求凭什么还要给出一个答案而不是抛出错误？？？*/
+        vector<vector<int>> out(k,vector<int>(2,0));
+        out.reserve(k);
+        int i=0;
+        while(i<k){
+            T c=pq.top();
+            out[i][0]=c.first;
+            out[i][1]=c.second;
+            pq.pop();
+            ++i;
+        }
+        return out;
+    }
+};
