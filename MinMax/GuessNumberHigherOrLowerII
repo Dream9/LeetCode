@@ -1,0 +1,43 @@
+class Solution {
+public:
+    
+    int getMoneyAmount(int n) {
+        vector<vector<int>>dp(n+1,vector<int>(n+1,-1));
+        return _MinMax(dp,1,n);
+        //if(n==1|| n==0)
+        //    return 0;
+        //if(n==2)
+        //    return 1;
+        //vector<int>dp(n+1,-1);
+        //dp[1]=0;
+        //dp[2]=1;
+        //
+        //int left=1;
+        //int right=n+1;
+        //int mid=left+((right-left)>>1);
+        //int sum=INT_MAX;
+        //for(int i=mid;i<n;++i){
+        //    if(dp[n-i]==-1)
+        //        dp[n-i]=getMoneyAmount(n-i);
+        //    int tmp=i+dp[n-i];///////这个地方是有问题的
+        //    int tmp2=i+dp[n-i]+i;//////
+        //    sum=min(sum,max(tmp,tmp2));
+        //}
+        //return sum;
+    }
+private:
+    int _MinMax(vector<vector<int>>&dp,int left,int right){
+        /*dp,注意每次取两侧中的最大值，最为最坏情况下的打算*/
+        if(left>=right || left<0)
+            return 0;
+        if(dp[left][right]!=-1)
+            return dp[left][right];
+        int out=INT_MAX;
+        for(int i=left;i<=right;++i){
+            int cur=i+max(_MinMax(dp,left,i-1),_MinMax(dp,i+1,right));
+            out=min(out,cur);
+        }
+        dp[left][right]=out;
+        return out;
+    }
+};
