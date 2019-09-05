@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int combinationSum4(vector<int>& nums, int target) {
+        sort(nums.begin(),nums.end());//消除重复
+        //vector<uint64_t> dp(target + 1);//
+        vector<uint64_t> dp(target + 1);//都是恶意
+        dp[0] = 1;
+        for (int i = 1; i <= target; ++i) {
+            for (auto a : nums) {
+                if (i >= a){
+                    try{
+                        dp[i] += dp[i - a];
+                    }
+                    catch(...){
+                        ;
+                    }
+                }
+                else
+                    break;
+            }
+        }
+        return dp.back();
+        
+    }
+};
