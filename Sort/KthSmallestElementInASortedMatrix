@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int m=matrix.size();
+        if(m==0)
+            return -1;
+        int n=matrix[0].size();
+        if(n==0)
+            return -1;
+        vector<int>data;
+        data.reserve(m*n);
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                data.push_back(matrix[i][j]);
+            }
+        }
+        
+        nth_element(data.begin(),data.begin()+k-1,data.end());
+        return data[k-1];
+    }
+};
