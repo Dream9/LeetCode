@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> lexicalOrder(int n) {
+        vector<int>ans;
+        ans.reserve(n);
+        __calc(ans,1,n);
+        //assert(ans.size()==n);
+        return ans;
+    }
+private:
+    void __calc(vector<int>&ans,int cur,int M){
+        if(cur>M)
+            return;
+        ans.emplace_back(cur);
+        __calc(ans,cur*10,M);
+        int threshold=min(M,cur+(cur==1?8:9));///////ennm
+        while(cur<threshold){
+            ++cur;
+            ans.emplace_back(cur);
+            __calc(ans,cur*10,M);
+        }
+        
+    }
+};
