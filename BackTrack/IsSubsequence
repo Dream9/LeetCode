@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool isSubsequence(string s, string t) {
+        return _h(s,0,t,0);
+    }
+private:
+    bool _h(const string&s,int a,const string&t,int b){
+        //backtrack
+        if(a>=s.size())
+            return true;
+        if(b>=t.size())
+            return false;
+        int len=t.size();
+        char c=s[a];
+        while(1){
+            b=t.find(c,b);
+            if(b==string::npos)
+                return false;
+            if(true==_h(s,a+1,t,b+1))
+                return true;
+            b=b+1;
+            
+        }
+        return false;
+    }
+};
