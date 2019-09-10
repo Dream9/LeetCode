@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int firstUniqChar(string s) {
+        /*先统计一遍重复次数，然后遍历找到第一个次数为1的更简洁*/
+        /*下面的并不是*/
+        int len=s.size();
+        if(len==0)
+            return -1;
+        map<char,int>dict;
+        vector<int>pos(len,-1);
+        for(int i=0;i<len;++i){
+            auto iter=dict.find(s[i]);
+            if(iter!=dict.end()){
+                pos[iter->second]=-1;
+                pos[i]=-1;
+            }
+            else{
+                pos[i]=i;
+                dict.insert({s[i],i});
+            }
+        }
+        
+        for(int c:pos){
+            if(c!=-1)
+                return c;
+        }
+        return -1;
+    }
+};
