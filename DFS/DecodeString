@@ -1,0 +1,55 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        string ans;
+        int right=s.size();
+        _slice(s,0,right,ans);
+        return ans;
+    }
+private:
+    void _slice(string &s,int left,int right,string &ans){
+        if(left>=right)
+            return;
+        int num_pos=s.find_first_of("0123456789",left);
+        
+        while(num_pos!=string::npos && num_pos<right){
+            //提取间隙
+            ans+=s.substr(left,num_pos-left);
+            
+            //提取次数
+            int left_pos=s.find('[',num_pos+1);
+            int count=stoi(s.substr(num_pos,left_pos-num_pos));
+            string str;
+            int bracket=1;
+            int _l=left_pos+1;
+            //匹配方括号
+            while(_l<right){
+                if(s[_l]=='['){
+                    ++bracket;
+                }
+                else if(s[_l]==']'){
+                    if(--bracket==0)
+                        break;
+                }
+                ++_l;
+            }
+            //递归下去
+            _slice(s,left_pos+1,_l,str);
+            
+            //for test
+            //ans+=to_string(left_pos+1)+" "+to_string(_l)+" "+str;
+            //拼接起来
+            while(count>0){
+                ans+=str;
+                --count;
+            }
+            left=_l+1;
+            num_pos=s.find_first_of("0123456789",left);
+            
+        }
+        
+        //没有重复的字符
+        ans+=s.substr(left,right-left);
+        return;
+    }
+};
