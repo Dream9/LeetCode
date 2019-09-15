@@ -1,0 +1,61 @@
+class Solution {
+public:
+    int longestSubstring(string s, int k) {
+        //
+        //assert(k>0);
+        //int len=s.size();
+        //if(len<k)
+        //    return 0;
+        //if(k<=1)
+        //    return len;
+        //
+        //vector<int>dict(26,INT_MAX);
+        //for(char c:s){
+        //    if(dict[c-'a']==INT_MAX)
+        //        dict[c-'a']=1;
+        //    else
+        //        ++dict[c-'a'];
+        //}
+        ////return *min_element(dict.begin(),dict.end());
+        //int out=0;
+        //for(int i=0;i<len;++i){
+        //    vector<int>tmp(dict.begin(),dict.end());
+        //    for(int j=len-1;j>i;--j){
+        //        if(j-i+1<=out)
+        //            break;
+        //        int _m=*min_element(tmp.begin(),tmp.end());
+        //        if(_m>=k){
+        //            if(j-i+1>out)
+        //                out=j-i+1;
+        //            break;
+        //        }
+        //        --tmp[s[j]-'a'];
+        //        if(tmp[s[j]-'a']==0)
+        //            tmp[s[j]-'a']=INT_MAX;
+        //    }
+        //    --dict[s[i]-'a'];
+        //    if(dict[s[i]-'a']==0)
+        //        dict[s[i]-'a']=INT_MAX;
+        //}
+        //
+        //return out;
+        
+        //和上面思路是一样的，但是通过mask,不在需要线性寻找最小值了
+        int res = 0, i = 0, n = s.size();
+        while (i + k <= n) {
+            int m[26] = {0}, mask = 0, max_idx = i;
+            for (int j = i; j < n; ++j) {
+                int t = s[j] - 'a';
+                ++m[t];
+                if (m[t] < k) mask |= (1 << t);
+                else mask &= (~(1 << t));
+                if (mask == 0) {
+                    res = max(res, j - i + 1);
+                    max_idx = j;
+                }
+            }
+            i = max_idx + 1;
+        }
+        return res; 
+    }
+};
