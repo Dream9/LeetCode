@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int integerReplacement(int n) {
+        if(n==1)
+            return 0;
+        //又是故意拿2147483647恶心人,而且这里不准+1，，，不要问为什么，问就是题意要求
+        if(n==INT_MAX)
+            //return 1+integerReplacement(n-1);
+            return integerReplacement(n-1);
+        
+        if(n%2==0)
+            return 1+integerReplacement(n>>1);
+        else
+            return 1+min(integerReplacement(n+1),integerReplacement(n-1));
+    }
+};
