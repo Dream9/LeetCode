@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxRotateFunction(vector<int>& A) {
+        //BF计算，当前的用例不会溢出
+        int len=A.size();
+        if(len==0)
+            return 0;
+        int64_t res=INT_MIN;
+        
+        for(int i=0;i<len;++i){
+            int64_t tmp=0;
+            int64_t index=0;
+            for_each(A.begin()+i,A.end(),[&](int i){tmp+=i*index++;return;});
+            for_each(A.begin(),A.begin()+i,[&](int i){tmp+=i*index++;return;});
+            res=max(tmp,res);
+        }
+        return res;
+        
+
+        //总结了一下计算规律
+        //int len=A.size();
+        //if(len==0)
+        //    return 0;
+        //int64_t sum=0;
+        //int64_t cur=0;
+        //int64_t index=0;
+        //for_each(A.begin(),A.end(),[&](int64_t i){cur+=i*index++;sum+=i;return;});
+        //int64_t out=cur;
+        //for(int64_t i=1;i<len;++i){
+        //    cur=cur+sum-len*A[len-i];//因为用了乘法，这里故意用了几个会溢出的例子
+        //                             //那就改成循环减去A[len-i]，一共循环len次
+        //                             //很恶意的例子
+        //    out=max(out,cur);
+        //}
+        //return out;
+    }
+};
