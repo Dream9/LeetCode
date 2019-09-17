@@ -1,0 +1,44 @@
+class Solution {
+public:
+    typedef pair<string,string> T;
+    typedef map<T,double> DataType;
+    typedef unordered_set<string> DictType;
+    vector<double> calcEquation(vector<vector<string>>& equations,
+                                vector<double>& values,
+                                vector<vector<string>>& queries) {
+        
+    }
+private:
+    bool __get_division(const string& a,
+                          const string&b,
+                          DataType& data,
+                          const DictType& dict,
+                          const vector<vector<string>>& equ,
+                          double& ans){
+        if(dict.find(a)==dict.end() || dict.find(b)==dict.end()){
+            ans=-1.0;
+            return false;
+        }
+        auto iter=data.find({a,b});
+        if(iter!=data.end())
+            return iter->second;
+        auto iter=data.find({b,a});
+        if(iter!=data.end())
+            return iter->second;
+        int len=equ.size();
+        for(int i=0;i<len;++i){
+            vector<string> v=equ[i];
+            int tmp=0;
+            if(v[0]==a){
+                if(__get_division(v[1],b,data,dict,equ,tmp)){
+                    ans=values[i]*tmp;
+                    data.insert({{a,b},ans});
+                    return true;
+                }
+            }
+            else if(v[1]==a){
+                if(__get_division(v[0]))
+            }
+        }
+    }
+};
