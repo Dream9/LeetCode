@@ -1,0 +1,30 @@
+class Solution {
+public:
+    Solution(vector<int>& nums){
+        int len=nums.size();
+        for(int i=0;i<len;++i)
+            _dict.insert({nums[i],i});
+    }
+    
+    int pick(int target) {
+        //借助于lower_bound()以及upper_bound()
+        //
+        //还有一种思路就是记录原始nums数组，每次遍历一遍，进行池塘采样
+        auto left=_dict.lower_bound(target);
+        auto right=_dict.upper_bound(target);
+        if(left==right)
+            return -1;
+        int dist=distance(left,right);
+        int index=rand()%dist;
+        advance(left,index);
+        return left->second;
+    }
+private:
+    multimap<int,int>_dict;
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(nums);
+ * int param_1 = obj->pick(target);
+ */
