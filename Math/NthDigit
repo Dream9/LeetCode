@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int findNthDigit(int n) {
+        /*按进制挨个统计即可*/
+        /*就是调试起来太恶心了*/
+        if(n<10)
+            return n;
+        int64_t cnt=0;
+        int single=1;
+        int64_t bit=1;
+        while(1){
+            int64_t tmp=cnt+bit*9*single;
+            if(tmp>=n)
+                break;
+            cnt=tmp;
+            ++single;
+            bit*=10;
+        }
+        ++cnt;
+        int64_t index=(n-cnt)/single;
+        string tmp=to_string(index+bit);
+        return tmp[(n-cnt)%single]-'0';
+        
+    }
+};
