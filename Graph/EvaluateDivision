@@ -1,0 +1,65 @@
+class Solution {
+public:
+    vector<double> calcEquation(vector<vector<string>>& equations, vector<double>& values, vector<vector<string>>& queries) {
+        /*本质是一个图*/
+        /*这是一个有向图*/
+        /*而且题意已经说明了结果唯一，环的权重必然为零*/
+        int N;
+        map<string,vector<pair<string,double>>>dict;
+        int len=equations.size();
+        for(int i=0;i<len;++i){
+            auto iter1=dict.find(equations[i][0]);
+            auto iter2=dict.find(equations[i][1]);
+            if(iter1==dict.end()){
+                dict[equations[i][0]]=vector<pair<string,double>>({{equations[i][1],values[i]}});
+            }
+            else
+                iter1->second.emplace_back(equations[i][1],values[i]);
+            if(iter2==dict.end()){
+                dict[equations[i][1]]=vector<pair<string,double>>({{equations[i][0],1.0/values[i]}});
+            }
+            else
+                //iter2->second.emplace_back(equations[i][0],values[i]);
+                iter2->second.emplace_back(equations[i][0],1.0/values[i]);
+        }
+        
+        vector<double>out;
+        for(vector<string>&c:queries){
+            const string&f=c[0];
+            const string&s=c[1];
+            double ans=1.0;
+            unordered_set<string>visited;
+            if(_get(f,s,dict,visited,ans)==true){
+                out.emplace_back(ans);
+            }
+            else{
+                out.emplace_back(-1.0);
+            }
+        }
+        return out;
+    }
+private:
+    //遍历图即可
+    bool _get(const string&f,const string&s,map<string,vector<pair<string,double>>>&dict,
+              unordered_set<string>& visited,double& ans){
+        auto iter=dict.find(f);
+        auto iter2=dict.find(s);
+        if(iter==dict.end() || iter2==dict.end()){
+            return false;
+        }
+        for(pair<string,double>&c:iter->second){
+            if(visited.find(c.first)!=visited.end())
+                continue;
+            ans*=c.second;
+            if(c.first==s)//找到为止
+                return true;
+            auto tmp=visited.insert(c.first);
+            if(true==_get(c.first,s,dict,visited,ans))
+                return true;
+            visited.erase(tmp.first);
+            ans/=c.second;
+        }
+        //ans=1.0;
+        return false;
+    }
+};
