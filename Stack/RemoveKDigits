@@ -1,0 +1,80 @@
+class Solution {
+public:
+    string removeKdigits(string num, int k) {
+        if(num.size()==k)
+            return "0";
+        return _stack(num,k);
+        
+        //dfs：tle
+        //string out=num;
+        //_remove_dfs(num,k,out);
+        //int zero_index=out.find_first_not_of('0');
+        //if(zero_index==string::npos)
+        //    return "0";
+        //return out.substr(zero_index);
+    }
+    
+private:
+    //单调栈的思想
+    string _stack(const string& num,int k){
+        string out;
+        int len=num.size();
+        out.reserve(len-k);
+        
+        for(int i=0;i<len;++i){
+            while(k>0 && !out.empty() && out.back()>num[i]){
+                --k;
+                out.pop_back();
+            }
+            out.push_back(num[i]);
+        }
+        
+        int zero_index=out.find_first_not_of('0');
+        if(zero_index==string::npos)
+            return "0";
+        return out.substr(zero_index,out.size()-k-zero_index);
+    }
+    //dfs
+    void _remove_dfs(string& num,int k,string& out){
+        if(k==0){
+            if(_less(num,out))
+                out.swap(num);
+            return;
+        }
+        string tmp=num;
+        int len=num.size();
+        for(int i=0;i<len;++i){
+            num.erase(i,1);
+            _remove_dfs(num,k-1,out);
+            if(out.find_first_not_of('0')==string::npos)
+                return;
+            num.assign(tmp);
+        }
+    }
+    bool _less(const string &f,const string &s){
+        int findex=f.find_first_not_of('0');
+        int sindex=s.find_first_not_of('0');
+        if(findex==string::npos)
+            return true;
+        if(sindex==string::npos)
+            return false;
+        int flen=f.size();
+        int slen=s.size();
+        
+        if(flen-findex<slen-sindex)
+            return true;
+        else if(flen-findex>slen-sindex)
+            return false;
+        
+        for(int i=0;i<flen-findex;++i){
+            int tmp=f[findex+i]-s[sindex+i];
+            if(tmp<0)
+                return true;
+            else if(tmp>0)
+                return false;
+        }
+        //完全一致
+        return false;
+        
+    }
+};
