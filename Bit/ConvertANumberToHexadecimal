@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string toHex(int num) {
+        /*没四位是一位16进制*/
+        //必须要用无符型数字，否则符号填充
+        //int x=0xf0000000;
+        uint32_t x=0xf0000000;
+        string out;
+        int i=7;
+        
+        //定位到第一个非零
+        while(i>=0){
+            int tmp=(x&num)>>(4*i);
+            if(tmp!=0){
+                out+=(tmp<10?tmp+'0':tmp-10+'a');
+                --i;
+                x>>=4;
+                break;
+            }
+            x>>=4;
+            --i;
+        }
+        
+        //becare:这之后就算是0也要添加
+        while(i>=0){
+            int tmp=(x&num)>>(4*i);
+            out+=(tmp<10?tmp+'0':tmp-10+'a');
+            x>>=4;
+            --i;
+        }
+        return out.empty()?"0":out;
+    }
+};
