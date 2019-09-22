@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<vector<int>> reconstructQueue(vector<vector<int>>& people) {
+        int len=people.size();
+        if(len==0)
+            return {};
+        
+        auto func=[](const vector<int>&first,const vector<int>&second){
+            if(first[0]>second[0])
+                return true;
+            else if(first[0]<second[0])
+                return false;
+            return first[1]<second[1]?true:false;};
+        
+        sort(people.begin(),people.end(),func);
+        
+        for(int i=0;i<len;++i){
+            int expect_pos=people[i][1];
+            int tmp=i;
+            while(tmp>expect_pos){
+                swap(people[tmp],people[tmp-1]);
+                --tmp;
+            }
+        }
+        return people;
+    }
+};
