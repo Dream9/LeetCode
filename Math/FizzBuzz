@@ -1,0 +1,26 @@
+class Solution {
+public:
+    vector<string> fizzBuzz(int n) {
+        if(n<=0)
+            return {};
+        
+        vector<string>out;
+        string tmp;
+        
+        int cur=1;
+        while(cur<=n){
+            int judge3=cur%3;
+            int judge5=cur%5;
+            if(judge3==0 && judge5==0)
+                out.emplace_back("FizzBuzz");
+            else if(judge3==0)
+                out.emplace_back("Fizz");
+            else if(judge5==0)
+                out.emplace_back("Buzz");
+            else
+                out.emplace_back(to_string(cur));
+            ++cur;
+        }
+        return out;
+    }
+};
