@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& A) {
+        int len=A.size();
+        if(len<=2)
+            return 0;
+        
+        //dp初始化
+        vector<vector<int>>dp(len,vector<int>(len,0));
+        for(int i=0;i<len-1;++i){
+            dp[i][i]=1;
+            dp[i][i+1]=1;
+        }
+        dp[len-1][len-1]=1;
+        
+        //遍历
+        int out=0;
+        for(int i=0;i<len-2;++i){
+            for(int j=i+2;j<len;++j){
+                if(dp[i][j-1]!=0 && (A[j-1]-A[j-2]==A[j]-A[j-1])){
+                    dp[i][j]=1;
+                    ++out;
+                }
+                else{
+                    //dp[i][j]=0;
+                    //剪纸
+                    break;
+                }
+                    
+            }
+        }
+        
+        return out;
+    }
+};
