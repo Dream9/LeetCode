@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int longestPalindrome(string s) {
+        unordered_map<char,int>dict;
+        int out=0;
+        for(char c:s){
+            ++dict[c];
+            if(dict[c]==2){
+                out+=2;
+                dict[c]=0;
+            }
+        }
+        for(auto c:dict){
+            if(c.second==1)
+                return out+1;
+        }
+        return out;
+    }
+};
