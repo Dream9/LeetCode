@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int thirdMax(vector<int>& nums) {
+        /*类似于投票*/
+        //我就知道他会故意拿INT_MIN 恶心人
+        //if(nums.empty())
+        //    return -1;//保证非空
+        long A=LONG_MIN;
+        long B=A;
+        long C=B;
+        
+        //以下是在重复的数字计入排序时
+        //for(int i:nums){
+        //    if(i>=A){
+        //        C=B;
+        //        B=A;
+        //        A=i;
+        //    }
+        //    else if(i>=B){
+        //        C=B;
+        //        B=i;
+        //    }
+        //    else if(i>C){
+        //        C=i;
+        //    }
+        //}
+        
+        //本题比较奇怪，重复的算一个
+        for(int i:nums){
+            if(i==A || i==B || i==C)
+                continue;
+            if(i>A){
+                C=B;
+                B=A;
+                A=i;
+            }
+            else if(i>B){
+                C=B;
+                B=i;
+            }
+            else if(i>C){
+                C=i;
+            }
+        }
+        
+        
+        //真的恶心人呀
+        return (C==LONG_MIN || C==B)?A:C;
+        
+    }
+};
