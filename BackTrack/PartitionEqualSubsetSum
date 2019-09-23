@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        
+        int64_t sum=accumulate(nums.begin(),nums.end(),0);
+        if(sum==0)
+            return true;
+        if(sum&0x1)
+            return false;
+        int64_t target=sum>>1;
+        sort(nums.begin(),nums.end(),greater<int>());
+        
+        return _isCan(nums,0,0,target);
+    }
+    
+private:
+    bool _isCan(const vector<int>& nums,int index,int sum,int target){
+        int len=nums.size();
+        for(int i=index;i<len;++i){
+            sum+=nums[i];
+            if(sum==target)
+                return true;
+            else if(sum>target)
+                return false;
+            if(_isCan(nums,i+1,sum,target))
+                return true;
+            sum-=nums[i];
+        }
+        return false;
+    }
+};
