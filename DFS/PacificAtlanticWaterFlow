@@ -1,0 +1,69 @@
+class Solution {
+public:
+    typedef vector<vector<uint8_t>> Ty;
+    typedef vector<vector<int>> Ky;
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& matrix) {
+        m=matrix.size();
+        if(m==0)
+            return {};
+        n=matrix[0].size();
+        if(n==0)
+            return {};
+        //brief:
+        //0x1:到达太平洋，
+        //0x2:到达大西洋，
+        //0x3:都可达，
+        Ty dp(m,vector<uint8_t>(n,0));
+        
+        //becare:遍历标记应该区分不同方向，这样子可以做剪枝
+        Ty visitedP(m,vector<uint8_t>(n,0));
+        Ty visitedA(m,vector<uint8_t>(n,0));
+        vector<vector<int>>out;
+        
+        for(int i=0;i<m;++i){
+            dp[i][0]|=0x1;
+            dfs(matrix,dp,visitedP,i,0,matrix[i][0],dp[i][0]);
+            dp[i][n-1]|=0x2;
+            dfs(matrix,dp,visitedA,i,n-1,matrix[i][n-1],dp[i][n-1]);
+        }
+        for(int i=0;i<n;++i){
+            dp[0][i]|=0x1;
+            dfs(matrix,dp,visitedP,0,i,matrix[0][i],dp[0][i]);
+            dp[m-1][i]|=0x2;
+            dfs(matrix,dp,visitedA,m-1,i,matrix[m-1][i],dp[m-1][i]);
+        }
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(dp[i][j]==3)
+                    out.emplace_back(vector<int>({i,j}));
+            }
+        }
+        
+        return out;
+    }
+private:
+    void dfs(Ky& matrix,Ty& dp,Ty& visited,
+              int row,int column,int last,uint8_t state){
+        if(row<0 || column<0 || row>=m || column>=n ||
+           visited[row][column] || matrix[row][column]<last)
+            return;
+        visited[row][column]=1;
+        
+        dp[row][column]|=state;
+        
+        int s=dp[row][column];
+        int tmp=matrix[row][column];
+        
+        dfs(matrix,dp,visited,row-1,column,tmp,s);
+        dfs(matrix,dp,visited,row+1,column,tmp,s);
+        dfs(matrix,dp,visited,row,column-1,tmp,s);
+        dfs(matrix,dp,visited,row,column+1,tmp,s);
+        
+        //visited[row][column]=0;
+        
+    }
+    
+private:
+    int m;
+    int n;
+};
