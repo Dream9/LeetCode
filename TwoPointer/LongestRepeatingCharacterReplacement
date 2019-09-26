@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        /*典型的伸缩窗口*/
+        if(s.empty() || k<0)//允许k==0...
+            return 0;
+        
+        int len=s.size();
+        int left=0;
+        int right=0;
+        int out=k;
+        vector<int>cur(26,0);
+        
+        while(right<len){
+            ++cur[s[right]-'A'];
+            int same_count=*max_element(cur.begin(),cur.end());
+            int tmp_len=right-left+1;
+            if(tmp_len-same_count<=k)
+                out=max(out,tmp_len);
+            else{
+                --cur[s[left]-'A'];
+                ++left;
+            }
+                ++right;
+        }
+        
+        return out;
+    }
+};
