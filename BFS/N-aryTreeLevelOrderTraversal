@@ -1,0 +1,41 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> children;
+
+    Node() {}
+
+    Node(int _val, vector<Node*> _children) {
+        val = _val;
+        children = _children;
+    }
+};
+*/
+class Solution {
+public:
+    typedef vector<vector<int>> Ty;
+    vector<vector<int>> levelOrder(Node* root) {
+        if(!root)
+            return {};
+        Ty out;
+        vector<Node*> level={root};
+        _LOT(level,out);
+        return out;
+    }
+private:
+    void _LOT(vector<Node*> level,Ty& out){
+        if(level.empty())
+            return;
+        vector<Node*>next;
+        vector<int> data;
+        for(Node*cur:level){
+            data.emplace_back(cur->val);
+            for(Node*i:cur->children)
+                next.emplace_back(i);
+        }
+        out.emplace_back(std::move(data));
+        _LOT(next,out);
+    }
+};
