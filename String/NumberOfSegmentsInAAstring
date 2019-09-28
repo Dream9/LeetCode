@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int countSegments(string s) {
+        int out=0;
+        
+        size_t pos=s.find_first_not_of(' ');
+        while(pos!=string::npos){
+            size_t space_pos=s.find_first_of(' ',pos);
+            if(space_pos==string::npos){
+                ++out;
+                break;
+            }
+            ++out;
+            pos=s.find_first_not_of(' ',space_pos);
+        }
+        return out;
+    }
+};
