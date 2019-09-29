@@ -1,0 +1,27 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        if(!root)
+            return 0;
+        return _path(root,0,sum)+pathSum(root->left,sum)+pathSum(root->right,sum);
+    }
+private:
+    //注意上一个函数进行分发起点，本函数负责dfs走到底
+    int _path(TreeNode* root,int path_sum ,int sum) {
+        if(!root)
+            return 0;
+        int cur=path_sum+root->val;
+        
+        return (cur==sum?1:0)+_path(root->left,cur,sum)+_path(root->right,cur,sum);
+    }
+    
+};
