@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> findRightInterval(vector<vector<int>>& intervals) {
+        if(intervals.empty())
+            return {};
+        
+        map<int,int>start_pos;
+        int len=intervals.size();
+        
+        for(int i=0;i<len;++i){
+            auto iter=start_pos.find(intervals[i][0]);
+            if(iter==start_pos.end())
+                start_pos.insert({intervals[i][0],i});
+            else{
+                iter->second=min(iter->second,i);
+            }
+        }
+        
+        vector<int>out;
+        out.reserve(len);
+        for(const vector<int>&c:intervals){
+            auto iter=start_pos.lower_bound(c[1]);
+            out.emplace_back(iter==start_pos.end()?-1:iter->second);
+        }
+        return out;
+    }
+};
