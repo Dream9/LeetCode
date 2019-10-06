@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int len=s.size();
+        if(len<p.size())
+            return {};
+        
+        vector<int> out;
+        
+        vector<int> dict(26,0);
+        for(char c:p){
+            ++dict[c-'a'];
+        }
+        
+        int count=p.size();
+        int cache=0;
+        
+        int left=0;
+        int right=0;
+        while(right<len){
+            //for debug
+            //if(right==5)
+            //      return {dict[0]};
+            
+            char tmp=s[right];
+            --dict[tmp-'a'];
+            //记录乱序命中
+            if(dict[tmp-'a']>=0){
+                ++cache;
+                if(cache==count){
+                    out.emplace_back(left);
+                }
+            }
+            
+            ++right;
+            
+            //收缩窗口
+            if(right-left>=count){
+                ++dict[s[left]-'a'];
+                if(dict[s[left]-'a']>0){
+                    --cache;
+                }
+                ++left;
+            }
+        }
+        
+        return out;
+    }
+};
