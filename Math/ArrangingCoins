@@ -1,0 +1,9 @@
+class Solution {
+public:
+    int arrangeCoins(int n) {
+        //解一元二次方程即可
+        //小心乘法溢出
+        return static_cast<int>((sqrt(1+static_cast<int64_t>(8)*n)-1))>>1;
+        
+    }
+};
