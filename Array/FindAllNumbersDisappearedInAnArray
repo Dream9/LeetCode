@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<int> findDisappearedNumbers(vector<int>& nums) {
+        if(nums.empty())
+            return {};
+        int len=nums.size();
+        
+        vector<int>out;
+        int i=0;
+        //先做一遍标记
+        while(i<len){
+            int pos=abs(nums[i])-1;
+            if(nums[pos]>0){
+                nums[pos]=-nums[pos];
+            }
+            ++i;
+        }
+        //然后定位结果
+        for(i=0;i<len;++i){
+            if(nums[i]>0)
+                out.emplace_back(i+1);
+        }
+        return out;
+    }
+};
