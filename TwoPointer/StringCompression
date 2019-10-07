@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int compress(vector<char>& chars) {
+        //游程长度编码
+        int len=chars.size();
+        if(len<=1)
+            return len;
+        
+        int out=0;
+        int index=0;
+        int pos=0;
+        while(index<len){
+            char last=chars[index];
+            int next_index=index+1;
+            while(next_index<len && chars[next_index]==last)
+                ++next_index;
+            int compresslen=next_index-index;
+            
+            //out+=compresslen==1?1:__getLength(compresslen)+1;
+            if(compresslen==1){
+                chars[out]=last;
+                ++out;
+            }
+            else{
+                string tmp(to_string(compresslen));
+                chars[out]=last;
+                copy(tmp.begin(),tmp.end(),chars.begin()+out+1);
+                out+=1+tmp.size();
+            }
+            
+            index=next_index;
+        }
+        return out;
+    }
+private:
+    int __getLength(int k){
+        return to_string(k).size();
+    }
+};
