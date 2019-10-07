@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> findDuplicates(vector<int>& nums) {
+        //鸠占鹊巢式的排查即可
+        //这类似于桶排序
+        //每个桶只能放一个元素
+        if(nums.empty())
+            return {};
+        
+        vector<int>out;
+        int len=nums.size();
+        
+        int index=0;
+        while(index<len){
+            if(nums[index]==-1){
+                ++index;
+                continue;
+            }
+            while(nums[index]!=-2 && nums[index]!=index+1 && nums[nums[index]-1]!=-1){
+                //swap(nums[index],nums[nums[index]-1]);
+                int tmp=nums[index];
+                nums[index]=nums[nums[index]-1];
+                nums[tmp-1]=-1;
+            }
+            
+            //针对暂时没有值填补这个位置
+            if(nums[index]==-2){
+                ++index;
+                continue;
+            }
+            
+            if(nums[nums[index]-1]==-1){
+                //正对已经发生了重复，且当前位置无法被填充
+                out.emplace_back(nums[index]);
+                nums[index]=-2;
+            }
+            else{
+                //针对正好位置对应
+                nums[index]=-1;
+            }
+            ++index;
+        }
+        return out;
+    }
+};
