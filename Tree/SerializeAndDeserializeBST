@@ -1,0 +1,75 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+//结合先序和中序两种顺序结果
+//
+//那就麻烦了，直接把null通过特殊符号标记一下即可
+//那这样就不只是BST的序列化了，任意二叉树都可以这样序列化
+class Codec {
+public:
+
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        string str;
+        NLR(root,str);
+        return str;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        //return new TreeNode(data[8]-'0');
+        int pos=0;
+        return reconstruct(data,pos);
+    }
+private:
+    void NLR(TreeNode*root,string& str){
+        if(!root){
+            str+="N,";
+            return;
+        }
+        str+=to_string(root->val)+",";
+        NLR(root->left,str);
+        NLR(root->right,str);
+    }
+    void LNR(TreeNode*root,string& str){
+        if(!root){
+            str+="N,";
+            return;
+        }
+        NLR(root->left,str);
+        str+=to_string(root->val)+",";
+        NLR(root->right,str);
+    }
+    
+    TreeNode* reconstruct(string& str1,int& i){
+        if(str1.empty() || str1.size()<=i )
+            return nullptr;
+        if(str1[i]=='N'){
+            i+=2;
+            return nullptr;
+        }
+        int pos=str1.find(',',i);
+        if(pos==string::npos)
+            return nullptr;
+        string tmp=str1.substr(i,pos-i);
+        int value=stoi(tmp);
+        TreeNode* out=new TreeNode(value);
+        
+        i=pos+1;
+        out->left=reconstruct(str1,i);
+        
+        out->right=reconstruct(str1,i);
+        
+        return out;
+    } 
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
