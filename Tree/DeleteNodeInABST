@@ -1,0 +1,105 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    //关键在于把问题转换为删除叶子节点，不要移动中间的指针，只改变其值,以及移动叶子的指针
+     TreeNode* deleteNode(TreeNode* root, int key) {
+        if (!root) return NULL;
+        if (root->val > key) {
+            root->left = deleteNode(root->left, key);
+        } else if (root->val < key) {
+            root->right = deleteNode(root->right, key);
+        } else {
+            if (!root->left || !root->right) {
+                root = (root->left) ? root->left : root->right;
+            } else {
+                TreeNode *cur = root->right;
+                while (cur->left) cur = cur->left;
+                root->val = cur->val;
+                root->right = deleteNode(root->right, cur->val);
+            }
+        }
+        return root;
+    }
+    TreeNode* _deleteNode(TreeNode* root, int key) {
+        TreeNode leader(0);
+        leader.left=root;
+        return deleteNode(&leader,root,key);
+    }
+    TreeNode* deleteNode(TreeNode* parent,TreeNode* root, int key) {
+        //非常普通的BST删除
+        //找一个前驱或者一个后继即可
+        if(!root)
+            return root;
+        if(root->val==key){
+            R=root;
+            TreeNode* alte=find_next(root,root->right);
+            if(!alte){
+                //R=root;
+                alte=find_prev(root,root->left);
+            }
+            if(!alte){
+                //没有替代品，说明就在叶子上
+                if(parent->left==root){
+                    parent->left=nullptr;
+                }
+                else{
+                    parent->right=nullptr;
+                }
+                return nullptr;
+            }
+            alte->left=root->left;
+            alte->right=root->right;
+            if(parent->left==root){
+                parent->left=alte;
+            }
+            else{
+                parent->right=alte;
+            }
+            return alte;
+        }
+        else if(root->val>key){
+            deleteNode(root,root->left,key);
+            return root;
+        }
+        else{
+            deleteNode(root,root->right,key);
+            return root;
+        }
+    }
+private:
+    TreeNode* find_next(TreeNode* parent,TreeNode* root){
+        if(!root)
+            return nullptr;
+        if(root->left){
+            return find_next(root,root->left);
+        }
+        if(R!=parent)
+            parent->left=root->right;
+        else
+            parent->right=root->right;
+        return root;
+        
+    }
+    TreeNode* find_prev(TreeNode* parent,TreeNode* root){
+        if(!root)
+            return nullptr;
+        if(root->right){
+            return find_next(root,root->right);
+        }
+        if(R!=parent)
+            parent->right=root->left;
+        else
+            parent->left=root->left;
+        return root;
+        
+    }
+    TreeNode* R;
+};
