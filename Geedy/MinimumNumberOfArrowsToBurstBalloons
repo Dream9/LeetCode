@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int findMinArrowShots(vector<vector<int>>& points) {
+        //区间合并问题
+        if(points.empty())
+            return 0;
+        
+        sort(points.begin(),points.end());
+        
+        int len=points.size();
+        int prev=points[0][1];
+        int out=1;
+        for(int i=1;i<len;++i){
+            if(points[i][0]<=prev){
+                prev=min(prev,points[i][1]);
+            }
+            else{
+                ++out;
+                prev=points[i][1];
+            }
+        }
+        return out;
+    }
+};
