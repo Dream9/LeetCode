@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int minMoves(vector<int>& nums) {
+        //if(nums.size()<=1)
+        //    return 0;
+        //return _findminMoves(nums,0);
+        
+        //ennm,把问题反着考虑，只调整较大元素即可
+        int i=*min_element(nums.begin(),nums.end());
+        int ans=0;
+        for_each(nums.begin(),nums.end(),
+                 [&](int val){
+                     ans+=val-i;
+                 });
+        return ans;
+    }
+private:
+    int _findminMoves(vector<int>& nums,int count) {
+        int val=nums[0];
+        if(nums.end()==find_if(nums.begin(),nums.end(),
+                               [=](int i){return i!=val;})){
+            return count;
+        }
+        //加快收敛，但是部分测试用例依然会因为递归深度太大而溢出
+        partial_sort(nums.begin(),nums.begin()+2,nums.end(),greater<int>());
+        int diff=nums[0]-nums[1];
+        diff=diff==0?1:diff;
+        for_each(nums.begin()+1,nums.end(),
+                [=](int &v){v+=diff;});
+        return _findminMoves(nums,count+diff);
+        
+        //int max_val=nums[0];
+        //int pos=0;
+        //int len=nums.size();
+        //bool flag=true;
+        //for(int i=0;i<len;++i){
+        //    if(flag){
+        //        flag=max_val==nums[i];
+        //    }
+        //    if(nums[i]>max_val){
+        //        max_val=nums[i];
+        //        pos=i; 
+        //    }
+        //}
+        //
+        //if(flag)
+        //    return count;
+        //
+        //for_each(nums.begin(),nums.begin()+pos,
+        //        [](int &i){++i;});
+        //for_each(nums.begin()+pos+1,nums.end(),
+        //        [](int &i){++i;});
+        //
+        //return _findminMoves(nums,count+1);
+    }
+
+};
