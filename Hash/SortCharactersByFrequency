@@ -1,0 +1,32 @@
+https://github.com/Dream9/LeetCode/new/master/Hashclass Solution {
+public:
+    typedef pair<int,int>Ty;
+    string frequencySort(string s) {
+        int len=s.size();
+        if(len<=1)
+            return s;
+        
+        vector<Ty>dict(128,Ty(0,0));
+        for(char c:s ){
+            dict[c].first=c;
+            ++dict[c].second;
+        }
+        
+        sort(dict.begin(),dict.end(),
+             [](Ty f,Ty s){return f.second>s.second;});
+        
+        string out;
+        out.reserve(len);
+        
+        int index=0;
+        while(out.size()<len){
+            char c=dict[index].first;
+            
+            while(dict[index].second-->0){
+                out.push_back(c);
+            }
+            ++index;
+        }
+        return out;
+    }
+};
