@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int fourSumCount(vector<int>& A, vector<int>& B, vector<int>& C, vector<int>& D) {
+        //多数之和的标准案例、
+        //都是最终转化到两数之和上面去
+        
+        //map<int,int>dict1;
+        //map<int,int>dict2;
+        unordered_map<int,int>dict1;
+        unordered_map<int,int>dict2;
+        //关于这两个用例，用unordered_map对于(当前)测试用例具有更好的表现
+        
+        for(int i:A){
+            for(int j:B){
+                ++dict1[i+j];
+            }
+        }
+        
+        int out=0;
+        for(int i:C){
+            for(int j:D){
+                int sum=i+j;
+                auto iter=dict1.find(-sum);
+                if(iter!=dict2.end()){
+                    out+=iter->second;
+                }
+            }
+        }
+        
+        return out;
+        
+        //for(int i:C){
+        //    for(int j:D){
+        //        ++dict2[i+j];
+        //    }
+        //}
+        //
+        //int out=0;
+        //for(auto item:dict1){
+        //    int i=item.first;
+        //    auto iter= dict2.find(-i);
+        //    if(iter!=dict2.end()){
+        //        out+=item.second*iter->second;
+        //    }
+        //}
+        //return out;
+    }
+};
