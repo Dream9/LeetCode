@@ -1,0 +1,51 @@
+class Solution {
+public:
+    bool find132pattern(vector<int>& nums) {
+        //分成两部分，满足中间的大于两侧的最小值，
+        //很明显要用dp记录
+        int len=nums.size();
+        if(len<=2)
+            return false;
+        
+        vector<int>leftmin(len,nums[0]);
+        vector<int>rightmin(len,nums.back());
+        //vector<int>rightmax(len,nums.back());
+        
+        //调了半天后面的遍历，原来是前面求最小值的地方算错了。。。。。
+        for (int i = 1; i < len; ++i) {
+			if (nums[i] < leftmin[i-1])///////务必是和上一个最小值对比。。。。。
+				leftmin[i] = nums[i];
+			else
+				leftmin[i] = leftmin[i - 1];
+			int tmp = len - 1 - i;
+			if (nums[tmp] < rightmin[tmp+1])
+				rightmin[tmp] = nums[tmp];
+			else
+				rightmin[tmp] = rightmin[tmp + 1];
+			//if(nums[tmp]>rightmax[tmp])
+			//    rightmax[tmp]=nums[tmp];
+		}
+        
+        --len;
+        for(int i=1;i<len;++i){
+            int med=nums[i];
+            if(leftmin[i-1]<med && rightmin[i+1]<med){
+                //剪枝
+                if(rightmin[i+1]>leftmin[i-1])
+                    return true;
+                //
+                //if(med>rightmax[i+1])
+                //    return true;
+                //否则需要遍历寻找是否存在一个值,介于两者中间
+                int j=i+1;
+                int pivot=leftmin[i-1];
+                auto iter=find_if(nums.begin()+j,nums.end(),
+                                  [=](int v){return v>pivot && v<med;});
+                if(iter!=nums.end())
+                    return true;
+            }
+        }
+        
+        return false;
+    }
+};
