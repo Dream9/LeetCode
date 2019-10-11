@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        /*非常类似于set_union*/
+        //然后还带有一点贪心的思想
+
+        if(g.empty() || s.empty())
+            return 0;
+        
+        sort(g.begin(),g.end());
+        sort(s.begin(),s.end());
+        
+        int out=0;
+        int leng=g.size();
+        int lens=s.size();
+        int i=0;
+        int j=0;
+        
+        while(i<leng && j<lens){
+            if(g[i]<=s[j]){
+                ++i;
+                ++out;
+            }
+            ++j;
+        }
+        
+        return out;
+    }
+};
