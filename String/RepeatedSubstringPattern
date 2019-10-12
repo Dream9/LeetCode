@@ -1,0 +1,43 @@
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        //首先剪枝，然后memcmp即可
+        int len=s.size();
+        if(len<=1)
+            return false;
+        
+        //获得最对的重复数目
+        vector<int>dict(26,0);
+        for(char c:s)
+            ++dict[c-'a'];
+        int times=INT_MAX;
+        for(int i:dict){
+            if(i==0)
+                continue;
+            times=min(i,times);
+        }
+        
+        //依次尝试即可
+        int i=times;
+        while(i>1){
+            //保证是整数倍地关系
+            if(times%i!=0 || len%i!=0){
+                --i;
+                continue;
+            }
+            int size=len/i;
+            char* first=&s[0];
+            char* pos=first+size;
+            while(pos!=first+len){
+                if(0!=memcmp(first,pos,size)){
+                    break;
+                }
+                pos+=size;
+            }
+            if(pos==first+len)
+                return true;
+            --i;
+        }
+        return false;
+    }
+};
