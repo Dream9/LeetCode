@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int hammingDistance(int x, int y) {
+        uint32_t tmp=x^y;
+        //正向操作，32次
+        //int64_t needle=0x1;
+        //int ans=0;
+        //for(int i=0;i<32;++i){
+        //    if(tmp&needle)
+        //        ++ans;
+        //    needle<<=1;
+        //}
+        if(tmp==0)
+            return 0;
+        
+        //反向操作，可以剪枝，不在必须遍历32位了
+        int ans=0;
+        while(tmp){
+            if(tmp&0x1)
+                ++ans;
+            tmp>>=1;
+        }
+        return ans;
+    }
+};
