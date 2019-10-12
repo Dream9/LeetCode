@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int minMoves2(vector<int>& nums) {
+        //错了：越接近平均值越接近最小移动量
+        //越接近排序后中位数，才对，，so,why?
+        int len=nums.size();
+        if(len<=1)
+            return 0;
+        
+        //int64_t sum=accumulate(nums.begin(),nums.end(),0);
+        //double mean=1.0*sum/len;
+        //
+        //int med=0;
+        //double distance=DBL_MAX;
+        //for_each(nums.begin(),nums.end(),
+        //         [&](int val){
+        //             double cur=fabs(val-mean);
+        //             if(cur<distance){
+        //                 distance=cur;
+        //                 med=val;
+        //             }
+        //         });
+        
+        int pos=len>>1;
+        nth_element(nums.begin(),nums.begin()+pos,nums.end());
+        int med=nums[pos];
+        int ans=0;
+        
+        for_each(nums.begin(),nums.end(),
+                [&](int val){
+                    ans+=abs(val-med);
+                });
+        return ans;
+    }
+};
