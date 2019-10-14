@@ -1,0 +1,41 @@
+class Solution {
+public:
+    bool canIWin(int maxChoosableInteger, int desiredTotal) {
+        //另一种形式的dp,访问的组合是通过位记录
+        if(maxChoosableInteger>=desiredTotal)
+            return true;
+        int sum=maxChoosableInteger*(maxChoosableInteger+1)/2;
+        if(sum<desiredTotal)
+            return false;
+        else if(sum==desiredTotal)
+            return maxChoosableInteger&0x1;
+        
+        //已经访问的组合通过位的方式进行记录之
+        unordered_map<int,bool>dict;
+        int visited=0;
+        
+        return _dfs(dict,visited,maxChoosableInteger,desiredTotal);
+    }
+    
+private:
+    bool _dfs(unordered_map<int,bool>&dict,int visited,int biggest,int target){
+        auto iter=dict.find(visited);
+        if(iter!=dict.end())
+            return iter->second;
+        
+        for(int i=0;i<biggest;++i){
+            int pos=0x1<<i;
+            if(pos & visited)
+                continue;
+            int tmp=visited | pos;
+            
+            //当前的数值已经累加到了target或者下一个人的执行结果为失败都对应了本次的成功
+            if(i+1>=target || !_dfs(dict,tmp,biggest,target-i-1)){
+                dict[visited]=true;
+                return true;
+            }
+        }
+        dict[visited]=false;
+        return false;
+    }
+};
