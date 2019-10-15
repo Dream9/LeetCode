@@ -1,0 +1,17 @@
+// The rand7() API is already defined for you.
+// int rand7();
+// @return a random integer in the range 1 to 7
+
+class Solution {
+public:
+    int rand10() {
+        //利用小的随机数产生大的随机数
+        int first=rand7();
+        int second=rand7();
+        int data=(first-1)*7+second;
+        if(data>40)
+            return rand10();
+        int out=data%10;
+        return out==0?10:out;
+    }
+};
