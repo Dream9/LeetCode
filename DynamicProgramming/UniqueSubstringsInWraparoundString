@@ -1,0 +1,66 @@
+class Solution {
+public:
+    int findSubstringInWraproundString(string p) {
+        //关键点在于如何组织记录方式保证不会重复
+        //只记录以某个字符结尾的字串个数，并且这个个数等于以这个字符
+        //结尾时的最长字串长度
+        vector<int> cnt(26, 0);
+        int len = 0;
+        for (int i = 0; i < p.size(); ++i) {
+            if (i > 0 && (p[i] == p[i - 1] + 1 || p[i - 1] - p[i] == 25)){
+                ++len;
+            } else {
+                len = 1;
+            }
+            cnt[p[i] - 'a'] = max(cnt[p[i] - 'a'], len);
+        }
+        return accumulate(cnt.begin(), cnt.end(), 0);
+    }
+    //以下的方式去重存在问题
+    //int faild(string p) {
+    //    int len=p.size();
+    //    if(len<=1)
+    //        return len;
+    //    
+    //    //int out=0;
+    //    //int last=p[0];
+    //    //int local=1;
+    //    //
+    //    //for(int i=1;i<len;++i){
+    //    //    int cur=p[i];
+    //    //    if(cur-last==1 || cur-last==-25){
+    //    //        ++local;
+    //    //        last=cur;
+    //    //    }
+    //    //    else{
+    //    //        out+=local*(local+1)/2;
+    //    //        last=cur;
+    //    //        local=1;
+    //    //    }
+    //    //}
+    //    //out+=local*(local+1)/2;
+    //    
+    //    vector<int>dict(26,0);
+    //    int last=p[0];
+    //    int local=1;
+    //    int tmp=0;
+    //    
+    //    for(int i=1;i<len;++i){
+    //        int cur=p[i];
+    //        if(cur-last==1 || cur-last==-25){
+    //            ++local;
+    //            last=cur;
+    //        }
+    //        else{
+    //            tmp=local*(local+1)/2;
+    //            dict[last-'a']=max(dict[last-'a'],tmp);
+    //            last=cur;
+    //            local=1;
+    //        }
+    //    }
+    //    tmp=local*(local+1)/2;
+    //    dict[last-'a']=max(dict[last-'a'],tmp);
+    //    
+    //    return accumulate(dict.begin(),dict.end(),0);
+    //}
+};
