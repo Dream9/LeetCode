@@ -1,0 +1,35 @@
+class Solution {
+public:
+    bool makesquare(vector<int>& nums) {
+        if(nums.size()<4)
+            return false;
+        int64_t sum=accumulate(nums.begin(),nums.end(),0);
+        if(sum%4!=0)
+            return false;
+        int64_t target=sum/4;
+        
+        //sort(nums.begin(),nums.end());
+        //先大后小。可以加快收敛
+        sort(nums.rbegin(),nums.rend());
+        vector<int>edge(4,0);
+        return F(nums,edge,0,target);
+    }
+    
+    bool F(vector<int>& nums, vector<int>& edge, int pos, int target){
+        if(pos>=nums.size())
+            return edge[0]==target &&
+                   edge[1]==target && 
+                   edge[2]==target;
+        
+        int len=nums.size();
+        for(int i=0;i<4;++i){
+            if(edge[i]+nums[pos]>target)
+                continue;
+            edge[i]+=nums[pos];
+            if(F(nums,edge,pos+1,target))
+                return true;
+            edge[i]-=nums[pos];
+        }
+        return false;
+    }
+};
