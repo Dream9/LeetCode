@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int findRadius(vector<int>& houses, vector<int>& heaters) {
+        
+        sort(heaters.begin(),heaters.end());
+        int out=0;
+        for(int i:houses){
+            auto first=lower_bound(heaters.begin(),heaters.end(),i);
+            int diff1=first==heaters.end()?INT_MAX:*first-i;
+            int diff2=first==heaters.begin()?INT_MAX:i-*(--first);
+            out=max(out,min(diff1,diff2));
+        }
+        
+        return out;
+        
+        //sort(houses.begin(),houses.end());
+        //sort(heaters.begin(),heaters.end());
+        // 
+        //int out=abs(heaters[0]-houses[0]);
+        //auto last=heaters.begin();
+        //
+        //int len=houses.size();
+        //for(int i=1;i<len;++i){
+        //    int diff=abs(houses[i]-*last);
+        //    if(diff<=out)
+        //        continue;
+        //    
+        //    //此时该点无法被上一个点的out半径内照亮
+        //    auto next=last+1;
+        //    while(next!=heaters.end()){
+        //        int tmp=abs(*next-houses[i]);
+        //        if(tmp<=diff){
+        //            diff=tmp;
+        //            last=next++;
+        //        }
+        //        else
+        //            break;
+        //    }
+        //    out=max(out,diff);
+        //}
+        //
+        //return out;
+    }
+};
