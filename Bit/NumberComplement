@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int findComplement(int num) {
+        //按位操作即可
+        int64_t needle=0x1;
+        
+        while(needle<=num){
+            if(needle & num){
+                num ^= needle;
+            }
+            else{
+                num |= needle;
+            }
+            needle <<= 1;
+        }
+        return num;
+    }
+};
