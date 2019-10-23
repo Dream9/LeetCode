@@ -1,0 +1,28 @@
+class Solution {
+public:
+    typedef pair<int,int>Ty;
+    bool PredictTheWinner(vector<int>& nums) {
+        //因为题意中提到了nums的长度不超过20，因此递归的深度是可接受的
+        //但实际上这中间涉及了许多重复计算，因此可以通过记忆数组或者dp进行优化
+        Ty ans=_score(nums,0,nums.size());
+        return ans.first>=ans.second;
+        
+    }
+private:
+    Ty _score(vector<int>&nums,int left,int right){
+        //每个人总是选取使自己获得最大分数的路径
+        //因此每往下递归一次，分数实际上左右交换一次的
+        if(left>=right)
+            return Ty(0,0);
+        Ty choose_left=_score(nums,left+1,right);
+        Ty choose_right=_score(nums,left,right-1);
+        
+        int ans_left=choose_left.second+nums[left];
+        int ans_right=choose_right.second+nums[right-1];
+        
+        if(ans_left>ans_right)
+            return Ty(ans_left,choose_left.first);
+        else
+            return Ty(ans_right,choose_right.first);
+    }
+};
