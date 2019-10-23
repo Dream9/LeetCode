@@ -1,0 +1,28 @@
+class Solution {
+public:
+    string licenseKeyFormatting(string S, int K) {
+        //正常的字符串拼接
+        //复习一下remove,transform,toupper的使用
+        auto iter=remove(S.begin(),S.end(),'-');
+        int size=iter-S.begin();
+        if(size==0)
+            return "";
+        
+        int offset=size%K;
+        int number=size/K;
+        string out;
+        out.reserve(size+number-1);
+        
+        out.append(S.begin(),S.begin()+offset);
+        while(offset<size){
+            out+="-";
+            out.append(S.begin()+offset,S.begin()+offset+K);
+            offset+=K;
+        }
+        
+        transform(out.begin(),out.end(),out.begin(),::toupper);
+        return out.front()=='-'?out.substr(1):out;
+        
+        
+    }
+};
