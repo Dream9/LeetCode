@@ -1,0 +1,42 @@
+class Solution {
+public:
+    typedef vector<vector<int>> VVT;
+    typedef vector<int> VT;
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        //很常规的全组合题目
+        //注意子序列不能排序
+        if(nums.size()<=1)
+            return {};
+        
+        VT path;
+        VVT out;
+        
+        _bt(nums,0,path,out);
+        return out;
+    }
+    
+private:
+    void _bt(VT& nums,int pos,VT& path,VVT& out){
+        int len=nums.size();
+        unordered_set<int> dup;
+        
+        for(int i=pos;i<len;++i){
+            //注意这里，之前的一些遍历全组合的题是先经过排序，因此只需要和前一个元素对比即可
+            //但这里是子序列，因此不能排序，故需要dup进行记录判别
+            //if((i!=pos && nums[i]==nums[i-1]) ||
+            if((dup.find(nums[i])!=dup.end()) ||
+               (!path.empty() && nums[i]<path.back()))
+                continue;
+            
+            dup.insert(nums[i]);
+                
+            path.emplace_back(nums[i]);
+            if(path.size()>1)
+                out.emplace_back(path);
+            
+            _bt(nums,i+1,path,out);
+            
+            path.pop_back();
+        }
+    }
+};
