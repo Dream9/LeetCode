@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int findPoisonedDuration(vector<int>& timeSeries, int duration) {
+        //区间合并问题的衍生
+        int out=0;
+        int last_end=0;
+        int last_val=0;
+        
+        //已经排序好了
+        for(int cur:timeSeries){
+            int tmp=cur+duration;
+            if(last_end<cur){
+                out+=last_end-last_val;
+                last_val=cur;
+                last_end=tmp;
+            }
+            else if(last_end<tmp){
+                last_end=tmp;
+            }
+        }
+        
+        return  out+last_end-last_val;//注意最后一轮没有添加
+    }
+};
