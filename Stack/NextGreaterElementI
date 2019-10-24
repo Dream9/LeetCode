@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        //还可以用栈来实现
+        //用stack维护升序，同时不断更新之，所有破环其升序的，stack.top()的Next
+        //Greater Element就是破坏者，记录之然后pop,push
+        //用stack维护一个升序序列
+
+        int len=nums2.size();
+        
+        unordered_map<int,int> dict;
+        
+        for(int i=0;i<len;++i){
+            dict.insert({nums2[i],i});
+        }
+        
+        vector<int>out;
+        out.reserve(len);
+        
+        for(int i:nums1){
+            int pos=dict[i];
+            auto iter=std::find_if(nums2.begin()+pos,nums2.end(),
+                                  [=](int val){
+                                      return val>i;
+                                  });
+            if(iter==nums2.end())
+                out.emplace_back(-1);
+            else
+                out.emplace_back(*iter);
+        }
+        
+        return out;
+    }
+};
