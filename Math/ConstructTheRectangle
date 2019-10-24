@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<int> constructRectangle(int area) {
+        //从sqrt遍历到第一个可被整除的
+        int right=sqrt(area);
+        int diff=INT_MAX;
+        vector<int> out(2,0);
+        
+        while(right>=1){
+            int med=right;
+            
+            //int other=area/med;
+            //int tmp=other*med;
+            //if(tmp==area){
+            if(area%med==0){
+                int other=area/med;
+                out[1]=min(other,med);
+                out[0]=max(other,med);
+                break;
+            }
+            --right;
+            //else{
+            //    //由于存在向零舍入关系，因此一定是偏小
+            //    left=med+1;
+            //}
+        }
+        
+        return out;
+    }
+};
