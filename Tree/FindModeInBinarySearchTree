@@ -1,0 +1,70 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> findMode(TreeNode* root) {
+        //借助于中序遍历的顺序
+        if(!root)
+            return {};
+        
+        vector<int>out;
+        int most=0;
+        int count=1;
+        TreeNode* pre=nullptr;
+        
+        //_recursive(root,out,count,root->val+100,most);
+        _recursive(root,out,count,pre,most);
+        return out;
+    }
+private:
+    void _recursive(TreeNode* root,
+                    vector<int>& out,
+                    int& count,
+                    //int last,
+                    TreeNode*& pre,//这里必须是引用，负责修改指向上一个元素的值！！！！！！！！！！！！！！！！！！
+                    int& most){
+        if(!root)
+            return;
+        
+        //_recursive(root->left,out,count,root->val,most);
+        _recursive(root->left,out,count,pre,most);
+        
+        if(pre){
+            count=pre->val==root->val?count+1:1;
+        }
+        //else
+        //    count=1;
+        
+        //for test
+        //if(root->val==last)
+        //    ++count;
+        //else
+        //    count=1;
+        
+        if(count>=most){
+            if(count>most){
+                //for test
+                //if(!out.empty()){
+                //    out.push_back(root->val*100+count+most*10);
+                //    return ;
+                //}
+                out.clear();
+                most=count;
+            }
+            if(out.empty() || out.back()!=root->val)
+                out.emplace_back(root->val);
+        }
+        
+        //_recursive(root->right,out,count,root->val,most);
+        //_recursive(root->right,out,count,root,most);
+        pre=root;
+        _recursive(root->right,out,count,pre,most);
+    }
+};
