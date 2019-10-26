@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<string> findWords(vector<string>& words) {
+        //哈希表对应起来即可
+        //不要输错了即可
+        vector<int>dict={1,0,0,1,2,1,1,1,2,1,1,1,0,0,2,2,2,2,1,2,2,0,2,0,2,0};
+        vector<string>out;
+        
+        for(string& word:words){
+            int last=dict[::tolower(word[0])-'a'];
+            //for test
+            //out.emplace_back(to_string(last)+word[0]);
+            bool flag=true;
+            for(char c:word){
+                char tmp=::tolower(c);
+                int pos=dict[tmp-'a'];
+                if(pos!=last){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag){
+                out.emplace_back(word);
+            }
+        }
+        return out;
+    }
+};
