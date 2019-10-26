@@ -1,0 +1,65 @@
+inline bool isValid(pair<int,int> data,int m, int n){
+    return data.first>=0 && data.first<m &&
+           data.second>=0 && data.second<n;
+}
+
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        //根据当前上下行方向决定下一个位置即可
+        //观察规律可知下标之和是从0一直增加到m+n-2
+        //小心溢出即可
+        
+        int m=matrix.size();
+        if(m==0)
+            return {};
+        int n=matrix[0].size();
+        if(n==0)
+            return {};
+        
+        vector<int>out;
+        out.reserve(m*n);
+        
+        int bigger=m+n-1;
+        int sum=0;
+        bool up=true;
+        pair<int,int>cur={0,0};
+        out.emplace_back(matrix[0][0]);
+        
+        //for test
+        //return {bigger};
+        while(true){
+            //计算当前位置
+            if(up){
+                --cur.first;
+                ++cur.second;
+            }
+            else{
+                ++cur.first;
+                --cur.second;
+            }
+            
+            if(isValid(cur,m,n))
+                out.emplace_back(matrix[cur.first][cur.second]);
+            else{
+                //更换方向
+                ++sum;
+                if(sum>=bigger)
+                    break;
+                
+                //小心位置溢出
+                if(up){
+                    cur.second=min(sum,n-1);
+                    cur.first=sum-cur.second;
+                }
+                else{
+                    cur.first=min(sum,m-1);
+                    cur.second=sum-cur.first;
+                }
+                up=!up;
+                out.emplace_back(matrix[cur.first][cur.second]);
+            }
+        }
+        return out;
+    }
+};
