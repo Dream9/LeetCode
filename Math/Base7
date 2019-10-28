@@ -1,0 +1,33 @@
+class Solution {
+public:
+    string convertToBase7(int num) {
+        if(num==0)
+            return "0";
+        if(num<0)
+            return "-"+convertToBase7(-num);
+        
+        //提前算出位数,可以减少stack的使用
+        int bits=int(log10(num)/log10(7))+1;
+        string out(bits,0);
+        while(num){
+            out[--bits]='0'+num%7;
+            num/=7;
+        }
+        return out[0]==0?out.substr(1):out;
+        
+        //进制转换的标准流程
+        //stack<int>st;
+        //while(num){
+        //    st.push(num%7);
+        //    num/=7;
+        //}
+        //
+        //string out;
+        //out.reserve(st.size());
+        //while(!st.empty()){
+        //    out+=st.top()+'0';
+        //    st.pop();
+        //}
+        //return out;
+    }
+};
