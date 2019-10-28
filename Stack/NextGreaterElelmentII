@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> nextGreaterElements(vector<int>& nums) {
+        //通过stack维护一个单调栈
+        int len=nums.size();
+        if(len==0)
+            return {};
+        
+        stack<pair<int,int>>st;
+        queue<pair<int,int>>q;
+        vector<int>out(len,-1);
+        
+        st.push({nums[0],0});
+        
+        for(int i=1;i<len;++i){
+            int tmp=nums[i];
+            while(!st.empty() && st.top().first<tmp){
+                out[st.top().second]=tmp;
+                st.pop();
+            }
+            st.push({tmp,i});
+        }
+        
+        if(st.empty())
+            return out;
+        
+        //对这个循环数组在遍历一遍即可
+        for(int i=0;i<len;++i){
+            int tmp=nums[i];
+            while(!st.empty() && st.top().first<tmp){
+                //int index=st.top().second;
+                out[st.top().second]=tmp;
+                st.pop();
+            }
+            
+            //if(count==0)
+            //    break;
+            
+            st.push({tmp,i});
+            
+        }
+        return out;
+        
+    }
+};
