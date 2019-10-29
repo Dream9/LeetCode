@@ -1,0 +1,33 @@
+class Solution {
+public:
+    vector<string> findRelativeRanks(vector<int>& nums) {
+        int len=nums.size();
+        if(len==0)
+            return {};
+        
+        vector<pair<int,int>>tmp;
+        tmp.reserve(len);
+        int pos=0;
+        
+        for_each(nums.begin(),nums.end(),[&](int i)
+                 {
+                     tmp.emplace_back(i,pos++);
+                 });
+        sort(tmp.rbegin(),tmp.rend());
+        
+        vector<string>out(len);
+        pos=0;
+        for_each(tmp.begin(),tmp.end(),[&](const pair<int,int>&i)
+                 {
+                     switch(pos){
+                         case 0:out[i.second]="Gold Medal";break;
+                         case 1:out[i.second]="Silver Medal";break;
+                         case 2:out[i.second]="Bronze Medal";break;
+                         default:out[i.second]=to_string(pos+1);break;
+                     }
+                     ++pos;
+                 });
+        
+        return out;
+    }
+};
