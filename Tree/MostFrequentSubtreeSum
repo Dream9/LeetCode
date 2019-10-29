@@ -1,0 +1,48 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> findFrequentTreeSum(TreeNode* root) {
+        if(!root)
+            return {};
+        
+        unordered_map<int,int>notes;
+        int most=0;
+        vector<int> out;
+        _dfs(root,most,out,notes);
+        
+        return out;
+    }
+private:
+    int _dfs(TreeNode* root,
+             int& most, 
+             vector<int>& out,
+             unordered_map<int,int>& notes){
+        if(!root)
+            return 0;
+        
+        int left=_dfs(root->left,most,out,notes);
+        int right=_dfs(root->right,most,out,notes);
+        
+        int sum=left+right+root->val;
+        
+        //当最大值被更新时，丢弃原先的所有数据，重新记录即可
+        if(++notes[sum]>=most){
+            int tmp=notes[sum];
+            if(tmp>most){
+                most=tmp;
+                out.clear();
+            }
+            out.emplace_back(sum);
+        }
+        
+        return sum;
+    }
+};
