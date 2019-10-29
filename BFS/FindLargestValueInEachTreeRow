@@ -1,0 +1,44 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> largestValues(TreeNode* root) {
+        //BFS遍历即可
+        if(!root)
+            return {};
+        
+        vector<TreeNode*>layer;
+        
+        layer.emplace_back(root);
+        vector<int>out;
+        
+        while(!layer.empty()){
+            int M=INT_MIN;
+            for_each(layer.begin(),layer.end(),[&](TreeNode* cur){
+                M=max(M,cur->val);
+            });
+            out.emplace_back(M);
+            
+            //得到下一层的有效节点
+            vector<TreeNode*>tmp;
+            for(TreeNode* cur:layer){
+                if(cur->left)
+                    tmp.emplace_back(cur->left);
+                if(cur->right)
+                    tmp.emplace_back(cur->right);
+            }
+            
+            tmp.swap(layer);
+        }
+        
+        return out;
+        
+    }
+};
