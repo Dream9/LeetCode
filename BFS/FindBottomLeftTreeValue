@@ -1,0 +1,36 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int findBottomLeftValue(TreeNode* root) {
+        //BFS遍历取最后一层的第一个元素即可
+        vector<TreeNode*>layer;
+        
+        layer.emplace_back(root);
+        int ans;
+        
+        while(!layer.empty()){
+            ans=layer.front()->val;
+            
+            //得到下一层的有效节点
+            vector<TreeNode*>tmp;
+            for(TreeNode* cur:layer){
+                if(cur->left)
+                    tmp.emplace_back(cur->left);
+                if(cur->right)
+                    tmp.emplace_back(cur->right);
+            }
+            
+            tmp.swap(layer);
+        }
+        
+        return ans;
+    }
+};
