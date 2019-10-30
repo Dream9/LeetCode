@@ -1,0 +1,53 @@
+struct pair_hash
+{
+    template<class T1, class T2>
+    std::size_t operator() (const std::pair<T1, T2>& p) const
+    {
+        auto h1 = std::hash<T1>()(p.first);
+        auto h2 = std::hash<T2>()(p.second);
+        return h1 ^ h2;
+    }
+};
+
+class Solution {
+public:
+    typedef pair<int,int> Ty;
+    typedef unordered_map<Ty,int,pair_hash> T;
+    int change(int amount, vector<int>& coins) {
+        //dfs+记忆数组==》应该存在dp解法
+        sort(coins.rbegin(),coins.rend());
+        T notes;
+        return _C(amount,coins,0,notes);
+    }
+private:
+    int _C(int val, 
+           vector<int>& coins, 
+           int pos,
+           T& notes){
+        
+        if(val==0){
+            return 1;
+        }
+        if(pos>=coins.size())
+            return 0;
+        
+        auto iter=notes.find({val,pos});
+        if(iter!=notes.end())
+            return iter->second;
+        
+        int out=0;        
+        int len=coins.size();
+        for(int i=pos;i<len;++i){
+            if(coins[i]>val)
+                continue;
+            int times=val/coins[i];
+            while(times>0){
+                out+=_C(val-coins[i]*times,coins,i+1,notes);
+                --times;
+            }
+        }
+        
+        notes.insert({{val,pos},out});
+        return out;
+    }
+};
