@@ -1,0 +1,78 @@
+inline bool is_upper(char c){
+    return c<='Z' && c>='A';
+}
+class Solution {
+public:
+    bool detectCapitalUse(string cur) {
+        if(cur.empty())
+            return true;
+        
+        if(is_upper(cur[0])){
+            //Aaa形式的
+            auto iter=find_if(cur.begin()+1,cur.end(),
+                              [](char c){
+                                  return is_upper(c);
+                              });
+            if(iter==cur.end())
+                return true;
+            
+            //AAA形式的
+            iter=find_if(cur.begin()+1,cur.end(),
+                              [](char c){
+                                  return !is_upper(c);
+                              });
+            if(iter!=cur.end())
+                return false;
+        }
+        else{
+            //aaa形式的
+            auto iter=find_if(cur.begin()+1,cur.end(),
+                              [](char c){
+                                  return is_upper(c);
+                              });
+            if(iter!=cur.end())
+                return false;
+        }
+        
+        return true;
+        
+        
+        
+        //以下是针对句子。。。
+        //stringstream os;
+        //os<<word;
+        //
+        //string cur;
+        //while(os>>cur){
+        //    if(is_upper(cur[0])){
+        //        //Aaa形式的
+        //        auto iter=find_if(cur.begin()+1,cur.end(),
+        //                          [](char c){
+        //                              return is_upper(c);
+        //                          });
+        //        if(iter==cur.end())
+        //            return true;
+        //        
+        //        //AAA形式的
+        //        iter=find_if(cur.begin()+1,cur.end(),
+        //                          [](char c){
+        //                              return !is_upper(c);
+        //                          });
+        //        if(iter!=cur.end())
+        //            return false;
+        //    }
+        //    else{
+        //        //aaa形式的
+        //        auto iter=find_if(cur.begin()+1,cur.end(),
+        //                          [](char c){
+        //                              return is_upper(c);
+        //                          });
+        //        if(iter!=cur.end())
+        //            return false;
+        //    }
+        //}
+        //
+        //return true;
+    }
+    
+};
