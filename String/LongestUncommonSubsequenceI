@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int findLUSlength(string a, string b) {
+        //所以这道题是想考察什么呢？？？
+        
+        return a.size()==b.size()?
+            (a==b?-1:a.size()):max(a.size(),b.size());
+        
+        //int lena=a.size();
+        //int lenb=b.size();
+        //
+        //if(lena!=lenb)
+        //    return max(lena,lenb);
+        //return a==b?-1:lena;
+    }
+};
