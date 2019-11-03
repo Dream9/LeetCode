@@ -1,0 +1,74 @@
+class Solution {
+public:
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        //我还想再踩一下
+        if(k==0)
+            return __sb(nums);
+        
+        int len=nums.size();
+        //if(len<=1 || k==0)
+        //    return false;
+        if(len<=1)
+            return false;
+        if(k==1)
+            return true;
+        
+        //需要优化空间
+        //vector<vector<int>>dp(len,(vector<int>(len,0)));
+        ////partial_sum(nums.begin(),nums.end(),dp[0].begin());
+        //
+        //dp[0][0]=nums[0];
+        //for(int i=1;i<len;++i){
+        //    dp[0][i]+=dp[0][i-1]+nums[i];
+        //    if(dp[0][i]%k==0)
+        //        return true;
+        //}
+        //
+        //if(dp[0].back()<k)
+        //    return false;
+        
+        //for(int i=1;i<len;++i){
+        //    for(int j=i+1;j<len;++j){
+        //        dp[i][j]=dp[i-1][j]-nums[i-1];
+        //        if(dp[i][j]%k==0)
+        //            return true;
+        //    }
+        //}
+        //
+        
+        vector<int>dp(vector<int>(len,0));
+        
+        dp[0]=nums[0];
+        for(int i=1;i<len;++i){
+            dp[i]+=dp[i-1]+nums[i];
+            if(dp[i]%k==0)
+                return true;
+        }
+        //if(dp.back()<k)
+        //    return false;
+        
+        for(int i=1;i<len;++i){
+            for(int j=i+1;j<len;++j){
+                dp[j]-=nums[i-1];
+                if(dp[j]%k==0)
+                    return true;
+            }
+        }
+        
+        return false;
+        
+    }
+private:
+    //纯属傻逼操作
+    bool __sb(vector<int>& vec){
+        //return count(vec.begin(),vec.end(),0)>=2;
+        auto iter=find(vec.begin(),vec.end(),0);
+        while(iter<vec.end()-1){
+            ++iter;
+            if(*iter==0)
+                return true;
+            iter=find(iter,vec.end(),0);
+        }
+        return false;
+    }
+};
