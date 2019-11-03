@@ -1,0 +1,54 @@
+class Solution {
+public:
+    int findLUSlength(vector<string>& strs) {
+        sort(strs.begin(),strs.end(),
+            [](const string&f, const string&s){
+                if(f.size()>s.size())
+                    return true;
+                else if(f.size()<s.size())
+                    return false;
+                return f>s;
+            });
+        
+        //return (strs[0]=="cdc")+10*(strs[1]=="aba");
+        int len=strs.size();
+        for(int i=0;i<len;){
+            //先确保本字符串不喝任何其他字符串重复
+            int j=i+1;
+            while(j<len && strs[i]==strs[j]){
+                ++j;
+            }
+            if(i!=j-1){
+                i=j;
+                continue;
+            }
+            //if(i+1==len || strs[i]!=strs[i+1]){
+            //然后确保本string不是之前任意一个字符串的子序列
+            bool flag=true;
+            for(int j=0;j<i;++j){
+                if(isSub(strs[j],strs[i])){
+                    flag=false;
+                    break;
+                }
+            }
+            if(flag)
+                return strs[i].size();
+            //}
+            ++i;
+        }
+        return -1;
+    }
+private:
+    bool isSub(const string&f,const string&s){
+        int i=0;
+        for(char c:f){
+            if(c==s[i]){
+                ++i;
+                if(i==s.size())
+                    break;
+            }
+        }
+        
+        return i==s.size();
+    }
+};
