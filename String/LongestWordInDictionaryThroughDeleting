@@ -1,0 +1,40 @@
+class Solution {
+public:
+    string findLongestWord(string target, vector<string>& d) {
+        string out;
+        int longest=-1;
+        
+        //也可以先按长度排序，这样第一个完全匹配的就是结果
+        for(const string& cur:d){
+            if(static_cast<int>(cur.size())<longest)
+                continue;
+            int tmp=_count(target,cur);
+            if(tmp==longest){
+                out=cur<out?cur:out;
+            }
+            else if(tmp>longest){
+                out=cur;
+                longest=tmp;
+            }
+        }
+        
+        return longest>0?out:"";
+    }
+private:
+    int _count(const string&target,const string& s){
+        int out=0;
+        int len=s.size();
+        
+        for(char c:target){
+            if(s[out]==c){
+                ++out;
+                if(out==len)
+                    return out;
+            }
+        }
+        //理解错了，，不是匹配的最多的单词，是完全匹配的最长
+        //return out;
+        return 0;
+    }
+    
+};
