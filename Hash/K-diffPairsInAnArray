@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int findPairs(vector<int>& nums, int k) {
+        {
+            //把两个合并在一起
+            int res = 0, n = nums.size();
+            unordered_map<int, int> m;
+            for (int num : nums) ++m[num];
+            for (auto a : m) {
+                if (k == 0 && a.second > 1) ++res;
+                if (k > 0 && m.count(a.first + k)) ++res;
+            }
+            return res;
+        }
+        
+        if(k==0)
+            return _special(nums);
+        
+        if(k<0)
+            return 0;
+        
+        int out=0;
+        unordered_set<int>dict;
+        unordered_set<int>visited;
+        for(int i:nums){
+            int val=i-k;
+            if(dict.find(val)!=dict.end()){
+                if(visited.find(val)==visited.end())
+                    ++out;
+                visited.insert(val);
+            }
+            
+            val=i+k;
+            if(dict.find(val)!=dict.end()){
+                if(visited.find(i)==visited.end())
+                    ++out;
+                visited.insert(i);
+            }
+            
+            dict.insert(i);
+        }
+        
+        return out;
+        
+    }
+private:
+    int _special(vector<int>& nums){
+        unordered_map<int,int>dict;
+        int out=0;
+        for(int i:nums){
+            if(dict.find(i)!=dict.end()){
+                if(dict[i]==1)
+                    ++out;
+                ++dict[i];
+            }
+            else{
+                ++dict[i];
+            }
+        }
+        return out;
+    }
+};
