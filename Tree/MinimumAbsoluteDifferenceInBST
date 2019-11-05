@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int getMinimumDifference(TreeNode* root) {
+        //借助于中序遍历，找到
+        TreeNode* last=nullptr;
+        int out=INT_MAX;
+        
+        LNR(root,last,out);
+        
+        return out;
+    }
+private:
+    void LNR(TreeNode* root, TreeNode*&last, int&ans){
+        if(!root)
+            return;
+        
+        LNR(root->left,last,ans);
+        
+        if(last==nullptr){
+            last=root;
+        }
+        else{
+            ans=min(ans,abs(last->val - root->val));
+        }
+        
+        last=root;
+        LNR(root->right,last,ans);
+    }
+};
