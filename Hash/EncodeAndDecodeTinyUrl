@@ -1,0 +1,40 @@
+class Solution {
+public:
+    //短地址服务，主要有两种实现：自增序列或者摘要算法
+    typedef unordered_map<string,string> Ty;
+    
+    Solution():_C(0){}
+
+    // Encodes a URL to a shortened URL.
+    string encode(string longUrl) {
+        auto iter=_en.find(longUrl);
+        if(iter!=_en.end())
+            return iter->second;
+        
+        string out("http://tinyurl.com/");
+        out+=to_string(_C++);
+        
+        _en.insert({longUrl,out});
+        _de.insert({out,longUrl});
+        
+        return out;
+    }
+
+    // Decodes a shortened URL to its original URL.
+    string decode(string shortUrl) {
+        auto iter=_de.find(shortUrl);
+        if(iter!=_de.end())
+            return iter->second;
+        
+        return "";
+        
+    }
+private:
+    int64_t _C;
+    Ty _en;
+    Ty _de;
+};
+
+// Your Solution object will be instantiated and called as such:
+// Solution solution;
+// solution.decode(solution.encode(url));
