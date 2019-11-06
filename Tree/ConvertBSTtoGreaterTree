@@ -1,0 +1,60 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* convertBST(TreeNode* root) {
+        int sum=0;
+        
+        _RNL(root,sum);
+        
+        //Right-Node-Left顺序只需一遍即可
+        //_first(root,sum);
+        //_second(root,sum);
+        
+        return root;
+    }
+private:
+    void _RNL(TreeNode* root, int &sum){
+        if(!root)
+            return;
+        
+        _RNL(root->right,sum);
+        
+        sum+=root->val;
+        root->val=sum;
+        
+        _RNL(root->left,sum);
+    }
+    
+    void _first(TreeNode* root, int &sum){
+        if(!root)
+            return;
+        
+        _first(root->left,sum);
+        
+        sum+=root->val;
+        
+        _first(root->right,sum);
+    }
+    
+    void _second(TreeNode* root, int& sum){
+        if(!root)
+            return;
+        
+        _second(root->left,sum);
+        
+        int tmp=root->val;
+        root->val=sum;
+        sum-=tmp;
+        
+        _second(root->right,sum);
+        
+    }
+};
