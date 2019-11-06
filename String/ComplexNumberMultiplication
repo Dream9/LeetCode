@@ -1,0 +1,18 @@
+class Solution {
+public:
+    string complexNumberMultiply(string a, string b) {
+        //按照题目保证的，是不是不用管格式了？？
+        int pos_add=a.find_first_of('+');
+        int m=stoi(a.substr(0,pos_add));
+        int n=stoi(a.substr(pos_add+1,a.size()-1));
+        
+        pos_add=b.find_first_of('+');
+        int x=stoi(b.substr(0,pos_add));
+        int y=stoi(b.substr(pos_add+1,b.size()-1));
+        
+        int s=m*x-n*y;
+        int t=m*y+n*x;
+        
+        return to_string(s)+"+"+to_string(t)+"i";
+    }
+};
