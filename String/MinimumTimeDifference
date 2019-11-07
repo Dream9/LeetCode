@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int findMinDifference(vector<string>& timePoints) {
+        sort(timePoints.begin(),timePoints.end(),
+            [](const string&f, const string& s){
+                int hourf=getData(f,0);
+                int hours=getData(s,0);
+                if(hourf<hours)
+                    return true;
+                else if(hourf>hours)
+                    return false;
+                
+                int minf=getData(f,3);
+                int mins=getData(s,3);
+                return minf<mins;
+            });
+        
+        int ans=INT_MAX;
+        
+        int len=timePoints.size();
+        int last_t=convert(timePoints.back());
+        
+        for(const string& cur:timePoints){
+            int cur_t=convert(cur);
+            int tmp=abs(cur_t-last_t);
+            ans=min(ans,min(tmp,1440-tmp));
+            last_t=cur_t;
+        }
+        
+        return ans;
+    }
+};
