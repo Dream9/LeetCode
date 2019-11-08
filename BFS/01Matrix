@@ -1,0 +1,66 @@
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        //按距离远近遍历->直接bfs
+        //becare:还有一种按照先与左半边比较遍历更新距离，然后再反方向与右半边比较遍历更新
+        
+        int m=matrix.size();
+        int n=matrix[0].size();
+        
+        vector<pair<int,int>>layer;
+        vector<vector<int>>out(m,vector<int>(n,-1));
+        
+        int count=m*n;
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(matrix[i][j]==0){
+                    layer.emplace_back(i,j);
+                    --count;
+                    out[i][j]=0;
+                }
+            }
+        }
+        
+        while(!layer.empty()){
+            vector<pair<int,int>>tmp;
+            for(auto coor:layer){
+                //判断四个方向的延申即可
+                int x,y;
+                
+                x=coor.first-1;
+                y=coor.second;
+                if(x>-1 && x<m && y>-1 && y<n && out[x][y]==-1){
+                    out[x][y]=out[coor.first][coor.second]+1;
+                    tmp.emplace_back(x,y);
+                    --count;
+                }
+                x=coor.first+1;
+                y=coor.second;
+                if(x>-1 && x<m && y>-1 && y<n && out[x][y]==-1){
+                    out[x][y]=out[coor.first][coor.second]+1;
+                    tmp.emplace_back(x,y);
+                    --count;
+                }
+                x=coor.first;
+                y=coor.second-1;
+                if(x>-1 && x<m && y>-1 && y<n && out[x][y]==-1){
+                    out[x][y]=out[coor.first][coor.second]+1;
+                    tmp.emplace_back(x,y);
+                    --count;
+                }
+                x=coor.first;
+                y=coor.second+1;
+                if(x>-1 && x<m && y>-1 && y<n && out[x][y]==-1){
+                    out[x][y]=out[coor.first][coor.second]+1;
+                    tmp.emplace_back(x,y);
+                    --count;
+                }
+                if(count==0)
+                    return out;
+            }
+            layer.swap(tmp);
+        }
+        
+        return out;
+    }
+};
