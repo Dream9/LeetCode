@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string reverseWords(string s) {
+        //使用stringstream的好处就是写起来方便
+        //如果求块还是要原地find_first_of+reverse
+        istringstream in(s);
+        ostringstream out;
+        
+        string tmp;
+        while(in>>tmp){
+            reverse(tmp.begin(),tmp.end());
+            out<<tmp<<' ';
+        }
+        
+        tmp=out.str();
+        if(tmp.empty())
+            return tmp;
+        tmp.pop_back();
+        return tmp;
+    }
+};
