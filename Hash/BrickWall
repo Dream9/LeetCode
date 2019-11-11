@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int leastBricks(vector<vector<int>>& wall) {
+        unordered_map<int,int> record;
+        for(const vector<int>& v:wall){
+            int pos=0;
+            int len=v.size();
+            for(int i=0;i<len-1;++i){
+                pos+=v[i];
+                ++record[pos];
+            }
+        }
+        
+        int count=0;
+        for(auto i:record)
+            count=max(count,i.second);
+        
+        return wall.size()-count;
+        
+    }
+};
