@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int nextGreaterElement(int n) {
+        //本质就是求下一个词典序
+        string tmp=to_string(n);
+        int len=tmp.size();
+        
+        int i=len-1;
+        for(;i>0;--i)
+            if(tmp[i-1]<tmp[i])
+                break;
+        if(i==0)
+            return -1;
+        
+        int first=tmp[i-1];
+        int j=len-1;
+        for(;;--j)
+            if(tmp[j]>first)
+                break;
+        swap(tmp[i-1],tmp[j]);
+        reverse(tmp.begin()+i,tmp.end());
+        
+        //有几个比较恶意的测试，而且如果结果超过INT_MAX都改为无解
+        //return stol(tmp);
+        int64_t out = stoll(tmp);
+        if(out>INT_MAX)
+            return -1;
+        
+        return out;
+    }
+};
