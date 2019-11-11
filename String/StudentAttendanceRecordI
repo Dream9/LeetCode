@@ -1,0 +1,30 @@
+class Solution {
+public:
+    bool checkRecord(string s) {
+        
+        //这个题意怕是对迟到有什么神奇的理解
+        //int l=0;
+        //int a=0;
+        //for_each(s.begin(),s.end(),
+        //        [&](char c){
+        //            l += c=='L';
+        //            a += c=='A';
+        //        });
+        //
+        //return l<=2 && a<=1;
+        
+        int a=0;
+        int l=0;
+        int last='0';//非要连着迟到才收到惩罚。。。。
+        for(char c:s){
+            a += c=='A';
+            l = last=='L'?(c=='L'?l+1:0):(c=='L'?1:0);
+            last = c;
+            
+            if(l>2 || a>1)
+                return false;
+        }
+        
+        return true;
+    }
+};
