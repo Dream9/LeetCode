@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        //之前有道题是求和为0的所有组合，与本题是一致的
+        //即局部之和为两个从0开始的累和的差
+        unordered_map<int,int>notes;
+        notes[0]=1;
+        
+        int len=nums.size();
+        int sum=0;
+        int out=0;
+        for(int i=0;i<len;++i){
+            sum+=nums[i];
+            int cp=sum-k;
+            
+            auto iter=notes.find(cp);
+            if(iter!=notes.end()){
+                out+=iter->second;
+            }
+            
+            ++notes[sum];
+        }
+        
+        return out;
+    }
+};
