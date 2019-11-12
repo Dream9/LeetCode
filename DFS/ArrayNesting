@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int arrayNesting(vector<int>& nums) {
+        //unordered_set<int> visited;
+        int len=nums.size();
+        vector<int>visited(len,0);
+        int out=0;
+        
+        for(int i=0;i<len;++i){
+            int pathlen=0;
+            if(visited[i]==0)
+                _dfs(nums,i,visited,pathlen,out);
+        }
+        
+        return out;
+    }
+private:
+    void _dfs(vector<int>& nums, int pos, vector<int>&visited,
+              int pathlen, int& out){
+        if(visited[pos]==1){
+            out=max(out,pathlen);
+            return;
+        }
+        
+        visited[pos]=1;
+        _dfs(nums,nums[pos],visited,pathlen+1,out);
+    }
+};
