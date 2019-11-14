@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isSubtree(TreeNode* s, TreeNode* t) {
+        if(!s && !t)
+            return true;
+        if(!s || !t)
+            return false;
+        if(s->val == t->val)
+            if(_isSub(s,t))
+                return true;
+        return isSubtree(s->left,t) || isSubtree(s->right,t);
+    }
+private:
+    bool _isSub(TreeNode* s, TreeNode* cur){
+        if(!s && !cur)
+            return true;
+        if(!s || !cur)
+            return false;
+        if(s->val!=cur->val)
+            return false;
+        
+        return _isSub(s->left,cur->left) && _isSub(s->right,cur->right);
+    }
+};
