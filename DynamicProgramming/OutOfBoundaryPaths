@@ -1,0 +1,28 @@
+static const int kMod=1e9+7;
+class Solution {
+public:
+    using Ty =vector<vector<vector<int>>> ;
+    int findPaths(int m, int n, int N, int i, int j) {
+        vector<vector<vector<int>>> dp(m,vector<vector<int>>(n,vector<int>(N+1,-1)));
+        return _F(dp,N,m,n,i,j);
+    }
+    
+private:
+    int _F(Ty& dp, int N, int m, int n, int i, int j){
+        if(i<0 || j<0 || i>=m || j>=n)
+            return 1;
+        if(N<=0)
+            return 0;
+        
+        if(dp[i][j][N]!=-1)
+            return dp[i][j][N];
+        
+        int64_t a=_F(dp,N-1,m,n,i-1,j);
+        int64_t b=_F(dp,N-1,m,n,i+1,j);
+        int64_t c=_F(dp,N-1,m,n,i,j-1);
+        int64_t d=_F(dp,N-1,m,n,i,j+1);
+        
+        return dp[i][j][N]=(a+b+c+d)%kMod;
+        
+    }
+};
