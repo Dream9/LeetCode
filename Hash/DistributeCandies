@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int distributeCandies(vector<int>& candies) {
+        //...
+        int count = candies.size();
+        unordered_set<int> dict(candies.begin(),candies.end());
+        
+        return min(count>>1,static_cast<int>(dict.size()));
+    }
+};
