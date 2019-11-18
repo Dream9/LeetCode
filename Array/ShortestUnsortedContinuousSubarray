@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        //贪心,不断扩大范围即可
+        int len = nums.size();
+        if(len<=1)
+            return 0;
+        
+        int out = len;
+        //确定左侧最长的升序长度
+        int i=1;
+        while(i<len && nums[i]>=nums[i-1])
+            ++i;
+        
+        if(i==len)
+            return 0;
+
+        //确定右侧最长的的降序长度
+        int j=len-2;
+        while(j>=0 && nums[j]<=nums[j+1])
+            --j;
+        
+        //becare:这两个位置本身也是模糊的一部分
+        --i;
+        ++j;
+
+        //确定模糊区的范围
+        int b=INT_MIN;
+        int l=INT_MAX;
+        for(int t=i;t<=j;++t){
+            b=max(b,nums[t]);
+            l=min(l,nums[t]);
+        }
+        
+        //两侧找到重新满足关系的位置即可
+        for(;i>=0;--i){
+            if(nums[i]<=l)
+                break;
+        }
+        for(++j;j<len;++j){
+            if(nums[j]>=b)
+                break;
+        }
+        
+        return j-i-1;
+    }
+};
