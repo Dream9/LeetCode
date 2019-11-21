@@ -1,0 +1,22 @@
+inline int64_t square(int64_t x){
+    return x*x;
+}
+class Solution {
+public:
+    bool validSquare(vector<int>& p1, vector<int>& p2, vector<int>& p3, vector<int>& p4) {
+        unordered_map<int64_t,int>dict;
+        
+        ++dict[square(p1[0]-p2[0])+square(p1[1]-p2[1])];
+        ++dict[square(p1[0]-p3[0])+square(p1[1]-p3[1])];
+        ++dict[square(p1[0]-p4[0])+square(p1[1]-p4[1])];
+        ++dict[square(p3[0]-p2[0])+square(p3[1]-p2[1])];
+        ++dict[square(p3[0]-p4[0])+square(p3[1]-p4[1])];
+        ++dict[square(p4[0]-p2[0])+square(p4[1]-p2[1])];
+        
+        if(dict.size()!=2)
+            return false;
+        
+        auto iter=dict.begin();
+        return iter->second==2 || iter->second==4; 
+    }
+};
