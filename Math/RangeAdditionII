@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int maxCount(int m, int n, vector<vector<int>>& ops) {
+        //观察题
+        for(const auto& cur:ops){
+            m=min(m,cur[0]);
+            n=min(n,cur[1]);
+        } 
+        return m*n;
+    }
+};
