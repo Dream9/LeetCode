@@ -1,0 +1,59 @@
+class Solution {
+public:
+    vector<vector<string>> findDuplicate(vector<string>& paths) {
+        unordered_map<string,int> dict;
+        vector<vector<string>> out;
+        
+        for(string& s:paths){
+            auto pos = s.find(' ');
+            string path = s.substr(0,pos-0);
+            
+            while(string::npos!=pos){
+                //file info
+                auto pos2 = s.find('(',pos+1);
+                string file(s.begin()+pos+1,s.begin()+pos2);
+                auto pos3=s.find(')',pos2+1);
+                string content(s.begin()+pos2+1,s.begin()+pos3);
+                
+                //judge duplicate
+                auto iter = dict.find(content);
+                if(iter!=dict.end()){
+                    out[iter->second].emplace_back(path+"/"+file);
+                }
+                else{
+                    out.emplace_back(vector<string>(1,path+"/"+file));
+                    dict.insert({content,out.size()-1});
+                }
+                
+                //find next
+                pos=s.find(' ',pos3+1);
+            }
+            
+            //使用istringstream会写起来比较方便
+            //istringsream is(s);
+            //string path;
+            //string files;
+            //is>>path;
+            //while(is>>files){
+            //    auto pos = files.find('(');
+            //    //同上
+            //}
+            
+        }
+        
+        //剔除重复
+        int i=0;
+        int end=out.size();
+        for(;i<end;++i){
+            if(out[i].size()>1)
+                continue;
+            out[i].swap(out[end-1]);
+            --end;
+            --i;
+        }
+        
+        out.erase(out.begin()+end,out.end());
+        
+        return out;
+    }
+};
