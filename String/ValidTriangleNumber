@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        
+        int out=0;
+        int len = nums.size();
+        for(int i=0;i<len-2;++i){
+            for(int j=i+1;j<len-1;++j){
+                //for(int k=j+1;k<len;++k){
+                //    //加一个减枝操作,勉强通过
+                //    if(nums[i]+nums[j]<=nums[k])
+                //        break;
+                //    ++out;
+                //}
+                //基于有序的事实
+                auto iter =lower_bound(nums.begin()+j+1,
+                                       nums.end(),nums[i]+nums[j]);
+                out+=iter-nums.begin()-j-1;
+            }
+        }
+        
+        //这道题还能实现平方级别的效率
+        //首先遍历是倒着进行
+        //其次采用双指针的策略分别指向最短边和次短边，
+        //根据和大于当前值的规则进行伸缩移动
+        
+        
+        return out;
+        
+    }
+};
