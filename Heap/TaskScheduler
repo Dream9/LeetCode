@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        //
+        priority_queue<int>todo;
+        vector<int>count(26,0);
+        //注意这里并不关心调度的是那个任务，而是关注每一轮之中，把调度过的任务次数减一
+        for(char c:tasks){
+            ++count[c-'A'];
+        }
+        for(int v:count){
+            if(v==0)
+                continue;
+            todo.push(v);
+        }
+        
+        int out = 0;
+        while(!todo.empty()){
+            vector<int>current_number;
+            
+            int i=0;
+            //进行一次最低限度的任务调度
+            for(;i<n+1;++i){
+                if(todo.empty())
+                    break;
+                current_number.emplace_back(todo.top());
+                todo.pop();
+            }
+            
+            //检查本轮调度的任务，是否下次仍然需要调度
+            for_each(current_number.begin(),current_number.end(),[&](int cur){
+                if(--cur>0)
+                    todo.push(cur);
+            });
+            
+            //记录本轮调度次数,特别处理提前退出的情况
+            out+=todo.empty()?i:n+1;
+        }
+        
+        return out;
+    }
+};
