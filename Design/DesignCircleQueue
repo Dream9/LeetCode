@@ -1,0 +1,86 @@
+class MyCircularQueue {
+public:
+    /** Initialize your data structure here. Set the size of the queue to be k. */
+    MyCircularQueue(int k)
+        :_buf(new int[k]),
+        _cap(k),
+        _begin(0),
+        _end(0),
+        _use(0)
+    {
+            
+    }
+    
+    //leetcode的判题系统自带了资源释放，因此不须自己写
+    //~MyCircularQueue()
+    //{
+    //    if(_buf)
+    //        delete(_buf);
+    //}
+    
+    /** Insert an element into the circular queue. Return true if the operation is successful. */
+    bool enQueue(int value) {
+        if(isFull())
+            return false;
+        _buf[_end]=value;
+        _end = _end==_cap-1?0:_end+1;
+        ++_use;
+        
+        return true;
+    }
+    
+    /** Delete an element from the circular queue. Return true if the operation is successful. */
+    bool deQueue() {
+        if(isEmpty())
+            return false;
+        _begin = _begin==_cap-1?0:_begin+1;
+        --_use;
+        
+        return true;
+    }
+    
+    /** Get the front item from the queue. */
+    int Front() {
+        if(isEmpty())
+            return -1;
+        return _buf[_begin];
+    }
+    
+    /** Get the last item from the queue. */
+    int Rear() {
+        if(isEmpty())
+            return -1;
+        return _end==0?_buf[_cap-1]:_buf[_end-1];
+    }
+    
+    /** Checks whether the circular queue is empty or not. */
+    bool isEmpty() {
+        //注意空与满不是互补的。。。。
+        return _use == 0;
+    }
+    
+    /** Checks whether the circular queue is full or not. */
+    bool isFull() {
+        return _use == _cap;
+    }
+private:
+    //vector<int> _buf;
+    int* _buf;
+    
+    int _cap;
+    
+    int _begin;
+    int _end;
+    int _use;
+};
+
+/**
+ * Your MyCircularQueue object will be instantiated and called as such:
+ * MyCircularQueue* obj = new MyCircularQueue(k);
+ * bool param_1 = obj->enQueue(value);
+ * bool param_2 = obj->deQueue();
+ * int param_3 = obj->Front();
+ * int param_4 = obj->Rear();
+ * bool param_5 = obj->isEmpty();
+ * bool param_6 = obj->isFull();
+ */
