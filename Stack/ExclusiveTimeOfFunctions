@@ -1,0 +1,69 @@
+class Solution {
+public:
+    typedef pair<int,int> T;
+    vector<int> exclusiveTime(int n, vector<string>& logs) {
+        //会抢占吗？？
+        //假设没有抢占
+        //错了,允许抢占，而且抢占没有log记录，需要自行剥离出来，题意表述太差！！！
+        
+        //允许抢占时，每一个start都代表前一个过程的结束，都需要为之追加时间
+        vector<int> res(n, 0);
+        stack<int> st;
+        int preTime = 0, idx = 0, time = 0;
+        char type[10];
+        for (string log : logs) {
+            sscanf(log.c_str(), "%d:%[^:]:%d", &idx, type, &time);
+            if (type[0] == 's') {
+                if (!st.empty()) {
+                    res[st.top()] += time - preTime;
+                }
+                st.push(idx);
+            } else {
+                res[st.top()] += ++time - preTime;
+                st.pop();
+            }
+            preTime = time;
+        }
+        return res;
+        
+        ///////////////////////////////
+        //以下为不允许抢占时的解
+        //stack<T> st;
+        //vector<int> vec(n,0);
+        //int s=0;
+       //
+        //for(string&log:logs){
+        //    int id;
+        //    bool flag;
+        //    int time;
+        //    parse(log,id,flag,time);
+        //    
+        //    if(flag){
+        //        //start
+        //        if(st.empty())
+        //            //全新任务调度
+        //            s=0;
+        //        st.push(T(id,time));
+        //    }
+        //    else{
+        //        //end
+        //        T cur = st.top();
+        //        int tmp=time-cur.second+1-s;
+        //        vec[cur.first]+=tmp;
+        //        st.pop();
+        //        s+=tmp;
+        //    }
+        //}
+        //
+        //return vec;
+        
+        
+    }
+private:
+    void parse(string& log, int& id,bool& flag, int& time){
+        id = stoi(log);
+        size_t pos = log.find(':');
+        flag = log[pos+1]=='s';
+        time =stoi(log.substr(flag?pos+7:pos+5));
+    }
+};
