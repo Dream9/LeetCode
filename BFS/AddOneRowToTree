@@ -1,0 +1,77 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* addOneRow(TreeNode* root, int v, int d) {
+        //bfs
+        if(!root)
+            return root;
+        
+        if(d==1){
+            TreeNode* out =new TreeNode(v);
+            out->left = root;
+            return out;
+        }
+        
+        //TODO:用一个容器就可以了，搞复杂了,先检查depth是否到达，再赋值即可
+        vector<TreeNode*>prev;
+        vector<TreeNode*>cur(1,root);
+        
+        int depth=1;
+        while(!cur.empty()){
+            if(depth==d){
+                //找到替换层
+                for(auto p:prev){
+                    if(p->left){
+                        TreeNode* tmp=p->left;
+                        p->left=new TreeNode(v);
+                        p->left->left=tmp;
+                    }
+                    else{
+                        p->left =new TreeNode(v);
+                    }
+                    
+                    if(p->right){
+                        TreeNode* tmp=p->right;
+                        p->right=new TreeNode(v);
+                        p->right->right=tmp;
+                    }
+                    else{
+                        p->right = new TreeNode(v);
+                    }
+                }
+                return root;
+            }
+            
+            //继续向下一层遍历
+            vector<TreeNode*>tmp;
+            for(TreeNode* p: cur){
+                if(p->left)
+                    tmp.emplace_back(p->left);
+                if(p->right)
+                    tmp.emplace_back(p->right);
+            }
+            
+            prev.swap(cur);
+            cur.swap(tmp);
+            ++depth;
+        }
+        
+        //找到最底层
+        //只向下扩展一层
+        if(depth!=d)
+            return root;
+        for(auto p:prev){
+            p->left = new TreeNode(v);
+            p->right= new TreeNode(v);
+        }
+        return root;
+    }
+};
