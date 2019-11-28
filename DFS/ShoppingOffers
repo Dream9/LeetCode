@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int shoppingOffers(vector<int>& price, vector<vector<int>>& special, vector<int>& needs) {
+        //典型的递归思路
+        
+        int len=needs.size();
+        if(len==0)
+            return 0;
+        
+        //先求得不优惠结果
+        int out =0;
+        for(int i=0;i<len;++i){
+            out+=needs[i]*price[i];
+        }
+        if(out==0)
+            return out;
+         
+        for(auto& vec:special){
+            
+            //题目要求不准多买
+            int i=0;
+            bool flag = true;
+            for(;i<len;++i){
+                if(vec[i]>needs[i]){
+                    flag = false;
+                    break;
+                }
+                needs[i]-=vec[i];
+            }
+            
+            if(flag){
+                out = min(out, vec[len]+shoppingOffers(price,special,needs));
+            }
+            
+            //递归后还原回去
+            for(--i;i>=0;--i){
+                needs[i]+=vec[i];
+            }
+        }
+        
+        return out;
+    }
+};
