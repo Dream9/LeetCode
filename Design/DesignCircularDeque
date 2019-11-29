@@ -1,0 +1,104 @@
+class MyCircularDeque {
+public:
+    /** Initialize your data structure here. Set the size of the deque to be k. */
+    MyCircularDeque(int k) 
+        :_buf(new int[k]),
+        cap(k),
+        use(0),
+        begin(0),
+        end(0)
+    {
+        
+    }
+    //~MyCirularDeque(){
+    //    if(_buf)
+    //        delete[]_buf;
+    //}
+    
+    /** Adds an item at the front of Deque. Return true if the operation is successful. */
+    bool insertFront(int value) {
+        if(isFull())
+            return false;
+        begin = begin==0?cap-1:begin-1;
+        _buf[begin]=value;
+        ++use;
+        return true;
+    }
+    
+    /** Adds an item at the rear of Deque. Return true if the operation is successful. */
+    bool insertLast(int value) {
+        if(isFull())
+            return false;
+        
+        _buf[end++]=value;
+        end = end==cap?0:end;
+        ++use;
+        return true;
+    }
+    
+    /** Deletes an item from the front of Deque. Return true if the operation is successful. */
+    bool deleteFront() {
+        if(isEmpty())
+            return false;
+        begin= begin==cap-1?0:begin+1;
+        --use;
+        return true;
+    }
+    
+    /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
+    bool deleteLast() {
+        if(isEmpty())
+            return false;
+        end= end==0?cap-1:end-1;
+        --use;
+        return true;
+    }
+    
+    /** Get the front item from the deque. */
+    int getFront() {
+        if(isEmpty())
+            return -1;
+        return _buf[begin];
+        
+    }
+    
+    /** Get the last item from the deque. */
+    int getRear() {
+        if(isEmpty())
+            return -1;
+        return end==0?_buf[cap-1]:_buf[end-1];
+        
+    }
+    
+    /** Checks whether the circular deque is empty or not. */
+    bool isEmpty() {
+        return use==0;
+    }
+    
+    /** Checks whether the circular deque is full or not. */
+    bool isFull() {
+        return use==cap;
+    }
+private:
+    int* _buf;
+    
+    int cap;
+    int use;
+    
+    int begin;
+    int end;
+    
+};
+
+/**
+ * Your MyCircularDeque object will be instantiated and called as such:
+ * MyCircularDeque* obj = new MyCircularDeque(k);
+ * bool param_1 = obj->insertFront(value);
+ * bool param_2 = obj->insertLast(value);
+ * bool param_3 = obj->deleteFront();
+ * bool param_4 = obj->deleteLast();
+ * int param_5 = obj->getFront();
+ * int param_6 = obj->getRear();
+ * bool param_7 = obj->isEmpty();
+ * bool param_8 = obj->isFull();
+ */
