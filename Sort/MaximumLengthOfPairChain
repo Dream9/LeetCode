@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int findLongestChain(vector<vector<int>>& pairs) {
+        if(pairs.empty())
+            return 0;
+        
+        //区间问题的变形，之前的思路是尽可能的合并，这道题正好相反
+        //每个区间务必end尽可能的短，每次不重叠发生时==对前一个区间的确认
+        sort(pairs.begin(), pairs.end(),
+             [](const vector<int>& first, const vector<int>& second)
+             {
+                 return first[0]==second[0]?first[1]<second[1]:first[0]<second[0];
+             });
+        
+        
+        int len = pairs.size();
+        int out = 0;
+        int prev_e = pairs[0][1];
+        int prev_s = pairs[0][0];
+        
+        for(int i=1; i<len; ++i){
+            if(pairs[i][1]<prev_e){
+                prev_e = pairs[i][1];
+                prev_s = pairs[i][0];
+            }
+            else if(pairs[i][0]>prev_e){
+                ++out;
+                prev_e = pairs[i][1];
+                prev_s = pairs[i][0];
+            }
+        }
+        
+        return 1+out;
+    }
+};
