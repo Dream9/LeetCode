@@ -11,43 +11,54 @@ public:
             dp[i][i]=1;
         
         //以下是传统的遍历方式
-        //TODO:还可以反向遍历，这样可以节省更多的重复次数
-        //    即起点i从尾部len-1开始向0推进，终点j从i+1开始向len-1推进
+        //还可以反向遍历，这样可以节省更多的重复次数
+        //即起点i从尾部len-1开始向0推进，终点j从i+1开始向len-1推进
         int out = len;
-        for(int i=0;i<len;++i){
+        
+        //brief:重新调整了遍历顺序
+        for(int i=len-1;i>=0;--i){
             for(int j=i+1;j<len;++j){
-                if(s[i]==s[j]){
-                    if(i+1==j || dp[i+1][j-1]==1){
-                        ++out;
-                        dp[i][j]=1;
-                        continue;
-                    }
-                    else if(dp[i+1][j-1]==2){
-                        dp[i][j]=2;
-                        continue;
-                    }
-                    
-                    //first visit,one by one
-                    bool flag = true;
-                    auto left=i+1;
-                    auto right=j-1;
-                    while(left<=right){
-                        if(s[left]!=s[right]){
-                            flag=false;
-                            break;
-                        }
-                        ++left;
-                        --right;
-                    }
-                    out+=flag;
-                    dp[i][j]=flag?1:2;
-                    //becare:这是传统遍历方式的重复之处，这样稍微弥补一下，但并未从根本上得到纠正
-                    dp[i+1][j-1]=flag?1:2;
-                }
-                else
-                    dp[i][j]=2;
+                dp[i][j] = s[i]==s[j] ? (j==i+1 || (dp[i+1][j-1]==1)) : -1;
+                out += dp[i][j] == 1;
             }
         }
+        
+        return out;
+        
+        //for(int i=0;i<len;++i){
+        //    for(int j=i+1;j<len;++j){
+        //        if(s[i]==s[j]){
+        //            if(i+1==j || dp[i+1][j-1]==1){
+        //                ++out;
+        //                dp[i][j]=1;
+        //                continue;
+        //            }
+        //            else if(dp[i+1][j-1]==2){
+        //                dp[i][j]=2;
+        //                continue;
+        //            }
+        //            
+        //            //first visit,one by one
+        //            bool flag = true;
+        //            auto left=i+1;
+        //            auto right=j-1;
+        //            while(left<=right){
+        //                if(s[left]!=s[right]){
+        //                    flag=false;
+        //                    break;
+        //                }
+        //                ++left;
+        //                --right;
+        //            }
+        //            out+=flag;
+        //            dp[i][j]=flag?1:2;
+        //            //becare:这是传统遍历方式的重复之处，这样稍微弥补一下
+        //            dp[i+1][j-1]=flag?1:2;
+        //        }
+        //        else
+        //            dp[i][j]=2;
+        //    }
+        //}
         
         return out;
         
