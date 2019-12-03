@@ -1,0 +1,37 @@
+class Solution {
+public:
+    string replaceWords(vector<string>& dict, string sentence) {
+        //也可以借助于字典树，当前缀首次命中时，表示找到了最短地前缀
+        unordered_set<string> note(dict.begin(),dict.end());
+        
+        int len = 0;
+        for(const string& cur:dict)
+            len=max(len, static_cast<int>(cur.size()));
+        
+        istringstream is(sentence);
+        string out;
+        out.reserve(sentence.size());
+        string str;
+        
+        while(is>>str){
+            int root_len = INT_MAX;
+            string tmp;
+            tmp.reserve(str.size());
+            string alter;
+            
+            for(int i=0;i<len;++i){
+                tmp+=str[i];
+                if(note.find(tmp)!=note.end()){
+                    if(root_len>tmp.size()){
+                        root_len = tmp.size();
+                        alter = tmp;
+                    }
+                }
+            }
+            
+            out+= alter.empty()? str+" " : alter + " ";
+        }
+        
+        return out.substr(0,out.size()-1);
+    }
+};
