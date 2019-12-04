@@ -1,0 +1,73 @@
+class Solution {
+public:
+    string predictPartyVictory(string senate) {
+        //新的策略，通过位置两两pk，保留一方即可
+        queue<int> q_r;
+        queue<int> q_d;
+        
+        int i=0;
+        for(char c:senate)
+            c == 'R' ? q_r.push(i++) : q_d.push(i++);
+        
+        while(!q_r.empty() && !q_d.empty()){
+            int cur_r = q_r.front();q_r.pop();
+            int cur_d = q_d.front();q_d.pop();
+            
+            if(cur_r<cur_d){
+                q_r.push(cur_r+i);
+            }
+            else{
+                q_d.push(cur_d+i);
+            }
+        }
+        
+        return q_r.empty() ? "Dire" : "Radiant";
+        
+        
+        //每个阵营的最优策略都是ban掉在本轮尚未发言的人，当没有的时候，再从头找ban的对象
+        //int len = senate.size();
+        //if(len<=2)
+        //    return senate[0]=='R' ?"Radiant" : "Dire";//至少为1
+        //
+        //int i = 0;
+        //int last_D=-1;
+        //int last_R=-1;
+        //while(true){
+        //    i = i==len? 0 : i;
+        //    if(senate[i] == 'B'){ 
+        //        ++i;
+        //        continue;
+        //    }
+        //    if(senate[i]=='R'){
+        //        if(-1 ==ban(senate, i, 'D'))
+        //            return "Radiant";
+        //    }
+        //    else if(senate[i]=='D'){
+        //        if(-1 ==ban(senate, i, 'R'))
+        //            return "Dire";
+        //    }
+        //    ++i;
+        //}
+    }
+private:
+    //brief:ban掉一人
+    int ban(string& str, int pos, char c){
+        int index = str.find(c,pos);
+        if(index!=string::npos){
+            str[index] = 'B';
+            return index;
+        }
+        
+        //index = str.find(c);
+        index = 0;
+        while(index<pos){
+            if(str[index] == c){
+                str[index] = 'B';
+                return index;
+            }
+            ++index;
+        }
+        
+        return -1;
+    }
+};
