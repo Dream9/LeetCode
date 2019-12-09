@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
+        vector<TreeNode*> out;
+        unordered_map<string,int> dict;
+        string str;
+        _serilize_and_check(root, str, dict, out);
+        return out;
+    }
+private:
+    //brief:序列化tree,并检查是否重复
+    void _serilize_and_check(TreeNode* root, 
+                             string& str, 
+                             //unordered_set<string>& dict, 
+                             unordered_map<string,int>& dict,
+                             vector<TreeNode*>& counter){
+        //becare:空节点也要参与序列化，否则没办法区分
+        if(!root){
+            str += "-N";
+            return;
+        }
+        string cur ="-"+to_string(root->val);
+        _serilize_and_check(root->left,cur,dict,counter);
+        _serilize_and_check(root->right,cur,dict,counter);
+        
+        ++dict[cur];
+        if(dict[cur]==2){
+            counter.emplace_back(root);
+        }
+        
+        str+="-" + cur;
+    }
+    
+};
