@@ -1,0 +1,57 @@
+class Solution {
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        if(x<=arr[0]){
+            return vector<int>(arr.begin(),arr.begin()+k);
+        }
+        if(x>=arr.back()){
+            return vector<int>(arr.end()-k,arr.end());
+        }
+        
+        //brief；这种方法更加的巧妙
+        int len = arr.size();
+        int left =0 ;
+        int right =len -k;
+        
+        while(left<right){
+            int mid = left + ((right-left)>>1);
+            if(x - arr[mid] > arr[mid+k] - x){
+                left = mid +1;
+            }
+            else{
+                right = mid;
+            }
+        }
+        
+        return vector<int>(arr.begin()+left,arr.begin()+left+k);
+        
+        //此时一定位于中间,则lower_bound定位到中间位置，然后双指针操作即可
+        //int pos = lower_bound(arr.begin(),arr.end(),x) - arr.begin();
+        //if(x - arr[pos-1] < arr[pos] - x){
+        //    --pos;
+        //}
+        //
+        //vector<int> out;
+        //out.reserve(k);
+        //out.emplace_back(arr[pos]);
+        //
+        //int left = pos-1;
+        //int right = pos+1;
+        //int len = arr.size();
+        //
+        ////becare:根据题意，必然存在解
+        //while(out.size()<k){
+        //    if(left<0 || (right < len && x-arr[left] > arr[right]-x)){
+        //        out.emplace_back(arr[right]);
+        //        ++right;
+        //    }
+        //    else{
+        //        out.emplace_back(arr[left]);
+        //        --left;
+        //    }
+        //}
+        //
+        //sort(out.begin(),out.end());
+        //return out;
+    }
+};
