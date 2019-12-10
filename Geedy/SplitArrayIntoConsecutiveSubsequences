@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        //采取一种贪心策略,优先加入到已有的队列中
+        unordered_map<int,int>residual;
+        unordered_map<int,int>expect_next;
+        int len = nums.size();
+        if(len<=2)
+            return false;
+        for(int v:nums){
+            ++residual[v];
+        }
+        
+        for(int v:nums){
+            if(residual[v]==0)
+                continue;
+            
+            if(expect_next[v]>0){
+                //可以加入到已有的队列中
+                --expect_next[v];
+                ++expect_next[v+1];
+                --residual[v];
+            }
+            else if(residual[v+1]>0 &&
+                   residual[v+2]>0){
+                //可以创建自己的队列
+                ++expect_next[v+3];
+                --residual[v];
+                --residual[v+1];
+                --residual[v+2];
+            }
+            else
+                return false;
+        }
+        
+        return true;
+    }
+};
