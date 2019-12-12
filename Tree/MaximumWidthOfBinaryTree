@@ -1,0 +1,49 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        //按层遍历，只不过要记录每个点在该层的位置
+        if(!root)
+            return 0;
+        
+        root->val=0;
+        queue<TreeNode*> layer;
+        layer.push(root);
+        
+        int out =1<<0;
+        
+        while(!layer.empty()){
+            int len = layer.size();
+            if(len==1)
+                layer.front()->val=0;
+            int left = layer.front()->val;
+            
+            for(int i=0;i<len;++i){
+                TreeNode* cur = layer.front();
+                layer.pop();
+                int right = cur->val;
+                
+                if(cur->left){
+                    cur->left->val = right<<1;
+                    layer.push(cur->left);
+                }
+                if(cur->right){
+                    cur->right->val = (right<<1)+1;
+                    layer.push(cur->right);
+                }
+                
+                out=max(out,right-left+1);
+            }
+        }
+            
+        return out;
+    }
+};
