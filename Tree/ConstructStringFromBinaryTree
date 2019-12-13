@@ -1,0 +1,19 @@
+class Solution {
+public:
+    string tree2str(TreeNode* t) {
+        if(!t)
+            return "";
+        
+        string out=to_string(t->val);
+        
+        string left = tree2str(t->left);
+        string right = tree2str(t->right);
+        if(left.empty() && right.empty())
+            return out;
+        if(left.empty())
+            return out+"()("+right+")";
+        if(right.empty())
+            return out+"("+left+")";
+        return out+"("+left+")"+"("+right+")";
+    }
+};
