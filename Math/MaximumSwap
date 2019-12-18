@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int maximumSwap(int num) {
+        vector<int> nest(10,0);
+        string str=to_string(num);
+        for(char c:str)
+            ++nest[c-'0'];
+        
+        int len = str.size();
+        int i=0;
+        int pos = 9;
+        while(i<len){
+            while(nest[pos]==0)
+                --pos;
+            if(str[i]=='0'+pos)
+                --nest[pos];
+            else
+                break;
+            ++i;
+        }
+        if(i==len)
+            return num;
+        
+        auto index = str.rfind('0'+pos);
+        swap(str[index],str[i]);
+        return stoll(str);
+    }
+};
