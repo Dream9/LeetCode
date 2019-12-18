@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int findNumberOfLIS(vector<int>& nums) {
+        int len = nums.size();
+        int mx=0;
+        int out=0;
+        vector<int> length(len, 1);
+        vector<int> number(len, 1);
+        
+        for(int i=0;i<len;++i){
+            for(int j=0; j<i;++j){
+                if(nums[i]<=nums[j])
+                    continue;
+                
+                //需要dp[i]更新最长到max(length[i],length[j]+1)
+                if(length[i]==length[j]+1)
+                    //此时增加了新的路径可以获得最大长度
+                    number[i] += number[j];
+                else if(length[i]<length[j]+1){
+                    //此时出现了全新的最大长度
+                    number[i]=number[j];
+                    length[i] = length[j]+1;
+                }
+                //还有一种情况是dp[i]保持不变，此时不增加number数量，忽略
+                
+            }
+            if(mx==length[i])
+                out += number[i];
+            else if(mx<length[i]){
+                mx= length[i];
+                out = number[i];
+            }
+        }
+        
+        return out;
+    }
+};
