@@ -1,0 +1,42 @@
+class MagicDictionary {
+public:
+    /** Initialize your data structure here. */
+    MagicDictionary() {
+        
+    }
+    
+    /** Build a dictionary through a list of words */
+    void buildDict(vector<string> dict) {
+        for(auto& s:dict)
+            D.insert(s);
+        
+    }
+    
+    /** Returns if there is any word in the trie that equals to the given word after modifying exactly one character */
+    bool search(string word) {
+        for(char& c:word){
+            char cur = c;
+            for(int i=0;i<26;++i){
+                if('a'+i==cur)
+                    continue;
+                c= 'a'+i;
+                if(D.find(word)!=D.end())
+                    return true;
+                c=cur;
+            }
+        }
+        
+        return false;
+    }
+public:
+    
+    //还可以采用Tire的方式
+    unordered_set<string> D;
+};
+
+/**
+ * Your MagicDictionary object will be instantiated and called as such:
+ * MagicDictionary* obj = new MagicDictionary();
+ * obj->buildDict(dict);
+ * bool param_2 = obj->search(word);
+ */
