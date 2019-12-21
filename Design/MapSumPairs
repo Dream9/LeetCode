@@ -1,0 +1,37 @@
+class MapSum {
+public:
+    /** Initialize your data structure here. */
+    MapSum(): sum_(0){}
+    
+    void insert(string key, int val) {
+        if(key.empty())
+            return ;
+        auto k = m[key];
+        m[key] = val;
+        sum_ += val-k;
+        
+    }
+    
+    int sum(string prefix) {
+        if(prefix.empty())
+            return sum_;
+        
+        int res = 0, n = prefix.size();
+        for (auto it = m.lower_bound(prefix); it != m.end(); ++it) {
+            if (it->first.substr(0, n) != prefix) break;
+            res += it->second;
+        }
+        return res;
+    }
+    
+private:
+    map<string, int> m;
+    int sum_;
+};
+
+/**
+ * Your MapSum object will be instantiated and called as such:
+ * MapSum* obj = new MapSum();
+ * obj->insert(key,val);
+ * int param_2 = obj->sum(prefix);
+ */
