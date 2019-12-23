@@ -1,0 +1,38 @@
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        //通过union-find算法判断是否是在同一个分量即可
+        //跟最小生成树的思路一样，新加入的边构成环了，说明不是MST的一员
+        
+        unordered_map<int,int> head;
+        for(const auto& vec:edges){
+            int low = vec[0];
+            int high = vec[1];
+            
+            int v1 = getHead(head,low);
+            int v2 = getHead(head,high);
+            
+            if(v1==v2)
+                return vec;
+            
+            head[v2] = v1;
+        }
+        
+        return {};
+    }
+private:
+    //union - find算法
+    int getHead(unordered_map<int,int>&head, int val){
+        auto iter = head.find(val);
+        if(iter==head.end()){
+            head.insert({val,val});
+            return val;
+        }
+        
+        while(iter->second!=val){
+            val = iter->second;
+            iter = head.find(val);
+        }
+        return val;
+    }
+};
