@@ -1,0 +1,70 @@
+class Solution {
+public:
+    bool checkValidString(string s) {
+        //很常见的一道题了
+        
+        //新思路
+        return _Greedy(s);
+        
+        int sum=0;
+        return 0 == _IsValid(s,0,sum);
+    }
+private:
+    int _IsValid(const string& s, int index, int& sum){
+        if(s.size()==index)
+            return sum;
+        
+        if(s[index] == '*'){
+            int tmp = sum;
+            if(0==_IsValid(s,index+1,sum))
+                return 0;
+            sum = tmp + 1;
+            if(0==_IsValid(s,index+1,sum))
+                return 0;
+            sum = tmp - 1;
+            if(0==_IsValid(s,index+1,sum))
+                return 0;
+            return -1;
+        }
+        
+        if(s[index] == '(')
+            return _IsValid(s,index+1,++sum);
+        
+        --sum;
+        if(sum<0)
+            return sum;
+        
+        return _IsValid(s,index+1,sum);
+    }
+    
+    //还有一种基于Greedy的思路，很巧妙
+    bool _Greedy(const string& s){
+        int left = 0;
+        int right=0;
+        
+        //取*全部当作（
+        for(char c:s){
+            if(c=='(' || c=='*')
+                ++left;
+            else
+                --left;
+            if(left<0)
+                return false;
+        }
+        
+        if(left==0)
+            return true;
+        
+        //取*全部当作）
+        int len = s.size();
+        for(int i=s.size()-1;i>=0;--i){
+            if(s[i]==')' || s[i] =='*')
+                ++right;
+            else
+                --right;
+            if(right<0)
+                return false;
+        }
+        return true;
+    }
+};
