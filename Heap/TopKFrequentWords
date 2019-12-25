@@ -1,0 +1,39 @@
+class Solution {
+public:
+    class cmp{
+    public:
+        //priority_queue的排序比较逆反，默认用小于，但建立的是大根堆，得到的是降序
+        //但如果用它排序，因为每次pop，元素都是置于末尾，最终的结果又是比较正常的升序
+        //可能这就是这样设计的原因吧。。。。。
+        bool operator()(pair<string,int> f, pair<string,int>& s){
+            if(f.second!=s.second)
+                return f.second>s.second;
+            return f.first<s.first;
+        }
+    };
+    
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        //很明显，堆排序
+        unordered_map<string,int>dict;
+        for(const auto&str:words)
+            ++dict[str];
+        
+        priority_queue<pair<string,int>,vector<pair<string,int>>,cmp>heap;
+        
+        for(const auto& item:dict){
+            heap.push(item);
+            if(heap.size()>k)
+                heap.pop();
+        }
+        
+        vector<string>out(k,"");
+        --k;
+        while(k>=0){
+            out[k]=heap.top().first;
+            heap.pop();
+            --k;
+        }
+        
+        return out;
+    }
+};
