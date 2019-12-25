@@ -1,0 +1,48 @@
+class Solution {
+public:
+    //typedef vector<int64_t> VT;//这个数简直大到可怕，int64_t都溢出了...
+    typedef vector<double> VT;
+    typedef vector<VT> VVT;
+    typedef vector<VVT> VVVT;
+    double knightProbability(int N, int K, int r, int c) {
+        //直接dfs-》TLE,加上记忆数组就ok了
+        //还有一种思路，即直接dp，而且是不管起始位置
+        //凡是能用记忆数组的基本上都可以改成dp
+        int count =0;
+        int single = 0;
+        VVVT dp(N,VVT(N,VT(K,0)));
+        return _dfs(N,r,c,K,dp) / pow(8.0,K);
+    }
+    
+private:
+    bool _out_range(int N, int r, int c){
+        return r<0 || c<0 || r>=N || c>=N;
+    }
+    
+    double _dfs(int N, int r, int c, int K, VVVT& dp){
+        if(_out_range(N,r,c))
+            return 0;
+        
+        if(K==0)
+            return 1;
+        
+        if(dp[r][c][K-1]!=0){
+            return dp[r][c][K-1];
+        }
+        
+        //8个方向递归即可
+        dp[r][c][K-1] += _dfs(N,r-2,c-1,K-1,dp);
+        dp[r][c][K-1] += _dfs(N,r-2,c+1,K-1,dp);
+        
+        dp[r][c][K-1] += _dfs(N,r+2,c-1,K-1,dp);
+        dp[r][c][K-1] += _dfs(N,r+2,c+1,K-1,dp);
+        
+        dp[r][c][K-1] += _dfs(N,r-1,c-2,K-1,dp);
+        dp[r][c][K-1] += _dfs(N,r+1,c-2,K-1,dp);
+        
+        dp[r][c][K-1] += _dfs(N,r-1,c+2,K-1,dp);
+        dp[r][c][K-1] += _dfs(N,r+1,c+2,K-1,dp);
+        
+        return dp[r][c][K-1];
+    }
+};
