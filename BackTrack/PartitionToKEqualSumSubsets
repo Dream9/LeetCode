@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int sum=accumulate(nums.begin(),nums.end(),0);
+        if(sum%k !=0)
+            return false;
+        int mean = sum/k;
+        vector<int>tmp(k,0);
+        sort(nums.rbegin(),nums.rend());
+        
+        return _mean(nums,mean,tmp,0);
+    }
+private:
+    bool _mean(vector<int>& nums, int mean, 
+               vector<int>& container,int pos){
+        if(pos==nums.size()){
+            for(int i: container)
+                if(i!=mean)
+                    return false;
+            return true;
+        }
+        
+        for(int& i:container){
+            if(i + nums[pos] <= mean){
+                i+=nums[pos];
+                if(true==_mean(nums,mean,container,pos+1))
+                    return true;
+                i-=nums[pos];
+            }
+            //注意这个减枝操作
+            //因为只需要找到每个元素可以均分的一种 组合
+            //即每个元素都必须放在某个组中，而且放在那个组是无所谓的
+            //如果第一个数据放到第一个组就不是true，那说明他放
+            //在那个组也不会成功的
+            if(i==0)
+                return false;
+        }
+        
+        return false;
+            
+    }
+};
