@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        //常规题
+        int out=0;
+        height=grid.size();
+        if(height==0)
+            return 0;
+        width = grid[0].size();
+        if(width==0)
+            return 0;
+        
+        for(int i=0;i<height;++i){
+            for(int j=0;j<width;++j){
+                if(grid[i][j]==1)
+                    out = max(out,_dfs(grid, i,j));
+            }
+        }
+        
+        return out;
+    }
+    
+private:
+    int _dfs(vector<vector<int>>&grid,int row,int column){
+        if(row<0 || column<0 || 
+           row>=height || column >=width ||
+           grid[row][column]!=1)
+            return 0;
+                
+        grid[row][column]=2;
+        int out=1;
+        out+=_dfs(grid,row+1,column);
+        out+=_dfs(grid,row-1,column);
+        out+=_dfs(grid,row,column+1);
+        out+=_dfs(grid,row,column-1);
+        return out;
+    }
+    
+    int width;
+    int height;
+};
