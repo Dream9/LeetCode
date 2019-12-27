@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int minimumDeleteSum(string s1, string s2) {
+        int m=s1.size();
+        int n=s2.size();
+        //直接算会TLE,那就加一个记忆数组
+        vector<vector<int>> dp(m,vector<int>(n,-1));
+        //那么改成dp也肯定可以的了,直接dp其实就是最长公共序列那道题一样的思路
+        return _dfs(s1,s2,m-1,n-1,dp);
+    }
+private:
+    int _dfs(string& s1,string& s2,int r,int c,vector<vector<int>>& dp){
+        if(r<0 && c<0)
+            return 0;
+        if(r<0){
+            return accumulate(s2.begin(),s2.begin()+c+1,0);
+        }
+        if(c<0){
+            return accumulate(s1.begin(),s1.begin()+r+1,0);
+        }
+        
+        if(dp[r][c]!=-1)
+            return dp[r][c];
+        
+        if(s1[r]==s2[c])
+            dp[r][c]=_dfs(s1,s2,r-1,c-1,dp);
+        else{
+            int first =s1[r] + _dfs(s1,s2,r-1,c,dp);
+            int second = s2[c] + _dfs(s1,s2,r,c-1,dp);
+            dp[r][c] =  min(first,second);
+        }
+        
+        return dp[r][c];
+    }
+};
