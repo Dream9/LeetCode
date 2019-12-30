@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        //dp解
+        //注意这道题已经有n个变形了
+        //这道题抽象开来，就是必须前后顺序发生两件事A,B，求累计的最终状态
+        //因此通常需要两个数组分别记录顺序事件A,B的状态，
+        //从而确定下一刻的状态变迁
+        
+        int len=prices.size();
+        int hold=-prices[0];
+        int none=0;
+        
+        for(int i=1;i<len;++i){
+            int tmp = none;
+            none = max(none,hold+prices[i]-fee);
+            hold = max(hold, tmp-prices[i]);
+        }
+        
+        return none;
+    }
+};
