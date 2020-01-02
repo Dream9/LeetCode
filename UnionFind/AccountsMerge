@@ -1,0 +1,60 @@
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        unordered_map<string,string>G;
+        unordered_map<string, set<string>> m;
+        vector<vector<string>>res;
+        
+        //为了防止名字重复，题意中明确了人名最大1000，因此选用一个四位数（为了前缀长度一致，简化计算）
+        //还有一种实现，是单独用一个map记录邮箱->人名的映射，这样就不需要前缀了
+        int tail = 1000;
+        for(auto& con: accounts){
+            string head = _find_and_insert('*' + to_string(tail++) +con[0],G);
+            int len = con.size();
+            for(int i=1;i<len;++i){
+                auto cur = _find(con[i],G);
+                if(cur.empty())
+                    G.insert({con[i],head});
+                else{
+                    G[head]=cur;
+                    head=cur;
+                }
+            }
+        }
+        //把同属一个Node上的邮箱聚集起来
+        for (auto account : accounts) {
+            for (int i = 1; i < account.size(); ++i) {
+                m[_find(account[i], G)].insert(account[i]);
+            }
+        }
+        //进行结果的分发
+        for (auto a : m) {
+            vector<string> v(a.second.begin(), a.second.end());
+            sort(v.begin(),v.end());
+            v.insert(v.begin(), a.first.substr(sizeof("*1000")-1));
+            res.push_back(v);
+        }
+        return res;
+        
+    }
+ private:
+    //寻找并插入
+    string _find_and_insert(const string& str, unordered_map<string,string>&dict){
+        auto iter = dict.find(str);
+        if(iter==dict.end()){
+            dict.insert({str,str});
+            return str;
+        }
+        string tmp =str;
+        while(iter->second !=tmp){
+            tmp = iter->second;
+            iter = dict.find(tmp);
+        }
+        return tmp;
+    }
+    //仅寻找，若未发现返回空
+    string _find(const string& str, unordered_map<string,string>&dict){
+        auto iter = dict.find(str);
+        return iter==dict.end() ? "" : iter->second == str ? str : _find(iter->second,dict);
+    }
+};
