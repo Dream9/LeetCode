@@ -51,6 +51,21 @@ public:
         
         region.insert({start,end});
         return true;
+        
+        
+        
+        //上面是把他弄复杂了，实际上不需要合并区间，无非就是占用空间大点
+        //即：
+        auto it = region.lower_bound(start);
+        if (it != region.end() && it->first < end) return false;
+        if (it != region.begin() && prev(it)->second > start) return false;
+        region[start] = end;//不用和并区间
+        return true;
+    }
+
+        
+        
+        
     }
 private:
     map<int,int> region;
