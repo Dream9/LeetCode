@@ -1,0 +1,63 @@
+class MyCalendar {
+public:
+    MyCalendar() {
+        
+    }
+    
+    bool book(int start, int end) {
+        auto iter = region.lower_bound(start);
+        //2个区间合并
+        if(iter == region.begin()){
+            if(iter!=region.end() && iter->first<end)
+                return false;
+            if(iter!=region.end() && iter->first == end){
+                end = iter->second;
+                region.erase(iter);
+            }
+            region.insert({start,end});
+            return true;
+        }
+        if(iter == region.end()){
+            --iter;
+            if(iter->second > start)
+                return false;
+            if(iter->second == start){
+                start = iter->first;
+                region.erase(iter);
+            }
+            region.insert({start,end});
+            return true;
+        }
+        if(iter->first == start || iter->first < end)
+            return false;
+        auto prev = --iter;
+        if(prev->second > start)
+            return false;
+        
+        //3个区间合并
+        //becare:删除会使得某些迭代器失效
+        bool need_erase=false;
+        int tmp = prev->first;
+        if(prev->second == start){
+            start = prev->first;
+            need_erase = true;
+        }
+        if(iter->first == end){
+            end = iter->second;
+            region.erase(iter);
+        }
+        if(need_erase)
+            region.erase(tmp);
+        
+        region.insert({start,end});
+        return true;
+    }
+private:
+    map<int,int> region;
+};
+
+/**
+ * Your MyCalendar object will be instantiated and called as such:
+ * MyCalendar* obj = new MyCalendar();
+ * bool param_1 = obj->book(start,end);
+ */
