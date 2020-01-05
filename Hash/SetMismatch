@@ -1,0 +1,27 @@
+class Solution {
+public:
+    vector<int> findErrorNums(vector<int>& nums) {
+        int len = nums.size();
+        int i=0;
+        int repeat =0;
+        //find repeat
+        while(i<len){
+            while((i+1)!=nums[i]){
+                if(nums[nums[i]-1]==nums[i]){
+                    repeat = nums[i];
+                    break;
+                }
+                swap(nums[i],nums[nums[i]-1]);
+            }
+            if((i+1)!=nums[i])
+                break;
+            ++i;
+        }
+        
+        //find lost
+        int sum = accumulate(nums.begin(), nums.end(),0) - repeat;
+        int lost =((len*(len+1))>>1)-sum;
+        
+        return {repeat, lost};
+    }
+};
