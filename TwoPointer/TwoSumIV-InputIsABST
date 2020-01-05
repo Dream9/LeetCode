@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool findTarget(TreeNode* root, int k) {
+        vector<int>vec;
+        LNR(root, vec);
+        
+        int left = 0;
+        int right =vec.size()-1;//不允许重复使用一个
+        
+        while(left<right){
+            int cur =vec[left]+vec[right];
+            if(cur==k)
+                return true;
+            if(cur>k)
+                --right;
+            else
+                ++left;
+        }
+        return false;
+    }
+private:
+    void LNR(TreeNode* root, vector<int>&con){
+        if(!root)
+            return;
+        LNR(root->left, con);
+        con.emplace_back(root->val);
+        LNR(root->right,con);
+    }
+};
