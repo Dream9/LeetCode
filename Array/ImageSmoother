@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<vector<int>> imageSmoother(vector<vector<int>>& M) {
+        //均值滤波
+        int height = M.size();
+        int width = M[0].size();
+        vector<vector<int>>out;
+        int pos[][2]={{-1,-1},{0,-1},{1,-1},
+                              {-1,0},{0,0},{1,0},
+                              {-1,1},{0,1},{1,1}};
+        for(int y =0;y<height;++y){
+            out.emplace_back(vector<int>());
+            for(int x=0;x<width;++x){
+                int count=0;
+                int sum=0;
+                for(auto k:pos){
+                    int a=x+k[0];
+                    int b=y+k[1];
+                    if(a<0 || b<0 || a>=width || b>=height)
+                        continue;
+                    ++count;
+                    sum+=M[b][a];
+                }
+                out[y].emplace_back(floor(sum/count));
+            }
+        }
+                                 
+        return out;
+    }
+};
