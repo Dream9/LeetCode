@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool checkPossibility(vector<int>& nums) {
+        bool erase=true;
+        int len = nums.size()-1;
+        for(int i=0;i<len;++i){
+            if(nums[i]>nums[i+1]){
+                if(erase==false)
+                    return false;
+                erase=false;
+                //FIXME:写的有点乱
+                //要么改当前值，要么改下一个值
+                int tmp = nums[i];
+                nums[i]= i==0?INT_MIN:nums[i-1];
+                if(nums[i]>nums[i+1])
+                    nums[i+1]=tmp;
+                
+            }
+        }
+        
+        return true;
+    }
+};
