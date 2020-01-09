@@ -1,0 +1,35 @@
+class MyCalendarTwo {
+public:
+    MyCalendarTwo() {
+        
+    }
+    
+    bool book(int start, int end) {
+        //比较特别的区间问题
+        //check no triple
+        for(auto item : _repeat){
+            if(start>=item.second || end<=item.first )
+                continue;
+            return false;
+        }
+        
+        for(auto item : _range){
+            if(start>=item.second || end<=item.first )
+                continue;
+            _repeat.insert({max(start,item.first),min(end,item.second)});
+        }
+        _range.insert({start,end});
+        return true;
+    }
+private:
+    //map<int,int> _range;
+    //map<int,int> _repeat;
+    set<pair<int,int>> _range;
+    set<pair<int,int>> _repeat;
+};
+
+/**
+ * Your MyCalendarTwo object will be instantiated and called as such:
+ * MyCalendarTwo* obj = new MyCalendarTwo();
+ * bool param_1 = obj->book(start,end);
+ */
