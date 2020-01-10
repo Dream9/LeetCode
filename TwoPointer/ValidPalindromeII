@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool validPalindrome(string s) {
+        //典型的双指针
+        int left =0;
+        int right =s.size()-1;
+        bool used =false;
+        
+        while(left<right){
+            if(s[left]==s[right]){
+                ++left;
+                --right;
+            }
+            else
+                return _P(s,left+1,right) || _P(s,left,right-1);
+        }
+        return true;
+    }
+private:
+    bool _P(string& s, int left, int right){
+        while(left<right){
+            if(s[left++]!=s[right--])
+                return false;
+        }
+        return true;
+    }
+};
