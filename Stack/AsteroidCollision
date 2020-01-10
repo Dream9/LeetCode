@@ -1,0 +1,50 @@
+class Solution {
+public:
+    vector<int> asteroidCollision(vector<int>& asteroids) {
+        //题意表述不明！！
+        //题意必须加上一条，每个行星的位置就是其索引值的位置
+        if(asteroids.size()<=1)
+            return asteroids;
+        
+        stack<int> st;
+        
+        for(int i: asteroids){
+            if(i>0){
+                st.push(i);
+                continue;
+            }
+            bool flag=true;
+            
+            while(!st.empty()){
+                int op = st.top();
+                if(op*i>0){
+                    st.push(i);
+                    flag = false;
+                    break;
+                }
+                else if(abs(op)>abs(i)){
+                    flag =false;
+                    break;
+                }
+                else if(op+i==0){
+                    st.pop();
+                    flag = false;
+                    break;
+                }
+                else{
+                    st.pop();
+                }
+            }
+            if(flag)
+                st.push(i);
+        }
+        
+        vector<int>out;
+        while(!st.empty()){
+            out.emplace_back(st.top());
+            st.pop();
+        }
+        reverse(out.begin(),out.end());
+        return out;
+    }
+};
