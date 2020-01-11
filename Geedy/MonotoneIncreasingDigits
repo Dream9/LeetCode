@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int monotoneIncreasingDigits(int N) {
+        if(N<10)
+            return N;
+
+        string num=to_string(N);
+        return _Back(num);
+
+
+        int len = num.size();
+        string res;
+        
+        //首先定位到第一个违反规则的位置
+        int prev = 0;
+        int i=0;
+        bool flag=true;
+        for(;i<len;++i){
+            int val = num[i] - '0';
+            if(val<prev){
+                flag =false;
+                break;
+            }
+            else
+                res.push_back(num[i]);
+            prev = val;
+        }
+        //然后回溯，进行修复
+        if(!flag){
+            res[i-1]-=1;
+            int j=i;
+            while(i-2>=0 && res[i-2]>res[i-1]){
+                res[i-2]-=1;
+                --i;
+            }
+            for(;i<j;++i)
+                res[i]='9';
+            for(;j<len;++j)
+                res.push_back('9');
+        }
+        
+        return stoi(res);
+    }
+private:
+    int _Back(string s){
+        //从后向前寻找
+        int len =s.size();
+        int j=len-1;
+        int last_change=len;
+        while(j>0){
+            if(s[j-1]<=s[j]){
+                --j;
+                continue;
+            }
+            last_change=j;
+            --s[--j];
+        }
+        while(last_change<len)
+            s[last_change++]='9';
+        return stoi(s);
+    }
+};
