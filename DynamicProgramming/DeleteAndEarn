@@ -1,0 +1,53 @@
+class Solution {
+public:
+	    int deleteAndEarn(vector<int>& nums) {
+		      if (nums.empty())
+			        return 0;
+		      int N = *max_element(nums.begin(), nums.end()) + 1;
+		      vector<int>vec(N, 0);
+		      for (int i : nums)
+			        vec[i] += i;
+		      int take = 0;
+		      int jump = 0;
+		      for (int i : vec) {
+			        int tmp = take;
+			        take = jump + i;
+			        jump = max(tmp, jump);
+		      }
+		      return max(take, jump);
+
+		//这是一个错误的思路，注意存在连续跳过多个数字进行delete并获得最大值的情况。。。
+		//int len = nums.size();
+		//if(len==0)
+		//    return 0;
+		//sort(nums.begin(),nums.end());
+		//
+		//return _Max(nums,0);
+	}
+
+private:
+	//int _Max(vector<int>&nums,int left){
+	//    int len=nums.size();
+	//    int first=0;
+	//    int second=0;
+	//    int prev =nums[left];
+	//    bool flag =true;
+	//    
+	//    for(;left<len;++left){
+	//        if(nums[left]!=prev){
+	//            if(nums[left]-prev>1)
+	//                break;
+	//            flag=!flag;
+	//            prev=nums[left];
+	//        }
+	//        if(flag)
+	//            first+=nums[left];
+	//        else
+	//            second+=nums[left];
+	//    }
+	//    if(left>=len)
+	//        return max(first,second);
+	//    else 
+	//        return _Max(nums,left)+max(first,second);
+	//}
+};
