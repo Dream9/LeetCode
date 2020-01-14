@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int calPoints(vector<string>& ops) {
+        //典型的基于栈的思路
+        stack<int>st;
+        for(string& str : ops){
+            if(str[0]=='C'){
+                st.pop();
+            }
+            else if(str[0]=='+'){
+                int val= st.top();
+                st.pop();
+                int cur = st.top()+val;
+                st.push(val);
+                st.push(cur);
+            }
+            else if(str[0]=='D'){
+                st.push(st.top() * 2);
+            }
+            else{
+                st.push(stoi(str));
+            }
+        }
+
+        int out=0;
+        while(!st.empty()){
+            out+=st.top();
+            st.pop();
+        }
+        return out;
+    }
+};
