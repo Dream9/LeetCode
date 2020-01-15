@@ -1,0 +1,48 @@
+class cmp{
+public:
+    bool operator()(pair<int,int>&f, pair<int,int>&s){
+        //FIXME:注意，这里和习惯有点反转，按照less排序，得到的是大根堆，好吧可以理解成升序
+        //return f.second<s.second;
+        return f.second>s.second;
+    }
+};
+
+class Solution {
+public:
+    int networkDelayTime(vector<vector<int>>& times, int N, int K) {
+        vector<vector<pair<int,int>>> G(N,vector<pair<int,int>>());
+        for(auto& vec:times)
+            G[vec[0]-1].emplace_back(vec[1],vec[2]);
+
+        priority_queue<int,vector<pair<int,int>>,cmp>pq;
+        for(auto& item : G[K-1]){
+            pq.push(item);
+        }
+
+        vector<int> visited(N,0);
+        int i=1;
+        int longest =0;
+        visited[K-1]=1;
+        
+        //基于dirjksta算法的实现，有点差异，借鉴了延迟的Prim算法实现（我敲得时候就觉得和标准Dirjkstra有点不一样。。。）
+        while(!pq.empty()){
+            auto item = pq.top();
+            if(visited[item.first-1]!=0){
+                pq.pop();
+                continue;
+            }
+            visited[item.first-1]=1;
+            ++i;
+            longest = item.second;
+
+            //松弛边
+            for(auto& v:G[item.first-1]){
+                if(visited[v.first-1]!=0)
+                    continue;
+                pq.push({v.first,v.second+item.second});//差别，并不是即时松弛，是延迟操作，类似于Prms延迟实现
+            }
+        }
+
+        return i==N?longest:-1;
+    }
+};
