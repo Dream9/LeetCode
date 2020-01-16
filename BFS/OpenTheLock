@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        //BFS搜索即可
+        //becare:deadend和visited应该分开存储，否则会陷入无限循环。。。。
+        unordered_set<string> dict(deadends.begin(), deadends.end());
+        unordered_set<string> visited;
+        if(dict.find("0000")!=dict.end())
+            return -1;
+        if(target=="0000")
+            return 0;
+
+        queue<string> q;
+        q.push("0000");
+        visited.insert("0000");
+        int step=1;
+        
+        while(!q.empty()){
+            int len = q.size();
+            
+            while(len>0){
+                string tmp = q.front();
+                q.pop();
+                visited.insert(tmp);
+                for(int i=0;i<4;++i){
+                    char t=tmp[i];
+                    
+                    tmp[i]=t+1>'9'?'0':t+1;
+                    if(tmp==target)
+                        return step;
+                    if(dict.find(tmp)==dict.end() && visited.find(tmp)==visited.end())
+                        q.push(tmp);
+                    visited.insert(tmp);
+                    
+                    tmp[i]=t-1<'0'?'9':t-1;
+                    if(tmp==target)
+                        return step;
+                    if(dict.find(tmp)==dict.end() && visited.find(tmp)==visited.end())
+                        q.push(tmp);
+                    visited.insert(tmp);
+                    
+                    tmp[i]=t;
+                }
+                --len;
+            }
+            
+            ++step;
+        }
+        return -1;
+    }
+};
