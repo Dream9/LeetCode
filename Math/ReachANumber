@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int reachNumber(int target) {
+        //本质是一个数学问题
+        int64_t t = abs(target);
+        int64_t n = ceil((-1+sqrt(1+t*8))*0.5);
+        int64_t sum = n*(n+1)*0.5;
+
+        if(sum==target)
+            return n;
+        //return ((sum-target)&0x1==0) ? n :
+        //            ((n&0x1==0) ? n+1 : n+2);
+        //becare:位操作的优先级是真的低
+        return ((sum-target)&0x1)==0 ? n :
+                    ((n&0x1)==0) ? n+1 : n+2;
+
+        
+    }
+};
