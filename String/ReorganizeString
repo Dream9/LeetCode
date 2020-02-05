@@ -1,0 +1,42 @@
+class Solution {
+public:
+    string reorganizeString(string S) {
+        //主要是优先次数多的字符，因此需要通过该heap维护相关信息
+        map<char,int> dict;
+        for(char c:S)
+            ++dict[c];
+        priority_queue<pair<int,char>>pq;
+        for(auto item : dict)
+            pq.push({item.second,item.first});
+
+        if(pq.top().first>(S.size()+1)/2)
+            return "";
+
+        string out;
+        char last = 'A';
+
+        while(pq.size()>=2){
+            auto item = pq.top();
+            pq.pop();
+            char c = item.second;
+            auto next = pq.top();
+            pq.pop();
+            char v = next.second;
+
+            out+=c;
+            out+=v;
+
+            if(item.first>1)
+                pq.push({item.first-1,item.second});
+            if(next.first>1)
+                pq.push({next.first-1,next.second});
+        }
+        if(pq.size()>0){
+            if(pq.top().first>1)
+                return "";
+            out+=pq.top().second;
+        }
+
+        return out;
+    }
+};
