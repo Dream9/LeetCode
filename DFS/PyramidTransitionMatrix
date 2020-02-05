@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool pyramidTransition(string bottom, vector<string>& allowed) {
+        unordered_map<string,string> dict;
+        for(auto& str:allowed){
+            string key = str.substr(0,2);
+            auto iter = dict.find(key);
+            if(iter==dict.end())
+                dict.insert({key,str.substr(2)});
+            else
+                iter->second.push_back(str[2]);
+        }
+
+        return _Pyramid(bottom,"",0,dict);
+
+    }
+private:
+    bool _Pyramid(string bottom, string next, int pos,unordered_map<string,string>& dict){
+        int len = bottom.size();
+        if(len<=1)
+            return true;
+        if(pos>=len-1)
+            return _Pyramid(next,"",0,dict);
+
+        string tmp = bottom.substr(pos,2);
+        auto iter = dict.find(tmp);
+        if(iter==dict.end())
+            return false;
+        for(char c:iter->second){
+            next.push_back(c);
+            if(true == _Pyramid(bottom,next,pos+1,dict))
+                return true;
+            next.pop_back();
+        }
+
+        return false;
+    }
+};
