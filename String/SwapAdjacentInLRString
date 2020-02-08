@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool canTransform(string start, string end) {
+        //brainteaser...
+        int lens = start.size();
+        int lene = end.size();
+
+        if(lens!=lene)
+            return false;
+
+        int i=0;
+        int j=0;
+        while(i<lens && j<lene){
+            while(i<lens && start[i]=='X')++i;
+            while(j<lene && end[j]=='X')++j;
+            if(start[i]!=end[j])
+                return false;
+            if(start[i]=='L' && i<j)
+                return false;
+            if(start[i]=='R' && i>j)
+                return false;
+            ++i;
+            ++j;
+        }
+        return true;
+    }
+};
