@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int numRabbits(vector<int>& answers) {
+        int out = 0;
+        unordered_map<int,int>dict;
+
+        for(int i:answers)
+            ++dict[i];
+        
+        for(auto item:dict){
+            //for test
+            //return item.first+ item.second*10+dict.size()*1000;
+            //becare:!!必须先转换为浮点型，否则在ceil向上取整前就已经舍入完了
+            int tmp = ceil(1.0*item.second/(item.first+1));
+            out += tmp*(item.first+1);
+        }
+        
+        return out;
+        
+    }
+};
