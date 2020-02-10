@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int kthGrammar(int N, int K) {
+        //本质是一个数学总结规律问题
+        //可以类比堆的实现
+        int index = (1<<(N-1))-1+K;
+        int flag=0;
+        while(index>3){
+            flag += (index&0x1)?1:0;
+            index>>=1;
+        }
+        if(index<=2)
+            return flag & 0x1==1?1:0;
+        return (flag &0x1)?0:1;
+    }
+};
