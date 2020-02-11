@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    int longestUnivaluePath(TreeNode* root) {
+        //这是一类题型，求取树结构中某段特殊属性的路径
+        //都是dfs+分类，分成两类，当前Node是否为角点
+        //当是角点时，候选结果为left+Node+right
+        //否则就是left/right的dfs返回结果中的较大者
+        
+        int same=0;
+        return root?_Longest(root,same)-1:0;
+    }
+private:
+    int _Longest(TreeNode* root, int& same){
+        if(!root)
+            return 0;
+        
+        int edge_left=0;
+        int edge_right=0;
+
+        int cand1 = _Longest(root->left, edge_left);
+        int cand2 = _Longest(root->right, edge_right);
+
+        int cand3=1;
+        int cand4=1;
+        
+        if(root->left && root->left->val == root->val)
+            cand3=1+edge_left;
+        if(root->right && root->right->val == root->val)
+            cand4=1+edge_right;
+
+        same = max(cand3,cand4);
+        return max(max(cand1,cand2),cand3+cand4-1);
+    }
+};
